@@ -54,9 +54,9 @@ public class Attribute {
 	 * 
 	 * @param symbol The symbol of key
 	 */
-	public void getFeature(String symbol) {
+	public double getFeature(String symbol) {
 		int key = dict.getAlphabetAt(dictId).getIndex(symbol);
-		sparseVector.findValue(key);
+		return sparseVector.findValue(key);
 	}
 	
 	/**
