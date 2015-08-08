@@ -1,10 +1,10 @@
 package edu.ruc.data;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class Dictionary {
 	private int length;
-	private List<Alphabet> arrayList;
+	private ArrayList<Alphabet> arrayList;
 	
     /**
      * Constructor for a Dictionary.

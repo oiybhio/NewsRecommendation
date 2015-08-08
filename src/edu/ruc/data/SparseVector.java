@@ -1,12 +1,11 @@
 package edu.ruc.data;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
 
 public class SparseVector {
 	private int length;
-	private List<Pair> arrayList;
+	private ArrayList<Pair> arrayList;
 	
     /**
      * Constructor for a SparseVector.

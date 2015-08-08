@@ -21,6 +21,24 @@ public class Attribute {
 	}
 	
 	/**
+	 * Get AttributeName
+	 * 
+	 * @return AttributeName
+	 */
+	public String getAttributeName() {
+		return attributeName;
+	}
+
+	/**
+	 * Get SparseVector
+	 * 
+	 * @return SparseVector
+	 */
+	public SparseVector getSparseVector() {
+		return sparseVector;
+	}	
+	
+	/**
 	 * Add a feature(Pair) into SparseVector 
 	 * 
 	 * @param symbol The symbol of key
@@ -32,7 +50,7 @@ public class Attribute {
 	}
 	
 	/**
-	 * get a feature value from SparseVector
+	 * Get a feature value from SparseVector
 	 * 
 	 * @param symbol The symbol of key
 	 */
@@ -42,11 +60,13 @@ public class Attribute {
 	}
 	
 	/**
-	 * Get SparseVector
+	 * Modify a feature value in SparseVector
 	 * 
-	 * @return SparseVector
+	 * @param symbol The symbol of key
+	 * @param value The value
 	 */
-	public SparseVector getSparseVector() {
-		return sparseVector;
+	public void modifyFeature(String symbol, double value) {
+		int key = dict.getAlphabetAt(dictId).getIndex(symbol);
+		sparseVector.modifyPair(Pair.create(key, value));
 	}
 }
