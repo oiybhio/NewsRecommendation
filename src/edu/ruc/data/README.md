@@ -31,6 +31,6 @@ int dictId; // 词典ID，由attributeName得到
 String attributeName; // 由构造函数参数传入
 ```
 封装SparseVector和dictID <br>
-构造函数中 Alphabet attributeSet 将 attributeName map dictID，Alphabet attributeSet 类似于全局变量
+构造函数中 Alphabet attributeSet 将 attributeName map to dictID，Alphabet attributeSet 类似于全局变量
 ## Hint
-User和News中应包含成员函数Attribute，并为其分配内存空间
+User和News中应包含成员函数ArrayList<Attribute>，并为其分配内存空间
