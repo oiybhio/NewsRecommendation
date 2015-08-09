@@ -48,11 +48,11 @@ public class SparseVector {
      * @param key the key of the pair wanted to find
      */    
     public double findValue(int key) {
-    	int index = arrayList.indexOf(key);
-    	if (index != -1)
-    		return arrayList.get(index).getValue();
-    	else
-    		return 0;
+    	for(Pair pair:arrayList) {
+    		if (pair.getKey() == key)
+    			return pair.getValue();
+    	}
+    	return 0;
     }
     
     /**
@@ -60,12 +60,14 @@ public class SparseVector {
      *
      * @param pair the pair wanted to modify
      */    
-    public void modifyPair(Pair pair) {
-    	int index = arrayList.indexOf(pair.getKey());
-    	if (index != -1)
-    		arrayList.get(index).setValue(pair.getValue());
-    	else
-    		pushBack(pair);
+    public void modifyPair(Pair pairModify) {
+    	for(Pair pair:arrayList) {
+    		if (pair.getKey() == pairModify.getKey()) {
+    			pair.setValue(pairModify.getValue());
+    			return;
+    		}
+    	}
+    	pushBack(pairModify);
     }
     
     /**
@@ -74,7 +76,10 @@ public class SparseVector {
      * @param key the key of the pair wanted to remove
      */    
     public void RemovePair(int key) {
-    	arrayList.remove(key);
+    	for(Pair pair:arrayList) {
+    		if (pair.getKey() == key)
+    			pair.setValue(0);
+    	}
     }
     
     /**
