@@ -1,7 +1,9 @@
 package edu.ruc.user;
+
 import edu.ruc.data.*;
 
 import java.util.*;
+
 public class User {
 	private long uid;
 	private int length;
@@ -59,9 +61,9 @@ public class User {
     /**
      * Find a attribute from User.
      *
-     * @param key the key of the attribute wanted to find
+     * @param attributeName the name of the attribute wanted to find
      */    
-    public Attribute findValue(String attributeName) {
+    public Attribute findAttribute(String attributeName) {
     	for(Attribute attribute:arrayList) {
     		if (attribute.getAttributeName() == attributeName)
     			return attribute;
@@ -83,13 +85,19 @@ public class User {
     	}
     	pushBack(attribute);
     }
-    
+
     /**
-     * Remove a pair from SparseVector.
+     * Remove a attribute from User.
      *
-     * @param key the key of the pair wanted to remove
+     * @param attributeName the name of the attribute wanted to remove
      */    
-    public void RemovePair(int key) {
-    	arrayList.remove(key);
+    public void removeAttribute(String attributeName) {
+    	for(Attribute attribute:arrayList) {
+    		if (attribute.getAttributeName() == attributeName) {
+    			arrayList.remove(attribute);
+    			return;
+    		}
+    	}
     }
+    
 }

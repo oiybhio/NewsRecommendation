@@ -1,7 +1,6 @@
 package edu.ruc.user;
-import java.util.*;
 
-import edu.ruc.data.Pair;
+import java.util.*;
 
 public class OnlineUsers {
 	private int length;
@@ -24,6 +23,7 @@ public class OnlineUsers {
     	arrayList.add(user);
     	length++;
     }
+    
     /**
      * Get size.
      */
@@ -44,7 +44,7 @@ public class OnlineUsers {
     /**
      * Find a user from OnlineUsers.
      *
-     * @param key the key of the pair wanted to find
+     * @param uid the uid of the user wanted to find
      */    
     public User findUser(long uid) {
     	for(User user:arrayList) {
@@ -73,13 +73,14 @@ public class OnlineUsers {
      * Remove a user from OnlineUsers.
      *
      * @param uid the uid of the user wanted to remove
-     * 
-     * remove  not finish()
      */    
-    public void RemoveUser(long uid) {
+    public void removeUser(long uid) {
     	for(User user:arrayList) {
-    		if (user.getUid() == uid)
-    		{}
+    		if (user.getUid() == uid) {
+    			arrayList.remove(user);
+    			return;
+    		}
     	}
     }
+    
 }

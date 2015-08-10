@@ -77,8 +77,10 @@ public class SparseVector {
      */    
     public void removePair(int key) {
     	for(Pair pair:arrayList) {
-    		if (pair.getKey() == key)
-    			pair.setValue(0);
+    		if (pair.getKey() == key) {
+    			arrayList.remove(pair);
+    			return;
+    		}
     	}
     }
     
