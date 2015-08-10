@@ -1,0 +1,95 @@
+package edu.ruc.user;
+import edu.ruc.data.*;
+
+import java.util.*;
+public class User {
+	private long uid;
+	private int length;
+	private List<Attribute> arrayList;
+	
+	/**
+     * Constructor for a SparseBehavior.
+     */
+    public User(long uid) {
+    	this.uid = uid;
+    	length = 0;
+    	arrayList = new ArrayList<Attribute>();
+    }
+    
+    public User(long uid, int length, List<Attribute> arrayList) {
+    	this.uid = uid;
+    	this.length = length;
+    	this.arrayList = arrayList;
+    }
+    
+    /**
+     * Get size.
+     */
+    public int size() {
+    	return length;
+    }
+    
+    /**
+     * Get uid.
+     */
+    public long getUid() {
+    	return uid;
+    }
+    
+    /**
+     * Add a attribute to User.
+     *
+     * @param attribute the object wanted to push back
+     */    
+    public void pushBack(Attribute attribute) {
+    	arrayList.add(attribute);
+    	length++;
+    }
+    
+    /**
+     * Get a attribute from User.
+     *
+     * @param i the index of the attribute wanted to get
+     */    
+    public Attribute getAttributeAt(int i) {
+    	Attribute attribute = (Attribute) arrayList.get(i);
+		return attribute;
+    }
+    
+    /**
+     * Find a attribute from User.
+     *
+     * @param key the key of the attribute wanted to find
+     */    
+    public Attribute findValue(String attributeName) {
+    	for(Attribute attribute:arrayList) {
+    		if (attribute.getAttributeName() == attributeName)
+    			return attribute;
+    	}
+    	return null;
+    }
+    
+    /**
+     * modify a attribute in User.
+     *
+     * @param attribute the attribute wanted to modify
+     */    
+    public void modifyAttribute(Attribute attribute) {
+    	for(Attribute a:arrayList) {
+    		if (a.getAttributeName() == attribute.getAttributeName()) {
+    			a = attribute;
+    			return;
+    		}
+    	}
+    	pushBack(attribute);
+    }
+    
+    /**
+     * Remove a pair from SparseVector.
+     *
+     * @param key the key of the pair wanted to remove
+     */    
+    public void RemovePair(int key) {
+    	arrayList.remove(key);
+    }
+}
