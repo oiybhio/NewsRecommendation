@@ -75,7 +75,7 @@ public class SparseVector {
      *
      * @param key the key of the pair wanted to remove
      */    
-    public void RemovePair(int key) {
+    public void removePair(int key) {
     	for(Pair pair:arrayList) {
     		if (pair.getKey() == key)
     			pair.setValue(0);
