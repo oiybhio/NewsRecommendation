@@ -11,7 +11,6 @@ private LogAnalysis analysis;   // the analysis of the action
 ```
 一个数据结构用来记录用户行为<uid, nid, behave, time ... >
 ## NewsAnalysis
-```java
 对news特征值的获取与分析，目前还没与文慧师兄对接
 ## LogAnalysis
 ```java
