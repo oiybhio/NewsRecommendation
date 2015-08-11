@@ -47,6 +47,13 @@ public class User {
     	arrayList.add(attribute);
     	length++;
     }
+
+    /**
+     * Get attribute list from User.
+     */    
+    public List<Attribute> getAttributeList() {
+    	return arrayList;
+    }
     
     /**
      * Get a attribute from User.
