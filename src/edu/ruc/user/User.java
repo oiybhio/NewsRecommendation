@@ -10,7 +10,7 @@ public class User {
 	private List<Attribute> arrayList;
 	
 	/**
-     * Constructor for a SparseBehavior.
+     * Constructor for a User.
      */
     public User(long uid) {
     	this.uid = uid;
