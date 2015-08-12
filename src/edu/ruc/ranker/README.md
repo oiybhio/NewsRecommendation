@@ -8,6 +8,9 @@ public List<News> query(User user, List<News> candidateList)
 
 ## VSMRanker
 ```java
+private List<Score> scoreList;
+private List<News> sortedNewsList;
+
 public List<News> query(User user, List<News> newsList)
 ```
 基于空间向量模型的推荐
@@ -41,18 +44,24 @@ public int position; // 在原 List<News> 中的位置
 
 ## LearningRanker
 ```java
+private List<News> sortedNewsList;
+
 public List<News> query(User user, List<News> newsList)
 ```
 基于机器学习的推荐（尚未完成）
 
 ## TimeRanker
 ```java
+private List<News> sortedNewsList;
+
 public List<News> query(User user, List<News> newsList)
 ```
 基于时间的推荐
 
 ## PopularityRanker
 ```java
+private List<News> sortedNewsList;
+
 public List<News> query(User user, List<News> newsList)
 ```
 基于热度的推荐
@@ -60,6 +69,7 @@ public List<News> query(User user, List<News> newsList)
 ## RandomMerge
 ```java
 private double [] p = new double [] {p1, p2, p3, p4};
+
 public List<News> merge(List<News> newsList1, List<News> newsList2, List<News> newsList3, List<News> newsList4)
 ```
 将不同的推荐列表随机整合在一起（尚未完成）
