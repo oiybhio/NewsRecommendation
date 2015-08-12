@@ -39,6 +39,18 @@ public class CosineSimilarity implements Similarity {
 		}
 	}
 	
+	public void calculate(DenseVector v1, DenseVector v2, double w) {
+		int len1 = v1.size();
+		int len2 = v2.size();
+		int len = Math.min(len1, len2);
+		for (int i = 0; i < len; i += 1) {
+			sum1 += w * v1.getValue(i) * v2.getValue(i);
+			sum2 += w * v1.getValue(i) * v1.getValue(i);
+			sum3 += w * v2.getValue(i) * v2.getValue(i);
+		}
+		
+	}
+	
 	public double getSimilarity(User user, News news, Weight weight) {
 		sum1 = sum2 = sum3 = 0;
 		for (int i=0; i<weight.length; i+=1) {
@@ -46,7 +58,14 @@ public class CosineSimilarity implements Similarity {
 			double w = weight.weightList.get(i);
 			Attribute attribute1 = user.findAttribute(attributeName);
 			Attribute attribute2 = news.findAttribute(attributeName);
-			calculate(attribute1.getSparseVector(), attribute2.getSparseVector(), w);
+			switch(attribute1.getVectorType()) {
+			case SPARSE:
+				calculate(attribute1.getSparseVector(), attribute2.getSparseVector(), w);
+				break;
+			case DENSE:
+				calculate(attribute1.getDenseVector(), attribute2.getDenseVector(), w);
+			}
+			
 		}
 		return (sum1 / Math.sqrt(sum2 * sum3));
 	}

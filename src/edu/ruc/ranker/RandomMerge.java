@@ -22,5 +22,6 @@ public class RandomMerge {
 	
 	public List<News> merge(List<News> newsList1, List<News> newsList2, List<News> newsList3, List<News> newsList4) {
 		// Didn't finish.
+		return null;
 	}
 }

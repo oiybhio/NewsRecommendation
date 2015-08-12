@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class SparseVector {
-	private int length;
 	private ArrayList<Pair> arrayList;
 	
     /**
      * Constructor for a SparseVector.
      */
     public SparseVector() {
-    	length = 0;
     	arrayList = new ArrayList<Pair>();
     }
 
@@ -19,7 +17,7 @@ public class SparseVector {
      * Get size.
      */
     public int size() {
-    	return length;
+    	return arrayList.size();
     }
     
     /**
@@ -29,7 +27,6 @@ public class SparseVector {
      */    
     public void pushBack(Pair pair) {
     	arrayList.add(pair);
-    	length++;
     }
     
     /**

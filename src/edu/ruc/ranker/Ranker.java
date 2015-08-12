@@ -18,11 +18,11 @@ public class Ranker {
 		TimeRanker timeRanker = new TimeRanker();
 		List<News> newsList2 = timeRanker.query(user, candidateList);
 		
-		LearningRanker learningRanker = new LearningRanker();
-		List<News> newsList3 = learningRanker.query(user, candidateList);		
+		//LearningRanker learningRanker = new LearningRanker();
+		//List<News> newsList3 = learningRanker.query(user, candidateList);		
 		
-		RandomMerge randomMerge = new RandomMerge(0.25, 0.25, 0.25, 0.25);
-		newsList = randomMerge.merge(newsList0, newsList1, newsList2, newsList3);
+		//RandomMerge randomMerge = new RandomMerge(0.25, 0.25, 0.25, 0.25);
+		//newsList = randomMerge.merge(newsList0, newsList1, newsList2, newsList3);
 	}
 	
 }
