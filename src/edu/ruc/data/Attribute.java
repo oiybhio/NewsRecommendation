@@ -141,4 +141,20 @@ public class Attribute {
 		denseVector.modify(index, value);
 	}
 	
+	/**
+	 * Output the elements into screen.
+	 */
+	public void display() {
+		System.out.println("Attribute Name: " + attributeName);
+		System.out.println("Dictionary Id: " + dictId);
+		switch(vectorType) {
+		case SPARSE:
+			sparseVector.display();
+			break;
+		case DENSE:
+			denseVector.display();
+			break;
+		}
+	}
+	
 }

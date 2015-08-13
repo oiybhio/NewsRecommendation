@@ -92,10 +92,10 @@ public class SparseVector {
 	 * Output the elements into screen.
 	 */
 	public void display() {
-		System.out.println("{");
+		System.out.print("{");
 		for(Pair pair:arrayList) {
 			pair.display();
-			System.out.println(" ");
+			System.out.print(" ");
         }
 		System.out.println("}");
 	}

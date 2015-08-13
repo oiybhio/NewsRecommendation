@@ -65,9 +65,9 @@ public class DenseVector {
 	 * Output the elements into screen.
 	 */
 	public void display() {
-		System.out.println("{");
+		System.out.print("{");
 		for (int i = 0; i < arrayList.size(); i += 1)
-			System.out.println(i + " " + arrayList.get(i));
+			System.out.print(i + " " + arrayList.get(i));
 		System.out.println("}");
 	}
 }
