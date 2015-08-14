@@ -6,9 +6,9 @@ import edu.ruc.user.*;
 public class Behavior implements Comparable{
 	private long uid;
 	private long nid;
-	private String behave;
+	private int behave;
 	private long startTime;
-	private String comment;
+	private int comment;
 	private long time;
 	
 	private LogAnalysis analysis;
@@ -18,20 +18,20 @@ public class Behavior implements Comparable{
      *              and some don't, such as click
      */
 	
-	public Behavior(long uid, long nid, String behave, long startTime, long time) {
+	public Behavior(long uid, long nid, int behave, long startTime, long time) {
 		this.uid = uid;
 		this.nid = nid;
 		this.behave = behave;
 		this.startTime = startTime;
 		this.time = time;
 	}
-	public Behavior(long uid, long nid, String behave, long startTime) {
+	public Behavior(long uid, long nid, int behave, long startTime) {
 		this.uid = uid;
 		this.nid = nid;
 		this.behave = behave;
 		this.startTime = startTime;
 	}
-	public Behavior(long uid, long nid, String behave, long startTime, String comment) {
+	public Behavior(long uid, long nid, int behave, long startTime, String comment) {
 		this.uid = uid;
 		this.nid = nid;
 		this.behave = behave;
@@ -78,7 +78,7 @@ public class Behavior implements Comparable{
 	/**
      * Get behave.
      */
-	public String getBehave() {
+	public int getBehave() {
 		return behave;
 	}
 	
