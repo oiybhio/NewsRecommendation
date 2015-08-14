@@ -1,4 +1,4 @@
-package news;
+package edu.ruc.news;
 
 import java.util.ArrayList;
 
