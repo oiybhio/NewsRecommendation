@@ -8,21 +8,50 @@ import java.util.*;
 
 public class Ranker {
 
-	public List<News> query(User user, List<News> candidateList) {
-		VSMRanker vsmRanker = new VSMRanker();
-		List<News> newsList0 = vsmRanker.query(user, candidateList);
+	public List<News> query(ResultStore resultStore, User user, String category, List<News> candidateList) {
 		
-		PopularityRanker popularityRanker = new PopularityRanker();
-		List<News> newsList1 = popularityRanker.query(user, candidateList);
+		List<News> newsList0, newsList1, newsList2, newsList3; 
 		
-		TimeRanker timeRanker = new TimeRanker();
-		List<News> newsList2 = timeRanker.query(user, candidateList);
+		Result result = resultStore.find(user, category, RankerType.VSM);
+		if (result == null) {
+			VSMRanker vsmRanker = new VSMRanker();
+			newsList0 = vsmRanker.query(user, candidateList);
+			resultStore.add(new Result(user, category, RankerType.VSM, newsList0));
+		} else {
+			newsList0 = result.getNewsList();
+		}
 		
-		//LearningRanker learningRanker = new LearningRanker();
-		//List<News> newsList3 = learningRanker.query(user, candidateList);		
+		result = resultStore.find(user, category, RankerType.POPULARITY);
+		if (result == null) {
+			PopularityRanker popularityRanker = new PopularityRanker();
+			newsList1 = popularityRanker.query(user, candidateList);
+			resultStore.add(new Result(user, category, RankerType.POPULARITY, newsList1));
+		} else {
+			newsList1 = result.getNewsList();
+		}
+		
+		result = resultStore.find(user, category, RankerType.TIME);
+		if (result == null) {
+			TimeRanker timeRanker = new TimeRanker();
+			newsList2 = timeRanker.query(user, candidateList);
+			resultStore.add(new Result(user, category, RankerType.TIME, newsList2));
+		} else {
+			newsList2 = result.getNewsList();
+		}		
+	
+		/*result = resultStore.find(user, category, RankerType.LEARNING);
+		if (result == null) {
+			LearningRanker learningRanker = new LearningRanker();
+			newsList3 = learningRanker.query(user, candidateList);
+			resultStore.add(new Result(user, category, RankerType.LEARNING, newsList3));
+		} else {
+			newsList3 = result.getNewsList();
+		}*/
 		
 		//RandomMerge randomMerge = new RandomMerge(0.25, 0.25, 0.25, 0.25);
 		//newsList = randomMerge.merge(newsList0, newsList1, newsList2, newsList3);
+		
+		return null; // Didn't finish.
 	}
 	
 }
