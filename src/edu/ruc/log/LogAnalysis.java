@@ -10,22 +10,17 @@ public class LogAnalysis {
 	/**
      * Constructor for a LogAnalysis.
      */
-	public LogAnalysis(User u, long nid, long startTime, long time) {
+	public LogAnalysis(User u, NewsAnalysis newsA, long startTime) {
 		user = u;
-		newsA = new NewsAnalysis(nid);
-		this.time = time;
+		this.newsA = newsA;
 		this.startTime = startTime;
 	}
-	public LogAnalysis(User u, long nid, long StartTime) {
-		user = u;
-		newsA = new NewsAnalysis(nid);
-		this.startTime = startTime;
-	} 
 	
 	/**
      * Update user.
      * @return updated user's features.
      */
 	public void UpdateUser() {
+		user.Update();
 	}
 }
