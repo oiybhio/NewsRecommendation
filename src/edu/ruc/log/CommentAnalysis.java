@@ -7,10 +7,10 @@ public class CommentAnalysis extends LogAnalysis{
 	/**
      * Constructor for a CollectAnalysis.
      */
-	public CommentAnalysis(User u, long nid, long StartTime, String comment) {
-		super(u, nid, StartTime);
+	public CommentAnalysis(User u, NewsAnalysis newsA, long StartTime, String comment) {
+		super(u, newsA, StartTime);
 		this.comment = comment;
-	} 
+	}
 	
 	/**
      * Update user.
