@@ -41,16 +41,17 @@ public class Behavior implements Comparable{
 	/**
      * Analyse user's behavior.
      */
-	public void BehaveAnalyse(OnlineUsers Ousers) {
+	public void BehaveAnalyse(OnlineUsers Ousers,NewsList newslist) {
 		User u = Ousers.findUser(uid);
-		if(behave.equals("click")) 
-			analysis = new ClickAnalysis(u,nid,startTime);
-		else if(behave.equals("collect")) 
-			analysis = new CollectAnalysis(u,nid,startTime);
-		else if(behave.equals("browse")) 
-			analysis = new BrowseAnalysis(u,nid,startTime,time);
-		else if(behave.equals("comment")) 
-			analysis = new CommentAnalysis(u,nid,startTime,comment);
+		NewsAnalysis na = new NewsAnalysis(newslist.getNews(nid),nid);
+		if(behave==1) // Click 
+			analysis = new ClickAnalysis(u,na,startTime);
+		else if(behave==2) // Collect
+			analysis = new CollectAnalysis(u,na,startTime);
+		else if(behave==3) // Browse 
+			analysis = new BrowseAnalysis(u,na,startTime,time);
+		else if(behave==4) //Comment 
+			analysis = new CommentAnalysis(u,na,startTime,comment);
 	}
 	
 	/**
