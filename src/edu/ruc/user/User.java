@@ -94,6 +94,12 @@ public class User {
     }
 
     /**
+     * Update User
+     */    
+    public void Update() {
+    }
+    
+    /**
      * Remove a attribute from User.
      *
      * @param attributeName the name of the attribute wanted to remove
