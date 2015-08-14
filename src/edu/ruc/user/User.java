@@ -112,5 +112,13 @@ public class User {
     		}
     	}
     }
-    
+    /**
+    * Output the elements into screen.
+    */
+    public void display() {
+	System.out.println("userID : "+uid);
+	for(int i=0;i<length;i++) {
+		getAttributeAt(i).display();
+	}
+    }
 }
