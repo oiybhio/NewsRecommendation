@@ -1,7 +1,8 @@
-package news;
+package edu.ruc.news;
 
 import java.util.ArrayList;
 import java.util.List;
+import edu.ruc.data.*;
 
 public class News {
 
