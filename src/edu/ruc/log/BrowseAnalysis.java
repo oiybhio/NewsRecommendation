@@ -6,8 +6,9 @@ public class BrowseAnalysis extends LogAnalysis {
 	/**
      * Constructor for a BrowseAnalysis.
      */
-	public BrowseAnalysis(User u, long nid, long startTime, long time) {
-		super(u, nid, startTime, time);
+	public BrowseAnalysis(User u, NewsAnalysis newsA, long startTime, long time) {
+		super(u, newsA, startTime);
+		this.time = time;
 		// TODO Auto-generated constructor stub
 	}
 	
