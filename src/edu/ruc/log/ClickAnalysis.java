@@ -5,8 +5,8 @@ public class ClickAnalysis extends LogAnalysis {
 	/**
      * Constructor for a ClickAnalysis.
      */
-	public ClickAnalysis(User u, long nid, long StartTime) {
-		super(u, nid, StartTime);
+	public ClickAnalysis(User u, NewsAnalysis newsA, long StartTime) {
+		super(u, newsA, StartTime);
 		// TODO Auto-generated constructor stub
 	}
 	
