@@ -6,8 +6,8 @@ public class CollectAnalysis extends LogAnalysis {
 	/**
      * Constructor for a CollectAnalysis.
      */
-	public CollectAnalysis(User u, long nid, long StartTime) {
-		super(u, nid, StartTime);
+	public CollectAnalysis(User u, NewsAnalysis newsA, long StartTime) {
+		super(u, newsA, StartTime);
 	} 
 	
 	/**
