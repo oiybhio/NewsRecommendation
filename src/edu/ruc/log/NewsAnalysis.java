@@ -9,9 +9,9 @@ public class NewsAnalysis {
 	/**
      * Constructor for a analysis.
      */
-	public NewsAnalysis(long nid) {
+	public NewsAnalysis(News news, long nid) {
 		this.nid = nid;
-		news = new News(nid);
+		this.news = news;
 	}
 
 	/**
