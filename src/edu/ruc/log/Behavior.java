@@ -2,13 +2,14 @@ package edu.ruc.log;
 
 import edu.ruc.data.Pair;
 import edu.ruc.user.*;
+import edu.ruc.news.*;
 
 public class Behavior implements Comparable{
 	private long uid;
 	private long nid;
 	private int behave;
 	private long startTime;
-	private int comment;
+	private String comment;
 	private long time;
 	
 	private LogAnalysis analysis;
