@@ -1,7 +1,9 @@
 package edu.ruc.log;
 
+import edu.ruc.news.*;
 import java.util.*;
 import edu.ruc.data.*;
+import edu.ruc.news.*;
 
 public class NewsAnalysis {
 	private long nid;
