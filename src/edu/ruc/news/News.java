@@ -11,8 +11,8 @@ public class News {
 //
 		
     
-    private static long id;
-	private static ArrayList<Attribute> array;
+        private long id;
+	private ArrayList<Attribute> array;
  
 
 //  构造函数
