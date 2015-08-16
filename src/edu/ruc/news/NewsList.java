@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class NewsList {
 	 private ArrayList<News> array;
-	 //æž„é€ å‡½æ•°
+	 //¹¹Ôìº¯Êý
      public NewsList(){
     	 array=new ArrayList<News>();
      }
-     //æ·»åŠ news å¦‚æžœå­˜åœ¨ å°±è¦†ç›– è¿”å›žfalse
+     //Ìí¼Ónews Èç¹û´æÔÚ ¾Í¸²¸Ç ·µ»Øfalse
      public boolean addNews(News news){
     	 for(News n:array){
     		 if(n.getID()==news.getID()){

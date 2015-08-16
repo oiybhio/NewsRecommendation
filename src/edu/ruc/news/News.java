@@ -6,8 +6,8 @@ import edu.ruc.data.*;
 
 public class News {
 
-//	News : ä¸€æ¡æ–°é—»çš„åŸºæœ¬ç»„æˆå’Œæ“ä½œã€‚
-//  ä¸»è¦çš„æ¥å£å°±æ˜¯æ ¹æ®æ ‡ç­¾åå­—å–attribute
+//	News : Ò»ÌõĞÂÎÅµÄ»ù±¾×é³ÉºÍ²Ù×÷¡£
+//  Ö÷ÒªµÄ½Ó¿Ú¾ÍÊÇ¸ù¾İ±êÇ©Ãû×ÖÈ¡attribute
 //
 		
     
@@ -15,21 +15,21 @@ public class News {
 	private ArrayList<Attribute> array;
  
 
-//  æ„é€ å‡½æ•°
- // å”¯ä¸€ä¸€ç§æ„é€ å‡½æ•°ï¼ŒæŒ‡å®šä¸€ä¸ªidä½œä¸ºå”¯ä¸€æ ‡è¯†
+//  ¹¹Ôìº¯Êı
+ // Î¨Ò»Ò»ÖÖ¹¹Ôìº¯Êı£¬Ö¸¶¨Ò»¸öid×÷ÎªÎ¨Ò»±êÊ¶
 	public News(long id){
 		this.id=id;
 		array=new ArrayList<Attribute>();
 	}
 	
-//  æ–¹æ³•
+//  ·½·¨
 	
-	//å¾—åˆ°ID
+	//µÃµ½ID
 	public long getID(){
 		return this.id;
 	}
 	
-	//è®¾ç½®å±æ€§ å¦‚æœå­˜åœ¨ å°±è¦†ç›– è¿”å›fasle
+	//ÉèÖÃÊôĞÔ Èç¹û´æÔÚ ¾Í¸²¸Ç ·µ»Øfasle
 	public boolean setAttribute(Attribute attribute){
 		for(Attribute a:array){
 			if(a. getAttributeName().equals(attribute.getAttributeName())){
@@ -41,7 +41,7 @@ public class News {
 		return true;
 	}
 	
-	//åˆ é™¤å±æ€§ ä¸å­˜åœ¨è¿”å›false
+	//É¾³ıÊôĞÔ ²»´æÔÚ·µ»Øfalse
 	public boolean removeAttribute(String attribute_name){
 		for(Attribute a:array){
 			if(a. getAttributeName().equals(attribute_name)){
@@ -53,12 +53,12 @@ public class News {
 		return false;
 	}
 	
-	//è¿”å›å±æ€§æ•°é‡
+	//·µ»ØÊôĞÔÊıÁ¿
 	public int getLengthAttribute(){
 		return array.size();
 	}
 	
-	//æ ¹æ®å±æ€§åå­—è¿”å›å±æ€§
+	//¸ù¾İÊôĞÔÃû×Ö·µ»ØÊôĞÔ
 	public Attribute getAttributeByName(String attribute_name){
 		
 		for(Attribute a:array){
@@ -74,12 +74,12 @@ public class News {
 	
 	
 	
-	//è¿”å›å±æ€§åˆ—è¡¨
+	//·µ»ØÊôĞÔÁĞ±í
 	public List<Attribute> getAttributeList(){
 		return array;
 	}
 	
-	//è¿”å›å±æ€§åå­—åˆ—è¡¨
+	//·µ»ØÊôĞÔÃû×ÖÁĞ±í
 	public List<String> getAttributeListName(){
 		ArrayList<String> arrayName=new ArrayList<String>();
 		for(Attribute a:array){
@@ -88,7 +88,7 @@ public class News {
 		return arrayName;
 	}
 	
-	//åˆ¤æ–­å±æ€§æ˜¯å¦å­˜åœ¨
+	//ÅĞ¶ÏÊôĞÔÊÇ·ñ´æÔÚ
 	public boolean isExistAttributeByName(String attribute_name){
 		for(Attribute a:array){
 			if(a. getAttributeName().equals(attribute_name)){		
@@ -97,7 +97,7 @@ public class News {
 		}
 		return false;
 	}
-	//æ‰“å°
+	//´òÓ¡
 	public String printAttribute(){
 		return "";
 	}

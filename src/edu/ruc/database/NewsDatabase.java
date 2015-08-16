@@ -1,7 +1,7 @@
-package Database;
+package edu.ruc.database;
 
-import news.News;
-import news.NewsList;
+import edu.ruc.news.News;
+import edu.ruc.news.NewsList;
 
 public class NewsDatabase {
       
@@ -9,7 +9,7 @@ public class NewsDatabase {
 	  public NewsDatabase(){
     	  
       }
-      //添加新闻
+      //
       public void setNews(News news){
     	  
       }
@@ -25,7 +25,7 @@ public class NewsDatabase {
       public News getNews(long id){
     	  return new News(0);
       }
-      //设置数据库地址
+     
       public void setURL(String url){
     	  
       }
