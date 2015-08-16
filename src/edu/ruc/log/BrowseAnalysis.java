@@ -3,6 +3,7 @@ package edu.ruc.log;
 import edu.ruc.user.User;
 
 public class BrowseAnalysis extends LogAnalysis {
+	private long time;
 	/**
      * Constructor for a BrowseAnalysis.
      */
