@@ -59,7 +59,7 @@ public class News {
 	}
 	
 	//根据属性名字返回属性
-	public Attribute getAttributeByName(String attribute_name){
+	public Attribute getAttribute(String attribute_name){
 		
 		for(Attribute a:array){
 			if(a. getAttributeName().equals(attribute_name)){
