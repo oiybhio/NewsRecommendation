@@ -1,6 +1,5 @@
 package edu.ruc.ranker;
 
-import edu.ruc.data.*;
 import edu.ruc.user.*;
 import edu.ruc.news.*;
 
@@ -10,7 +9,7 @@ public class Ranker {
 
 	public List<News> query(ResultStore resultStore, User user, String category, List<News> candidateList) {
 		
-		List<News> newsList0, newsList1, newsList2, newsList3; 
+		List<News> newsList0, newsList1, newsList2/*, newsList3*/; 
 		
 		Result result = resultStore.find(user, category, RankerType.VSM);
 		if (result == null) {
@@ -21,6 +20,12 @@ public class Ranker {
 			newsList0 = result.getNewsList();
 		}
 		
+		System.out.println("UserId:" + user.getUid() + " Category:" + category + " Ranker:VSM");
+		for(News news:newsList0) {
+			System.out.println(news.getTitle());
+		}
+		System.out.println();
+		
 		result = resultStore.find(user, category, RankerType.POPULARITY);
 		if (result == null) {
 			PopularityRanker popularityRanker = new PopularityRanker();
@@ -29,6 +34,12 @@ public class Ranker {
 		} else {
 			newsList1 = result.getNewsList();
 		}
+
+		System.out.println("UserId:" + user.getUid() + " Category:" + category + " Ranker:Hotness");
+		for(News news:newsList1) {
+			System.out.println(news.getTitle());
+		}
+		System.out.println();		
 		
 		result = resultStore.find(user, category, RankerType.TIME);
 		if (result == null) {
@@ -37,7 +48,13 @@ public class Ranker {
 			resultStore.add(new Result(user, category, RankerType.TIME, newsList2));
 		} else {
 			newsList2 = result.getNewsList();
-		}		
+		}
+
+		System.out.println("UserId:" + user.getUid() + " Category:" + category + " Ranker:Time");
+		for(News news:newsList2) {
+			System.out.println(news.getTitle());
+		}
+		System.out.println();		
 	
 		/*result = resultStore.find(user, category, RankerType.LEARNING);
 		if (result == null) {
