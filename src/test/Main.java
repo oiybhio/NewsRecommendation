@@ -1,22 +1,20 @@
 package test;
 
-import edu.ruc.database.NewsDatabase;
-import edu.ruc.database.UserDatabase;
-import edu.ruc.news.News;
-import edu.ruc.news.NewsList;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-
 import edu.ruc.data.*;
+import edu.ruc.data.Dictionary;
+import edu.ruc.news.*;
+import edu.ruc.user.*;
+import edu.ruc.ranker.*;
+import edu.ruc.database.*;
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
 	 private static NewsDatabase newsData;//the database of news
 	 private static UserDatabase userData;//the database of user
+	 private static OnlineUsers users;
+	 private static ResultStore resultStore;
 	 private static Dictionary dict;// the dictionary of features
 	 private static Alphabet attributeSet;// the alphabet of attribute name
 	 private static final String news_filename="";//the location of news_file 
@@ -25,23 +23,51 @@ public class Main {
 	 private static final String print_filename="";
 	 private static String default_code="utf-8";
 	 private static long num_news;
+	 
 	 private static void Initialize(){//Initialize
 		 //initialize variables
 		 num_news=0;
 		 newsData=new NewsDatabase();
 		 userData=new UserDatabase();
+		 resultStore=new ResultStore();
 		 dict=new Dictionary();
 		 attributeSet=new Alphabet();
 	 }
 	 private static void Ranker(){//for every user ,rank the newslist
-		 
+		 for(int i=0;i<users.size();i++) {
+			 User user = users.getUserAt(i);
+			 Ranker ranker = new Ranker();
+			 List<News> output = new ArrayList<News>();
+			 output = ranker.query(resultStore, user, "sports", newsData.getNewsList("sports"));
+			 print(output);
+			 output = ranker.query(resultStore, user, "social", newsData.getNewsList("social"));
+			 print(output);
+			 output = ranker.query(resultStore, user, "economy", newsData.getNewsList("economy"));
+			 print(output);
+			 output = ranker.query(resultStore, user, "all", newsData.getNewsList("all"));
+			 print(output);			 
+		 }
 	 }
 	 private static News CreateNews(){
 		 return new News(num_news++);
 	 }
+	 
+	 private static void CreateUsers(){
+         String[] features = new String[]{"习近平","李克强"};
+         users = new OnlineUsers();
+         for(int i=0;i<2;i++) {
+             User u = new User(i+1);
+             Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
+             a.addFeature(features[i],1);
+             u.pushBack(a);
+             users.pushBack(u);
+         }
+         users.display();
+     }
+
 	 private static void Preprocess() throws IOException{//the preprocess 
 		 InputNewsFile(news_filename,default_code);
-    	 InputUserFile(user_filename, default_code);
+    	 // InputUserFile(user_filename, default_code);
     	 
     	 doHotness();
 	 }
@@ -79,14 +105,14 @@ public class Main {
 	 private static void AddDictionary(String str){
 		 
 	 }
-     private static void InputUserFile(String filename,String code){
+     //private static void InputUserFile(String filename,String code){
 		 
-	 }
+	 //}
      
      private static void Load_feature(){// load the feature of news and user
     	 
      }
-     private static void Print(){
+     private static void print(List<News> newsList){
     	 
      }
      public static void main(String[] args) throws IOException{
@@ -103,7 +129,7 @@ public class Main {
     	 //
     	 Ranker();
     	 //print results
-    	 Print();
+    	 //Print();
     	 
      }
 }
