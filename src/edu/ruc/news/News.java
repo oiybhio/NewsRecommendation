@@ -11,9 +11,12 @@ public class News {
 //
 		
     
-        private long id;
+    private long id;
 	private ArrayList<Attribute> array;
- 
+	private String date;
+	private String category;
+    private String title;
+    private String body;
 
 //  构造函数
  // 唯一一种构造函数，指定一个id作为唯一标识
@@ -25,6 +28,32 @@ public class News {
 //  方法
 	
 	//得到ID
+	public void setDate(String date){
+		this.date=date;
+	}
+	public String getDate(){
+		return this.date;
+	}
+	public void setCategory(String category){
+		this.category=category;
+	}
+	public String getCategory(){
+		return this.category;
+	}
+	public void setTitle(String title){
+		this.title=title;
+	}
+	public String getTitle(){
+		return this.title;
+	}
+	public void setBody(String body){
+		this.body=body;
+	}
+	public String getBody(){
+		return this.body;
+	}
+	
+	
 	public long getID(){
 		return this.id;
 	}
