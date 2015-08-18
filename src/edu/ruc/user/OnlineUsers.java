@@ -82,5 +82,12 @@ public class OnlineUsers {
     		}
     	}
     }
-    
+    /**
+	 * Output the elements into screen.
+	 */
+	public void display() {
+		for(int i=0;i<length;i++) {
+			getUserAt(i).display();
+		}
+	}
 }
