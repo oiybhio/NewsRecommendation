@@ -45,7 +45,7 @@ public class NewsDatabase {
     	  System.out.println("no news");
     	  return new News(-1);
       }
-      public NewsList getNewsListbyCategory(String category){
+      public NewsList getNewsList(String category){
     	  NewsList newsList=new NewsList();
     	  for(News n:array){
     		  if(n.getCategory().equals(category)){
