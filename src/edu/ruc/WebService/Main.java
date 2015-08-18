@@ -1,4 +1,4 @@
-package WebService;
+package edu.ruc.WebService;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
