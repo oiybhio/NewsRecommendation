@@ -1,6 +1,5 @@
 package edu.ruc.ranker;
 
-import edu.ruc.data.*;
 import edu.ruc.user.*;
 import edu.ruc.news.*;
 

@@ -2,7 +2,7 @@ package edu.ruc.data;
 
 import java.util.Objects;
 
-public class Pair implements Comparable {
+public class Pair implements Comparable<Object> {
     private int first;
     private double second;
 

@@ -1,6 +1,6 @@
 package edu.ruc.ranker;
 
-public class Score implements Comparable {
+public class Score implements Comparable<Object> {
 	public double similarity;
 	public int position;
 	

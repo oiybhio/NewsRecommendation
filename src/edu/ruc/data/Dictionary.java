@@ -19,7 +19,7 @@ public class Dictionary {
      */
     public int size() {
     	return length;
-    }    
+    }
 
     /**
      * Add Alphabet to Dictionary.

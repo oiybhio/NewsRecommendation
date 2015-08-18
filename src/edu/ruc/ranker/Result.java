@@ -1,6 +1,5 @@
 package edu.ruc.ranker;
 
-import edu.ruc.data.*;
 import edu.ruc.user.*;
 import edu.ruc.news.*;
 
@@ -11,14 +10,14 @@ public class Result {
 	private String category;
 	private RankerType rankerType;
 	private List<News> arrayList;
-	private Date date;
+	//private Date date;
 	
 	public Result(User user, String category, RankerType rankerType, List<News> arrayList) {
 		this.user = user;
 		this.category = category;
 		this.rankerType = rankerType;
 		this.arrayList = arrayList;
-		this.date = new Date();
+		//this.date = new Date();
 	}
 	
 	public User getUser() {

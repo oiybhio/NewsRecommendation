@@ -137,7 +137,7 @@ public class Attribute {
 	 * @param index the index wanted to modify
 	 * @param value the value wanted to modify
 	 */
-	public void modigyFeature(int index, double value) {
+	public void modifyFeature(int index, double value) {
 		denseVector.modify(index, value);
 	}
 	
