@@ -53,7 +53,7 @@ public class Main {
 	 }
 	 
 	 private static void CreateUsers(){
-         String[] features = new String[]{"习近平","李克强"};
+         String[] features = new String[]{"涔犺繎骞�,"鏉庡厠寮�};
          users = new OnlineUsers();
          for(int i=0;i<2;i++) {
              User u = new User(i+1);
@@ -89,13 +89,17 @@ public class Main {
 			 br.readLine();//read time
 			 br.readLine();//read url
 			 String title=br.readLine();
-			 AddDictionary(title);
+			 String title_nlp=br.readLine();
 			 String body=br.readLine();
-			 AddDictionary(body);
+			 String body_nlp=br.readLine();
+			 
 			 String news_class=br.readLine();
-			 AddDictionary(news_class);
+			 
 			 //construct news
 			 News news=CreateNews();
+			 news.setTitle(title);
+			 news.setBody(body);
+			 news.setCategory(news_class);
 			 // add attributes by bohua do it ,add title,body,news_class
 			 doHotness();
 			 // add the newsdatabase
