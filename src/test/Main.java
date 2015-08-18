@@ -53,16 +53,26 @@ public class Main {
 	 }
 	 
 	 private static void CreateUsers(){
-         String[] features = new String[]{"涔犺繎骞�,"鏉庡厠寮�};
-         users = new OnlineUsers();
-         for(int i=0;i<2;i++) {
-             User u = new User(i+1);
-             Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
-             a.addFeature(features[i],1);
-             u.pushBack(a);
-             users.pushBack(u);
-         }
-         users.display();
+         	String[] features = new String[]{"上涨","涨幅","姚明","世界杯","骗","杀"};
+		 users = new OnlineUsers();
+		 for(int i=0;i<3;i++) {
+			 User u = new User(i+1);
+			 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
+			 a.addFeature(features[2*i],1);
+			 a.addFeature(features[2*i+1],1);
+			 u.pushBack(a);
+			 users.pushBack(u);
+		 }
+		 //Create the fourth user
+		 User u = new User(4);
+		 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
+		 a.addFeature("增长",1);
+		 a.addFeature("风险",1);
+		 a.addFeature("男篮",1);
+		 a.addFeature("联赛",1);
+		 u.pushBack(a);
+		 users.pushBack(u);
+		 users.display();
      }
 
 	 private static void Preprocess() throws IOException{//the preprocess 
