@@ -37,15 +37,10 @@ public class Main {
 		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
 			 Ranker ranker = new Ranker();
-			 List<News> output = new ArrayList<News>();
-			 output = ranker.query(resultStore, user, "sports", newsData.getNewsList("sports"));
-			 print(output);
-			 output = ranker.query(resultStore, user, "social", newsData.getNewsList("social"));
-			 print(output);
-			 output = ranker.query(resultStore, user, "economy", newsData.getNewsList("economy"));
-			 print(output);
-			 output = ranker.query(resultStore, user, "all", newsData.getNewsList("all"));
-			 print(output);			 
+			 ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
+			 ranker.query(resultStore, user, "social", newsData.getNewsList("social").getNewsList());
+			 ranker.query(resultStore, user, "economy", newsData.getNewsList("economy").getNewsList());
+			 ranker.query(resultStore, user, "all", newsData.getNewsList("all").getNewsList());
 		 }
 	 }
 	 private static News CreateNews(){
@@ -53,7 +48,7 @@ public class Main {
 	 }
 	 
 	 private static void CreateUsers(){
-         	String[] features = new String[]{"ä¸Šæ¶¨","æ¶¨å¹…","å§šæ˜","ä¸–ç•Œæ¯","éª—","æ€"};
+         	String[] features = new String[]{"ÉÏÕÇ","ÕÇ·ù","Ò¦Ã÷","ÊÀ½ç±­","Æ­","É±"};
 		 users = new OnlineUsers();
 		 for(int i=0;i<3;i++) {
 			 User u = new User(i+1);
@@ -66,10 +61,10 @@ public class Main {
 		 //Create the fourth user
 		 User u = new User(4);
 		 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
-		 a.addFeature("å¢é•¿",1);
-		 a.addFeature("é£é™©",1);
-		 a.addFeature("ç”·ç¯®",1);
-		 a.addFeature("è”èµ›",1);
+		 a.addFeature("Ôö³¤",1);
+		 a.addFeature("·çÏÕ",1);
+		 a.addFeature("ÄĞÀº",1);
+		 a.addFeature("ÁªÈü",1);
 		 u.pushBack(a);
 		 users.pushBack(u);
 		 users.display();
@@ -78,7 +73,8 @@ public class Main {
 	 private static void Preprocess() throws IOException{//the preprocess 
 		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
-    	 
+		 CreateUsers();
+		 
     	 doHotness();
 	 }
 	 private static Double getHotnessScore(){//return score of hotness
@@ -110,7 +106,7 @@ public class Main {
 			 news.setTitle(title);
 			 news.setBody(body);
 			 news.setCategory(news_class);
-			 // add attributes by bohua do it ,add title,body,news_class
+			 // add attributes,add title,body,news_class
 			 doHotness();
 			 // add the newsdatabase
 			 newsData.setNews(news);
@@ -124,9 +120,6 @@ public class Main {
 	 //}
      
      private static void Load_feature(){// load the feature of news and user
-    	 
-     }
-     private static void print(List<News> newsList){
     	 
      }
      public static void main(String[] args) throws IOException{
