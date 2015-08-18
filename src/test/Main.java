@@ -17,7 +17,8 @@ import edu.ruc.data.*;
 public class Main {
 	 private static NewsDatabase newsData;//the database of news
 	 private static UserDatabase userData;//the database of user
-	 private static Dictionary dic_text;// the dictionary of text feature
+	 private static Dictionary dict;// the dictionary of features
+	 private static Alphabet attributeSet;// the alphabet of attribute name
 	 private static final String news_filename="";//the location of news_file 
 	 private static final String user_filename="";//the location of user_file
 	 private static final String hotness_url="";//the url of solr
@@ -29,9 +30,8 @@ public class Main {
 		 num_news=0;
 		 newsData=new NewsDatabase();
 		 userData=new UserDatabase();
-		 dic_text=new Dictionary(); 
-				 
-	 	 
+		 dict=new Dictionary();
+		 attributeSet=new Alphabet();
 	 }
 	 private static void Ranker(){//for every user ,rank the newslist
 		 
