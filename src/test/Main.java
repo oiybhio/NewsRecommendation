@@ -66,7 +66,11 @@ public class Main {
 		 a.addFeature("风险",1);
 		 a.addFeature("男篮",1);
 		 a.addFeature("联赛",1);
+<<<<<<< HEAD
 		 Attribute b = new Attribute(VectorType.SPARSE,dict,attributeSet,"body");
+=======
+		 Attribute b = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
+>>>>>>> origin/master
 		 b.addFeature("贝克汉姆",1);
 		 b.addFeature("曼",1);
 		 b.addFeature("联",1);
