@@ -47,10 +47,17 @@ public class NewsDatabase {
       }
       public NewsList getNewsList(String category){
     	  NewsList newsList=new NewsList();
+    	  if(category.equals("all")){
+    		  for(News n:array){
+        		  newsList.addNews(n);
+        	  }
+        	  return newsList;
+    	  }else{
     	  for(News n:array){
     		  if(n.getCategory().equals(category)){
     			  newsList.addNews(n);
     		  }
+    	  }
     	  }
     	  return newsList;
       }

@@ -11,12 +11,12 @@ public class News {
 //
 		
     
-    private long id;
-	private ArrayList<Attribute> array;
-	private String date;
-	private String category;
-    private String title;
-    private String body;
+	public long id;
+	public ArrayList<Attribute> array;
+	public String date;
+	public String category;
+	public String title;
+	public String body;
 
 //  构造函数
  // 唯一一种构造函数，指定一个id作为唯一标识
@@ -67,6 +67,7 @@ public class News {
 				return false;
 			}
 		}
+		array.add(attribute);
 		return true;
 	}
 	

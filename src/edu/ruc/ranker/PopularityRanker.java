@@ -24,8 +24,8 @@ class NewsPopularityComparator implements Comparator<Object> {
     public int compare(Object o1, Object o2) {
     	News news1 = (News) o1;
     	News news2 = (News) o2;
-    	Attribute attribute1 = news1.getAttribute("Hotness");
-    	Attribute attribute2 = news2.getAttribute("Hotness");
+    	Attribute attribute1 = news1.getAttribute("hotness");
+    	Attribute attribute2 = news2.getAttribute("hotness");
     	double hotness1 = attribute1.getFeature(0);
     	double hotness2 = attribute2.getFeature(0);
     	if (hotness1 == hotness2)

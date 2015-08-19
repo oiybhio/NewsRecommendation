@@ -17,7 +17,7 @@ public class Main {
 	 private static ResultStore resultStore;
 	 private static Dictionary dict;// the dictionary of features
 	 private static Alphabet attributeSet;// the alphabet of attribute name
-	 private static final String news_filename="";//the location of news_file 
+	 private static final String news_filename="src/news_data/news_data_nlp.txt";//the location of news_file 
 	 private static final String user_filename="";//the location of user_file
 	 private static final String hotness_url="";//the url of solr
 	 private static final String print_filename="";
@@ -34,7 +34,8 @@ public class Main {
 		 attributeSet=new Alphabet();
 	 }
 	 private static void Ranker(){//for every user ,rank the newslist
-		 for(int i=0;i<users.size();i++) {
+		 System.out.println(users.size());
+		 for(int i=2;i<users.size();i++) {
 			 User user = users.getUserAt(i);
 			 Ranker ranker = new Ranker();
 			 ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
@@ -48,11 +49,11 @@ public class Main {
 	 }
 	 
 	 private static void CreateUsers(){
-         	String[] features = new String[]{"ÉÏÕÇ","ÕÇ·ù","Ò¦Ã÷","ÊÀ½ç±­","Æ­","É±"};
+         	String[] features = new String[]{"ä¸Šæ¶¨","æ¶¨å¹…","å§šæ˜Ž","ä¸–ç•Œæ¯","éª—","æ€"};
 		 users = new OnlineUsers();
 		 for(int i=0;i<3;i++) {
 			 User u = new User(i+1);
-			 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
+			 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
 			 a.addFeature(features[2*i],1);
 			 a.addFeature(features[2*i+1],1);
 			 u.pushBack(a);
@@ -60,30 +61,44 @@ public class Main {
 		 }
 		 //Create the fourth user
 		 User u = new User(4);
-		 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
-		 a.addFeature("Ôö³¤",1);
-		 a.addFeature("·çÏÕ",1);
-		 a.addFeature("ÄÐÀº",1);
-		 a.addFeature("ÁªÈü",1);
+		 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
+		 a.addFeature("å¢žé•¿",1);
+		 a.addFeature("é£Žé™©",1);
+		 a.addFeature("ç”·ç¯®",1);
+		 a.addFeature("è”èµ›",1);
+		 Attribute b = new Attribute(VectorType.SPARSE,dict,attributeSet,"body");
+		 b.addFeature("è´å…‹æ±‰å§†",1);
+		 b.addFeature("æ›¼",1);
+		 b.addFeature("è”",1);
 		 u.pushBack(a);
+		 u.pushBack(b);
 		 users.pushBack(u);
 		 users.display();
      }
-
-	 private static void Preprocess() throws IOException{//the preprocess 
+private static void Preprocess() throws IOException{//the preprocess 
 		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
 		 CreateUsers();
 		 
-    	 doHotness();
+    	 
 	 }
-	 private static Double getHotnessScore(){//return score of hotness
+	 private static Double getHotnessScore(String text,int order) throws IOException{//return score of hotness
+		 BufferedReader br=new BufferedReader(new 
+				 InputStreamReader(new FileInputStream(
+				 		"E://eclipse/workspace/XinHua/src/hotness/hotness.txt"),"utf-8"));
+		 String str;
+		 int sum=1;
+		 while((str=br.readLine())!=null){
+			 if(sum==order){
+				 return Double.parseDouble(str);
+			 }
+			 sum++;
+		 }
+		 
 		 return 0.0;
 	 }
 	 
-	 private static void doHotness(){
-		 getHotnessScore();
-	 }
+	 
 	 
 	 private static void InputNewsFile(String filename,String code) throws IOException{
 		 //read newsdata that has been tokenized
@@ -91,8 +106,10 @@ public class Main {
 		 BufferedReader br=new BufferedReader(new 
 				 InputStreamReader(new FileInputStream(filename),code));
 		 String str;
+		 int order=1;
 		 while((str=br.readLine())!=null){
-			 br.readLine();//read time
+			 //System.out.println(order);
+			 String date=br.readLine();//read time
 			 br.readLine();//read url
 			 String title=br.readLine();
 			 String title_nlp=br.readLine();
@@ -106,15 +123,48 @@ public class Main {
 			 news.setTitle(title);
 			 news.setBody(body);
 			 news.setCategory(news_class);
+			 news.setDate(date);
+			 //title attribute
+			 Attribute title_attribute=new Attribute(VectorType.SPARSE, 
+					 dict, attributeSet, "title");
+			 StringTokenizer st=new StringTokenizer(title_nlp," ");
+			 while(st.hasMoreTokens()){
+				 String token=st.nextToken();
+				 if(title_attribute.getFeature(token)==0){
+					 title_attribute.addFeature(token, 1.0);
+				 }else{
+					 Double d=title_attribute.getFeature(token);
+					 title_attribute.modifyFeature(token, d+1);
+				 }
+			 }
+			 news.setAttribute(title_attribute);
+			 //
+			//title attribute
+			 Attribute body_attribute=new Attribute(VectorType.SPARSE, 
+					 dict, attributeSet, "body");
+			 st=new StringTokenizer(body_nlp," ");
+			 while(st.hasMoreTokens()){
+				 String token=st.nextToken();
+				 if(body_attribute.getFeature(token)==0){
+					 body_attribute.addFeature(token, 1.0);
+				 }else{
+					 Double d=body_attribute.getFeature(token);
+					 body_attribute.modifyFeature(token, d+1);
+				 }
+			 }
+			 news.setAttribute(body_attribute);
 			 // add attributes,add title,body,news_class
-			 doHotness();
+			 Double hotness_score=getHotnessScore(title_nlp, order);
+			 Attribute hotness_attribute=new Attribute(
+					 VectorType.DENSE, dict, attributeSet, "hotness");
+			 hotness_attribute.addFeature(hotness_score);
+			 news.setAttribute(hotness_attribute);
 			 // add the newsdatabase
 			 newsData.setNews(news);
+			 order++;
 		 }
 	 }
-	 private static void AddDictionary(String str){
-		 
-	 }
+	 
      //private static void InputUserFile(String filename,String code){
 		 
 	 //}
@@ -131,8 +181,7 @@ public class Main {
     	 
     	 //doHotness();
     	 Preprocess();
-    	 //set feature
-    	 Load_feature();
+    	 
     	 //
     	 Ranker();
     	 //print results
