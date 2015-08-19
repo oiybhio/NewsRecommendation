@@ -48,11 +48,11 @@ public class Main {
 	 }
 	 
 	 private static void CreateUsers(){
-         	String[] features = new String[]{"ÉÏÕÇ","ÕÇ·ù","Ò¦Ã÷","ÊÀ½ç±­","Æ­","É±"};
+         	String[] features = new String[]{"ä¸Šæ¶¨","æ¶¨å¹…","å§šæ˜","ä¸–ç•Œæ¯","éª—","æ€"};
 		 users = new OnlineUsers();
 		 for(int i=0;i<3;i++) {
 			 User u = new User(i+1);
-			 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
+			 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
 			 a.addFeature(features[2*i],1);
 			 a.addFeature(features[2*i+1],1);
 			 u.pushBack(a);
@@ -60,12 +60,17 @@ public class Main {
 		 }
 		 //Create the fourth user
 		 User u = new User(4);
-		 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"Text");
-		 a.addFeature("Ôö³¤",1);
-		 a.addFeature("·çÏÕ",1);
-		 a.addFeature("ÄĞÀº",1);
-		 a.addFeature("ÁªÈü",1);
+		 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
+		 a.addFeature("å¢é•¿",1);
+		 a.addFeature("é£é™©",1);
+		 a.addFeature("ç”·ç¯®",1);
+		 a.addFeature("è”èµ›",1);
+		 Attribute b = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
+		 b.addFeature("è´å…‹æ±‰å§†",1);
+		 b.addFeature("æ›¼",1);
+		 b.addFeature("è”",1);
 		 u.pushBack(a);
+		 u.pushBack(b);
 		 users.pushBack(u);
 		 users.display();
      }
