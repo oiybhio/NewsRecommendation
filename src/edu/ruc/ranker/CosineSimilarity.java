@@ -8,6 +8,8 @@ public class CosineSimilarity implements Similarity {
 	private double sum1, sum2, sum3;
 	
 	public void calculate(SparseVector v1, SparseVector v2, double w) {
+		v1.sort();
+		v2.sort();
 		int len1 = v1.size();
 		int len2 = v2.size();
 		int i = 0, j = 0;

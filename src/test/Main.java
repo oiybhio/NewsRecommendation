@@ -34,13 +34,18 @@ public class Main {
 		 attributeSet=new Alphabet();
 	 }
 	 private static void Ranker(){//for every user ,rank the newslist
-		 System.out.println(users.size());
-		 for(int i=2;i<users.size();i++) {
+		 //System.out.println(users.size());
+		 /*List<News> array = newsData.getNewsList("all").getNewsList();
+		 for(News news:array) {
+			 news.display();
+		 }*/
+		 
+		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
 			 Ranker ranker = new Ranker();
-			 ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
-			 ranker.query(resultStore, user, "social", newsData.getNewsList("social").getNewsList());
-			 ranker.query(resultStore, user, "economy", newsData.getNewsList("economy").getNewsList());
+			 //ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
+			 //ranker.query(resultStore, user, "social", newsData.getNewsList("social").getNewsList());
+			 //ranker.query(resultStore, user, "economy", newsData.getNewsList("economy").getNewsList());
 			 ranker.query(resultStore, user, "all", newsData.getNewsList("all").getNewsList());
 		 }
 	 }
@@ -66,20 +71,16 @@ public class Main {
 		 a.addFeature("风险",1);
 		 a.addFeature("男篮",1);
 		 a.addFeature("联赛",1);
-<<<<<<< HEAD
 		 Attribute b = new Attribute(VectorType.SPARSE,dict,attributeSet,"body");
-=======
-		 Attribute b = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
->>>>>>> origin/master
 		 b.addFeature("贝克汉姆",1);
-		 b.addFeature("曼",1);
-		 b.addFeature("联",1);
+		 b.addFeature("曼联",1);
 		 u.pushBack(a);
 		 u.pushBack(b);
 		 users.pushBack(u);
 		 users.display();
+		 System.out.println();
      }
-private static void Preprocess() throws IOException{//the preprocess 
+	 private static void Preprocess() throws IOException{//the preprocess 
 		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
 		 CreateUsers();
@@ -89,7 +90,7 @@ private static void Preprocess() throws IOException{//the preprocess
 	 private static Double getHotnessScore(String text,int order) throws IOException{//return score of hotness
 		 BufferedReader br=new BufferedReader(new 
 				 InputStreamReader(new FileInputStream(
-				 		"E://eclipse/workspace/XinHua/src/hotness/hotness.txt"),"utf-8"));
+						 "src/hotness/hotness.txt"),"utf-8"));
 		 String str;
 		 int sum=1;
 		 while((str=br.readLine())!=null){

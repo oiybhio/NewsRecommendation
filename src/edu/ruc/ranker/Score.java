@@ -15,6 +15,10 @@ public class Score implements Comparable<Object> {
 		this.position = position;
 	}
 	
+	public void display() {
+		System.out.println(similarity + " " + position);
+	}
+	
     /**
      * Comparator.
      */
@@ -24,16 +28,15 @@ public class Score implements Comparable<Object> {
             return 0;            
         }
         else if (o != null && o instanceof Score) {   
-            Score p = (Score) o; 
-            if(similarity > p.similarity){
+            Score p = (Score) o;
+            if (similarity == p.similarity)
+            	return 0;
+            else if (similarity > p.similarity)
                 return -1;
-            }
-            else {
+            else 
             	return 1;
-            }
-        }else{
+        }else
         	return -1;
-        }
     }	
 	
 }

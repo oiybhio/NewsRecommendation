@@ -25,6 +25,7 @@ public class VSMRanker {
 		}
 		Collections.sort(scoreList);
 		for (Score score:scoreList) {
+			//score.display();
 			sortedNewsList.add(newsList.get(score.position));
 		}
 		return sortedNewsList;

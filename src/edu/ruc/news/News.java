@@ -128,11 +128,13 @@ public class News {
 		return false;
 	}
 	//¥Ú”°
-	public String printAttribute(){
-		return "";
+	public void display() {
+		System.out.println(title);
+		for(Attribute attribute:array) {
+			attribute.display();
+		}
 	}
 	
-
 	
 
 	
