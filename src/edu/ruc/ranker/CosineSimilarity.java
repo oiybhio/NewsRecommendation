@@ -18,24 +18,25 @@ public class CosineSimilarity implements Similarity {
 				sum1 += w * pair1.getValue() * pair2.getValue();
 				sum2 += w * pair1.getValue() * pair1.getValue();
 				sum3 += w * pair2.getValue() * pair2.getValue();
+				i++; j++;
 			}
 			else if (pair1.getKey() < pair2.getKey()) {
 				sum2 += w * pair1.getValue() * pair1.getValue();
-				i += 1;
+				i++;
 			} else {
 				sum3 += w * pair2.getValue() * pair2.getValue();
-				j += 1;
+				j++;
 			}
 		}
 		while (i < len1) {
 			Pair pair1 = v1.getPairAt(i);
 			sum2 += w * pair1.getValue() * pair1.getValue();
-			i += 1;
+			i++;
 		}
 		while (j < len2) {
 			Pair pair2 = v2.getPairAt(j);
 			sum3 += w * pair2.getValue() * pair2.getValue();
-			j += 1;
+			j++;
 		}
 	}
 	
