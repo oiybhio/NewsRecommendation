@@ -53,7 +53,7 @@ public class Main {
 		 return new News(num_news++);
 	 }
 	 
-	 private static void CreateUsers(){
+	 /*private static void CreateUsers(){
          	String[] features = new String[]{"上涨","涨幅","姚明","世界杯","骗","杀"};
 		 users = new OnlineUsers();
 		 for(int i=0;i<3;i++) {
@@ -79,14 +79,22 @@ public class Main {
 		 users.pushBack(u);
 		 users.display();
 		 System.out.println();
-     }
+     }*/
+	 
 	 private static void Preprocess() throws IOException{//the preprocess 
 		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
-		 CreateUsers();
-		 
-    	 
+		 //CreateUsers();
+		 MakeRandomUser makeRandomUser = new MakeRandomUser();
+		 int userNum = 2;
+		 int TopicNum = 5;
+		 int WordNum = 3;
+		 users = makeRandomUser.getRandomUser(userNum, TopicNum, WordNum, dict, attributeSet);
+		 System.out.println();
+		 users.display();
+		 System.out.println();
 	 }
+	 
 	 private static Double getHotnessScore(String text,int order) throws IOException{//return score of hotness
 		 BufferedReader br=new BufferedReader(new 
 				 InputStreamReader(new FileInputStream(
