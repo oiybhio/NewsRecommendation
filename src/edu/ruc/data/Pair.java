@@ -81,6 +81,15 @@ public class Pair implements Comparable<Object> {
     }
     
     /**
+     * Pair to String
+     * 
+     * @return String
+     */
+    public String pairToString() {
+    	return String.valueOf(first) + ":" +String.valueOf(second);
+    }
+    
+    /**
      * Output the elements of pair into screen.
      */    
     public void display() {

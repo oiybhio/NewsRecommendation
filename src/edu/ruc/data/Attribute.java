@@ -36,6 +36,32 @@ public class Attribute {
 	}
 
 	/**
+	 * Constructor for a Attribute.
+     * 
+     * @param vectorType SPARSE or DENSE
+     * @param dict The dictionary of all symbols
+     * @param attributeSet The dictionary of attribute name
+     * @param attributeName The attribute name
+	 * @param str Vector
+	 */
+	public Attribute(VectorType vectorType, Dictionary dict, Alphabet attributeSet, String attributeName, String str) {
+		switch(vectorType) {
+		case SPARSE:
+			this.dict = dict;
+			this.attributeName = attributeName;
+			sparseVector = new SparseVector(str);
+			dictId = attributeSet.getIndex(attributeName);
+			this.vectorType = VectorType.SPARSE;
+			break;
+		case DENSE:
+			this.attributeName = attributeName;
+			denseVector = new DenseVector(str);
+			this.vectorType = VectorType.DENSE;
+			break;
+		}
+	}	
+	
+	/**
 	 * Get VectorType
 	 * 
 	 * @return VectorType
@@ -140,6 +166,22 @@ public class Attribute {
 	public void modifyFeature(int index, double value) {
 		denseVector.modify(index, value);
 	}
+	
+	/**
+	 * Vector to String
+	 * 
+	 * @return String
+	 */
+	public String vectorToString() {
+		switch(vectorType) {
+		case SPARSE:
+			return sparseVector.vectorToString();
+		case DENSE:
+			return denseVector.vectorToString();
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Output the elements into screen.

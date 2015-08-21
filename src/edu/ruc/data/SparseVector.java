@@ -2,6 +2,7 @@ package edu.ruc.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.StringTokenizer;
 
 public class SparseVector {
 	private ArrayList<Pair> arrayList;
@@ -11,6 +12,22 @@ public class SparseVector {
      */
     public SparseVector() {
     	arrayList = new ArrayList<Pair>();
+    }
+    
+    /**
+     * Constructor for a SparseVector.
+     * 
+     * @param str Vector
+     */
+    public SparseVector(String str) {
+    	arrayList = new ArrayList<Pair>();
+		StringTokenizer st = new StringTokenizer(str," ");
+		while(st.hasMoreTokens()){
+			String token=st.nextToken();
+			if (token.length() < 3) continue;
+			StringTokenizer stPart = new StringTokenizer(token,":");
+			pushBack(Pair.create(Integer.parseInt(stPart.nextToken()), Double.parseDouble(stPart.nextToken())));
+		}
     }
 
     /**
@@ -87,6 +104,20 @@ public class SparseVector {
 	public void sort() {
     	Collections.sort(arrayList);
     }
+	
+	/**
+	 * Vector to String.
+	 * 
+	 * @return String
+	 */
+	public String vectorToString() {
+		String ret = new String();
+		for(Pair pair:arrayList) {
+			ret += pair.pairToString() + " ";
+        }
+		return ret;
+	}
+	
 	
 	/**
 	 * Output the elements into screen.

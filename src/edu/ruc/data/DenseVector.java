@@ -1,6 +1,7 @@
 package edu.ruc.data;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class DenseVector {
 	private ArrayList<Double> arrayList;
@@ -11,8 +12,31 @@ public class DenseVector {
     public DenseVector() {
     	arrayList = new ArrayList<Double>();
     }
+    
+    /**
+     * Constructor for a DenseVector.
+     * 
+     * @param arrayList Vector
+     */
     public DenseVector(ArrayList<Double> arrayList) {
     	this.arrayList = new ArrayList<Double>(arrayList);
+    }
+    
+    /**
+     * Constructor for a DenseVector.
+     * 
+     * @param str Vector
+     */
+    public DenseVector(String str) {
+    	arrayList = new ArrayList<Double>();
+		StringTokenizer st = new StringTokenizer(str," ");
+		while(st.hasMoreTokens()){
+			String token=st.nextToken();
+			if (token.length() < 3) continue;
+			StringTokenizer stPart = new StringTokenizer(token,":");
+			stPart.nextToken();
+			pushBack(Double.parseDouble(stPart.nextToken()));
+		}
     }
 
     /**
@@ -60,14 +84,28 @@ public class DenseVector {
     		arrayList.set(i, w);
     	}
     }
-	
+
+	/**
+	 * Vector to String.
+	 * 
+	 * @return String
+	 */
+	public String vectorToString() {
+		String ret = new String();
+		for (int i = 0; i < arrayList.size(); i += 1) {
+			ret += String.valueOf(i) + ":" + String.valueOf(arrayList.get(i)) + " ";
+        }
+		return ret;
+	}    
+    
 	/**
 	 * Output the elements into screen.
 	 */
 	public void display() {
 		System.out.print("{");
 		for (int i = 0; i < arrayList.size(); i += 1)
-			System.out.print(i + " " + arrayList.get(i));
+			System.out.print(i + ":" + arrayList.get(i) + " ");
 		System.out.println("}");
 	}
+	
 }
