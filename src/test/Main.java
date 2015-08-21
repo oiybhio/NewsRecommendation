@@ -85,6 +85,7 @@ public class Main {
 		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
 		 //CreateUsers();
+		 Outputnewsdatabase("src/news_database/news.txt");
 		 MakeRandomUser makeRandomUser = new MakeRandomUser();
 		 int userNum = 2;
 		 int TopicNum = 5;
@@ -181,7 +182,54 @@ public class Main {
      //private static void InputUserFile(String filename,String code){
 		 
 	 //}
-     
+	 private static void InputNewsdatabase(String filename) throws IOException{
+		 BufferedReader br=new BufferedReader(new 
+				 InputStreamReader(new FileInputStream(filename),"utf-8"));
+		 String str;
+		 while((str=br.readLine())!=null){
+			 
+			 StringTokenizer st=new StringTokenizer(str,"\t");
+			String id=st.nextToken();
+			String date=st.nextToken();
+			String category=st.nextToken();
+			String title=st.nextToken();
+			String body=st.nextToken();
+			String title_vector=st.nextToken();
+			String body_vector=st.nextToken();
+			String hotness_vector=st.nextToken();
+			News news=new News(Integer.parseInt(id));
+			news.setDate(date);
+			news.setBody(body);
+			news.setCategory(category);
+			news.setTitle(title);
+			Attribute title_a=new Attribute(VectorType.SPARSE, dict, attributeSet, "title",title_vector);
+		    news.setAttribute(title_a);
+		    Attribute body_a=new Attribute(VectorType.SPARSE, dict, attributeSet, "body",body_vector);
+		    news.setAttribute(body_a);
+		    Attribute hotness_a=new Attribute(VectorType.DENSE, dict, attributeSet, "hotness",hotness_vector);
+		    news.setAttribute(hotness_a);
+		 }
+		 br.close();
+	 }
+	 private static void Outputnewsdatabase(String filename) throws IOException{
+		 BufferedWriter bw=new BufferedWriter(new 
+				 OutputStreamWriter(new FileOutputStream(filename),"utf-8"));
+		NewsList newsList=newsData.getNewsList("all");
+		ArrayList<News> arrayNews=newsList.getNewsList();
+		for(News n:arrayNews){
+			bw.write(n.getID()+"\t");
+			bw.write(n.getDate()+"\t");
+			bw.write(n.getCategory()+"\t");
+			bw.write(n.getTitle()+"\t");
+			bw.write(n.getBody()+"\t");
+			bw.write("title:"+n.getAttribute("title").vectorToString()+"\t");
+			bw.write("body:"+n.getAttribute("body").vectorToString()+"\t");
+			bw.write("hotness:"+n.getAttribute("hotness").vectorToString()+"\t");
+			bw.newLine();
+		}
+		bw.close();
+		 
+	 }
      private static void Load_feature(){// load the feature of news and user
     	 
      }
