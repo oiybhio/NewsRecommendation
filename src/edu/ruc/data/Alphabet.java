@@ -40,18 +40,49 @@ public class Alphabet {
 		indices = new HashMap<String, Integer>();
 		symbols = new ArrayList<String>();
 	}
-  
+
+	/**
+	 * Constructs a new Alphabet object with some symbols stored.
+	 * 
+	 * @param symbols The array of String
+	 */
 	public Alphabet(String[] symbols) {
 		indices = new HashMap<String, Integer>();
 		this.symbols = new ArrayList<String>();
 		addSymbols(symbols);
 	}
 
+	/**
+	 * Constructs a new Alphabet object with one symbol stored.
+	 * 
+	 * @param symbol String
+	 */
 	public Alphabet(String symbol) {
 		indices = new HashMap<String, Integer>();
 		this.symbols = new ArrayList<String>();
 		addSymbol(symbol);
-	}	
+	}
+	
+	/**
+	 * Constructs a new Alphabet object that has been constructed before.
+	 * 
+	 * @param str
+	 * @param flag true or false is okay
+	 */
+	public Alphabet(String str, boolean flag) {
+		indices = new HashMap<String, Integer>();
+		symbols = new ArrayList<String>();
+		StringTokenizer st = new StringTokenizer(str," ");
+		while(st.hasMoreTokens()){
+			String token=st.nextToken();
+			if (token.length() < 3) continue;
+			StringTokenizer stPart = new StringTokenizer(token,":");
+			String sym = stPart.nextToken();
+			int value = Integer.parseInt(stPart.nextToken());
+			indices.put(sym, new Integer(value));
+			symbols.add(sym);
+		}
+	}
 	
 	/**
 	 * Adds a new symbol into the Alphabet object, and returns the integer 
@@ -147,4 +178,21 @@ public class Alphabet {
 		out.flush();
 		out.close();
 	}
+	
+	/**
+	 * HashMap to String
+	 * 
+	 * @return String
+	 */
+	public String hashMapToString() {
+		String ret = new String();
+		Iterator<String> ite = indices.keySet().iterator();
+		while(ite.hasNext()){
+			String wrd = ite.next(); 
+			int id = indices.get(wrd);
+			ret += String.valueOf(wrd) + ":" + String.valueOf(id) + " "; 
+		}
+		return ret;
+	}
+	
 }
