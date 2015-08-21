@@ -52,10 +52,10 @@ public class Main {
 	   System.out.println("client closed..");
 	}
 
-	private void SendMsg(Socket socket,boolean b) throws IOException 
+	private void SendMsg(Socket socket,String b) throws IOException 
 	{
 	   writer = new DataOutputStream(socket.getOutputStream()); 
-	   writer.writeBoolean(b);
+	   writer.writeUTF(b);
 	    writer.flush();
 	   
 	}
@@ -68,6 +68,7 @@ public class Main {
 	}
 	public boolean deal(String function, Socket socket) throws IOException {
 		DealMsg dm = new DealMsg(function);
+		dm.start();
 		return false;
 	}
 }
