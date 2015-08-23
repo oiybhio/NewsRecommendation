@@ -15,6 +15,6 @@ public class ClickAnalysis extends LogAnalysis {
      * @return updated user's feature
      */
 	public void UpdateUser(User user) {
-		
+		user.Update(newsA.getAttributes(),1.0);
 	}
 }
