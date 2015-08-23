@@ -96,7 +96,8 @@ public class User {
     /**
      * Update User
      */    
-    public void Update() {
+    public void Update(List<Attribute> newsattributes, double weight) {
+    	
     }
     
     /**
