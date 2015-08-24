@@ -18,10 +18,12 @@ public class NewsAnalysis {
 		this.nid = nid;
 		this.news = news;
 		length = 0;
+		arrayList = new ArrayList<Attribute>();
 		String[] attributeName = new String[]{"title","body"};
 		for(int i=0;i<attributeName.length;i++) {
 			if(news.isExistAttributeByName(attributeName[i])) {
 				length++;
+			//	System.out.println(news.getAttribute(attributeName[i]).vectorToString());
 				arrayList.add(news.getAttribute(attributeName[i]));
 			}
 		}
@@ -38,6 +40,12 @@ public class NewsAnalysis {
      */
 	public int size() {
 		return length;
+	}
+	/**
+     * Get uid.
+     */
+	public long getNid() {
+		return nid;
 	}
 	/**
      * Get attributes.
