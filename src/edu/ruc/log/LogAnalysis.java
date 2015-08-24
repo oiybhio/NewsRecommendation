@@ -3,10 +3,10 @@ package edu.ruc.log;
 import edu.ruc.user.User;
 
 public class LogAnalysis {
-	private User user;
-	private NewsAnalysis newsA;
-	private long startTime;
-	private long time;
+	public User user;
+	public NewsAnalysis newsA;
+	public long startTime;
+	public long time;
 	/**
      * Constructor for a LogAnalysis.
      */
@@ -21,6 +21,6 @@ public class LogAnalysis {
      * @return updated user's features.
      */
 	public void UpdateUser() {
-		user.Update();
+	//	user.Update();
 	}
 }
