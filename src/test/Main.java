@@ -1,11 +1,13 @@
 package test;
 
+import edu.ruc.WebService.BehaveType;
 import edu.ruc.data.*;
 import edu.ruc.data.Dictionary;
 import edu.ruc.news.*;
 import edu.ruc.user.*;
 import edu.ruc.ranker.*;
 import edu.ruc.database.*;
+import edu.ruc.log.*;
 
 import java.io.*;
 import java.util.*;
@@ -40,7 +42,7 @@ public class Main {
 			 news.display();
 		 }*/
 		 
-		 for(int i=0;i<users.size();i++) {
+		 for(int i=2;i<3;i++) {
 			 User user = users.getUserAt(i);
 			 Ranker ranker = new Ranker();
 			 //ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
@@ -53,7 +55,7 @@ public class Main {
 		 return new News(num_news++);
 	 }
 	 
-	 /*private static void CreateUsers(){
+	 private static void CreateUsers(){
          	String[] features = new String[]{"上涨","涨幅","姚明","世界杯","骗","杀"};
 		 users = new OnlineUsers();
 		 for(int i=0;i<3;i++) {
@@ -77,24 +79,28 @@ public class Main {
 		 u.pushBack(a);
 		 u.pushBack(b);
 		 users.pushBack(u);
-		 users.display();
-		 System.out.println();
-     }*/
+	//	 users.display();
+	//	 System.out.println();
+		 users.getUserAt(0).display();
+	//	 createLog();
+     }
+	 
+	 public static void createLog(){
+		 long nid = 33;
+		 Behavior behavior = new Behavior(3, nid, BehaveType.Click.ordinal(), 10);
+		 behavior.BehaveAnalyse(users,newsData.getNews(nid));
+		 newsData.getNews(nid).display();
+		 behavior.UpdateUserProfile();
+		 users.getUserAt(2).display();
+	 }
 	 
 	 private static void Preprocess() throws IOException{//the preprocess 
 		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
-		 //CreateUsers();
-		 MakeRandomUser makeRandomUser = new MakeRandomUser();
-		 int userNum = 2;
-		 int TopicNum = 5;
-		 int WordNum = 3;
-		 users = makeRandomUser.getRandomUser(userNum, TopicNum, WordNum, dict, attributeSet);
-		 System.out.println();
-		 users.display();
-		 System.out.println();
+		 CreateUsers();
+		 
+    	 
 	 }
-	 
 	 private static Double getHotnessScore(String text,int order) throws IOException{//return score of hotness
 		 BufferedReader br=new BufferedReader(new 
 				 InputStreamReader(new FileInputStream(
@@ -177,10 +183,6 @@ public class Main {
 			 order++;
 		 }
 	 }
-	 
-     //private static void InputUserFile(String filename,String code){
-		 
-	 //}
      
      private static void Load_feature(){// load the feature of news and user
     	 
@@ -196,6 +198,10 @@ public class Main {
     	 Preprocess();
     	 
     	 //
+    	// Ranker();
+    	// System.out.println("****************************");
+    	 createLog();
+    	// System.out.println("****************************");
     	 Ranker();
     	 //print results
     	 //Print();
