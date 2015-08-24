@@ -1,7 +1,9 @@
 package edu.ruc.log;
+import java.util.List;
+
+import edu.ruc.data.Attribute;
 import edu.ruc.user.*;
 public class ClickAnalysis extends LogAnalysis {
-	
 	/**
      * Constructor for a ClickAnalysis.
      */
@@ -14,7 +16,7 @@ public class ClickAnalysis extends LogAnalysis {
      * Update user.
      * @return updated user's feature
      */
-	public void UpdateUser(User user) {
-		user.Update(newsA.getAttributes(),1.0);
+	public void UpdateUser() {
+		user.Update(newsA.getAttributes(),newsA.getNid());
 	}
 }
