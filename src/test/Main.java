@@ -6,9 +6,18 @@ import edu.ruc.news.*;
 import edu.ruc.user.*;
 import edu.ruc.ranker.*;
 import edu.ruc.database.*;
+import org.apache.solr.client.solrj.util.ClientUtils;
 
 import java.io.*;
 import java.util.*;
+
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 
 public class Main {
 	 private static NewsDatabase newsData;//the database of news
@@ -23,9 +32,12 @@ public class Main {
 	 private static final String print_filename="";
 	 private static String default_code="utf-8";
 	 private static long num_news;
-	 
+	 private static String solrurl="http://183.174.228.20:8983/solr/test4";
+	 private static SolrClient solr;
 	 private static void Initialize(){//Initialize
 		 //initialize variables
+		
+	     solr= new HttpSolrClient(solrurl);
 		 num_news=0;
 		 newsData=new NewsDatabase();
 		 userData=new UserDatabase();
@@ -81,11 +93,12 @@ public class Main {
 		 System.out.println();
      }*/
 	 
-	 private static void Preprocess() throws IOException{//the preprocess 
+	 private static void Preprocess() throws IOException, SolrServerException{//the preprocess 
 		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
 		 //CreateUsers();
-		 Outputnewsdatabase("src/news_database/news.txt");
+		 Outputnewsdatabase("src/news_database/news"
+		 		+ ".txt");
 		 MakeRandomUser makeRandomUser = new MakeRandomUser();
 		 int userNum = 2;
 		 int TopicNum = 5;
@@ -96,25 +109,61 @@ public class Main {
 		 System.out.println();
 	 }
 	 
-	 private static Double getHotnessScore(String text,int order) throws IOException{//return score of hotness
-		 BufferedReader br=new BufferedReader(new 
-				 InputStreamReader(new FileInputStream(
-						 "src/hotness/hotness.txt"),"utf-8"));
-		 String str;
-		 int sum=1;
-		 while((str=br.readLine())!=null){
-			 if(sum==order){
-				 return Double.parseDouble(str);
-			 }
-			 sum++;
-		 }
+	 private static Double getHotnessScore(String text,int order) throws IOException, SolrServerException{//return score of hotness
+//		 BufferedReader br=new BufferedReader(new 
+//				 InputStreamReader(new FileInputStream(
+//						 "src/hotness/hotness.txt"),"utf-8"));
+//		 String str;
+//		 int sum=1;
+//		 while((str=br.readLine())!=null){
+//			 if(sum==order){
+//				 return Double.parseDouble(str);
+//			 }
+//			 sum++;
+//		 }
+		 StringTokenizer st=new StringTokenizer(text," ");
+			boolean if_first=true;
+			String myquery="";
+			while(st.hasMoreTokens()){
+				if(if_first){
+					String token=st.nextToken();
+					String query=ClientUtils.escapeQueryChars(token);
+					
+					if_first=false;
+					myquery+=("title:"+query);
+					
+					
+				}else{
+					String token=st.nextToken();
+					String query=ClientUtils.escapeQueryChars(token);
+					myquery+=(" OR title:"+query);
+				
+				}
+				
+			}
+			SolrQuery parameters = new SolrQuery();
+	    	parameters.set("q", myquery);
+	    	parameters.set("fl","score,title");
+	    	Double sum=0.0;
+	    	QueryResponse response = solr.query(parameters);
+	    	SolrDocumentList list = response.getResults();
+	    	for(int i=0;i<list.size();i++){
+	    	   SolrDocument sd=list.get(i);
+	    	   //System.out.println(sd);
+	    	   sum+=Double.parseDouble(sd.get("score").toString());
+	    	}
+	    	//System.out.println(sum);
+	    	System.out.println(sum/list.size());
+	    	return sum/list.size();
 		 
-		 return 0.0;
+		 
+		 
+		 
 	 }
 	 
 	 
 	 
-	 private static void InputNewsFile(String filename,String code) throws IOException{
+	 private static void InputNewsFile(String filename,String code) throws IOException, SolrServerException{
 		 //read newsdata that has been tokenized
 		 //add the dictionary
 		 BufferedReader br=new BufferedReader(new 
@@ -233,7 +282,7 @@ public class Main {
      private static void Load_feature(){// load the feature of news and user
     	 
      }
-     public static void main(String[] args) throws IOException{
+     public static void main(String[] args) throws IOException, SolrServerException{
     	 Initialize();
     	 //preprocess do above actions
     	 
