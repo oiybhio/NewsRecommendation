@@ -57,7 +57,7 @@ public class Main {
 			 news.display();
 		 }*/
 		 
-		 for(int i=2;i<3;i++) {
+		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
 			 Ranker ranker = new Ranker();
 			 //ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
@@ -70,11 +70,17 @@ public class Main {
 		 return new News(num_news++);
 	 }
 	 
-	 private static void CreateUsers(){
-         	String[] features = new String[]{"上涨","涨幅","姚明","世界杯","骗","杀"};
-		 users = new OnlineUsers();
+	 private static void CreateUsers() throws IOException{
+		 MakeRandomUser makeRandomUser = new MakeRandomUser();
+		 int userNum = 2;
+		 int TopicNum = 5;
+		 int WordNum = 3;
+		 users = makeRandomUser.getRandomUser(userNum, TopicNum, WordNum, dict, attributeSet);
+		 
+         String[] features = new String[]{"上涨","涨幅","姚明","世界杯","骗","杀"};
+		 // users = new OnlineUsers();
 		 for(int i=0;i<3;i++) {
-			 User u = new User(i+1);
+			 User u = new User(userNum+i+1);
 			 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
 			 a.addFeature(features[2*i],1);
 			 a.addFeature(features[2*i+1],1);
@@ -82,7 +88,7 @@ public class Main {
 			 users.pushBack(u);
 		 }
 		 //Create the fourth user
-		 User u = new User(4);
+		 User u = new User(userNum+4);
 		 Attribute a = new Attribute(VectorType.SPARSE,dict,attributeSet,"title");
 		 a.addFeature("增长",1);
 		 a.addFeature("风险",1);
@@ -94,9 +100,12 @@ public class Main {
 		 u.pushBack(a);
 		 u.pushBack(b);
 		 users.pushBack(u);
-	//	 users.display();
-	//	 System.out.println();
-		 users.getUserAt(0).display();
+		 
+		 
+		 System.out.println();
+		 users.display();
+		 System.out.println();
+	//	 users.getUserAt(0).display();
 	//	 createLog();
      }
 	 
@@ -104,9 +113,9 @@ public class Main {
 		 long nid = 33;
 		 Behavior behavior = new Behavior(3, nid, BehaveType.Click.ordinal(), 10);
 		 behavior.BehaveAnalyse(users,newsData.getNews(nid));
-		 newsData.getNews(nid).display();
+		 // newsData.getNews(nid).display();
 		 behavior.UpdateUserProfile();
-		 users.getUserAt(2).display();
+		 // users.getUserAt(2).display();
 	 }
 	 
 	 private static void Preprocess() throws IOException, SolrServerException{//the preprocess 
