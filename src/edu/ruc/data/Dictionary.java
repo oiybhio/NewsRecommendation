@@ -1,6 +1,7 @@
 package edu.ruc.data;
 
-import java.util.ArrayList;
+import java.sql.*;
+import java.util.*;
 
 public class Dictionary {
 	private int length;
@@ -56,4 +57,37 @@ public class Dictionary {
     	Alphabet labelSet = (Alphabet) arrayList.get(i);
 		return labelSet;
     }
+    
+    /**
+     * Save dictionary into database
+     * 
+     * @param con Connection
+     * @throws SQLException
+     */
+    public void saveIntoDatabase(Connection con) throws SQLException {
+    	int i = 0;
+    	for (Alphabet alphabet:arrayList) {
+    		alphabet.saveIntoDatabase(con, i);
+    		i++;
+    	}
+    }
+    
+    /**
+     * Load dictionary from database
+     * 
+     * @param con Connection
+     * @throws SQLException
+     */
+    public void loadFromDatabase(Connection con) throws SQLException {
+    	Statement stmt = con.createStatement();
+    	ResultSet result = stmt.executeQuery("select dict_id, symbol, symbol_id from dictionary");
+        while (result.next()){
+            int dictId = result.getInt("dict_id");
+            String symbol = result.getString("symbol");
+            int symbol_id = result.getInt("symbol_id");
+            arrayList.get(dictId).addSymbol(symbol,symbol_id);
+        }
+        result.close();
+    }
+    
 }

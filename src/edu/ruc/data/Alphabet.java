@@ -1,5 +1,6 @@
 package edu.ruc.data;
 
+import java.sql.*;
 import java.util.*;
 import java.io.*;
 
@@ -102,6 +103,17 @@ public class Alphabet {
 		}
 		return indices.get(sym).intValue();
 	}
+	
+	/**
+	 * Add pair<symbol,id> from database
+	 * 
+	 * @param sym Symbol
+	 * @param id Id
+	 */
+	public void addSymbol(String sym, int id) {
+		indices.put(sym, new Integer(id));
+		symbols.add(sym);
+	}
 
 	/**
 	 * Add a array of symbols into current Alphabet.
@@ -190,9 +202,27 @@ public class Alphabet {
 		while(ite.hasNext()){
 			String wrd = ite.next(); 
 			int id = indices.get(wrd);
-			ret += String.valueOf(wrd) + ":" + String.valueOf(id) + " "; 
+			ret += wrd + ":" + id + " "; 
 		}
 		return ret;
 	}
 	
+	/**
+	 * Save alphabet into database
+	 * 
+	 * @param con Connection
+	 * @param dictId 
+	 * @throws SQLException
+	 */
+	public void saveIntoDatabase(Connection con, int dictId) throws SQLException {
+		Statement stmt = con.createStatement();
+		Iterator<String> ite = indices.keySet().iterator();
+		while(ite.hasNext()){
+			String wrd = ite.next(); 
+			int id = indices.get(wrd);
+			String sql = "insert into dictionary values(\"" + dictId + "\",\"" + wrd + "\",\"" + id + "\")";
+			stmt.executeUpdate(sql);
+		}
+	}
+
 }
