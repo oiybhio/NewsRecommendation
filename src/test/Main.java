@@ -35,12 +35,14 @@ public class Main {
 		 dict=new Dictionary();
 		 attributeSet=new Alphabet();
 	 }
-	 private static void Ranker(){//for every user ,rank the newslist
+	 private static void Ranker() throws IOException{//for every user, rank the newslist
 		 //System.out.println(users.size());
 		 /*List<News> array = newsData.getNewsList("all").getNewsList();
 		 for(News news:array) {
 			 news.display();
 		 }*/
+		 
+		 MakeRandomHashmap MakeRandomHashmap = new MakeRandomHashmap();
 		 
 		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
@@ -48,7 +50,7 @@ public class Main {
 			 //ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
 			 //ranker.query(resultStore, user, "social", newsData.getNewsList("social").getNewsList());
 			 //ranker.query(resultStore, user, "economy", newsData.getNewsList("economy").getNewsList());
-			 ranker.query(resultStore, user, "all", newsData.getNewsList("all").getNewsList());
+			 ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(MakeRandomHashmap.getRandomHashmap()).getNewsList());
 		 }
 	 }
 	 private static News CreateNews(){
