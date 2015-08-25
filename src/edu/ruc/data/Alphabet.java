@@ -220,7 +220,7 @@ public class Alphabet {
 		while(ite.hasNext()){
 			String wrd = ite.next(); 
 			int id = indices.get(wrd);
-			String sql = "insert into dictionary values(\"" + dictId + "\",\"" + wrd + "\",\"" + id + "\")";
+			String sql = "insert into dictionarys values(\"" + dictId + "\",\"" + wrd + "\",\"" + id + "\")";
 			stmt.executeUpdate(sql);
 		}
 	}

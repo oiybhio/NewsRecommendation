@@ -80,7 +80,7 @@ public class Dictionary {
      */
     public void loadFromDatabase(Connection con) throws SQLException {
     	Statement stmt = con.createStatement();
-    	ResultSet result = stmt.executeQuery("select dict_id, symbol, symbol_id from dictionary");
+    	ResultSet result = stmt.executeQuery("select dict_id, symbol, symbol_id from dictionarys");
         while (result.next()){
             int dictId = result.getInt("dict_id");
             String symbol = result.getString("symbol");
