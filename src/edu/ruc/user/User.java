@@ -92,13 +92,51 @@ public class User {
     	}
     	pushBack(attribute);
     }
+    /**
+     * check is a attribute in User.
+     */  
+  	public boolean isExistAttributeByName(String attribute_name){
+  		for(Attribute a:arrayList){
+  			if(a. getAttributeName().equals(attribute_name)){		
+  				return true;
+  			}
+  		}
+  		return false;
+  	}
 
     /**
      * Update User
      */    
-    public void Update() {
+    public void Update(List<Attribute> newsattributes, long uid) {
+		for(int i=0;i<newsattributes.size();i++) {
+			if(isExistAttributeByName(newsattributes.get(i).getAttributeName())) {
+				merge(newsattributes.get(i));
+			}else{
+				length++;
+				arrayList.add(newsattributes.get(i));
+			}
+		}
     }
-    
+    /**
+     * Get News weight to User
+     */
+	public int getWeight(long nid) {
+		return 1;
+	}
+	/**
+     * merge a attribute from User.
+     *
+     * @param attributeName the name of the attribute wanted to remove
+     */    
+    public void merge(Attribute a) {
+    	for(Attribute attribute:arrayList) {
+    		if (attribute.getAttributeName() == a.getAttributeName()) {
+    			for(int i=0;i<a.getSparseVector().size();i++)
+    				attribute.addFeature(a.getSparseVector().getPairAt(i).getKey(), a.getSparseVector().getPairAt(i).getValue());
+    			return;
+    		}
+    	}
+    }
     /**
      * Remove a attribute from User.
      *

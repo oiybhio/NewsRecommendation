@@ -98,13 +98,23 @@ public class Attribute {
 	}
 	
 	/**
-	 * Add a feature(Pair) into SparseVector 
+	 * Add a feature(Pair) into SparseVector
 	 * 
 	 * @param symbol The symbol of key
 	 * @param value The value
 	 */
 	public void addFeature(String symbol, double value) {
 		int key = dict.getAlphabetAt(dictId).getIndex(symbol);
+		sparseVector.pushBack(Pair.create(key, value));
+	}
+	
+	/**
+	 * Add a feature(Pair) into SparseVector
+	 * 
+	 * @param key The key
+	 * @param value The value
+	 */
+	public void addFeature(int key, double value) {
 		sparseVector.pushBack(Pair.create(key, value));
 	}
 	

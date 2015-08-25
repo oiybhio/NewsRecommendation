@@ -3,6 +3,7 @@ package edu.ruc.log;
 import edu.ruc.data.Pair;
 import edu.ruc.user.*;
 import edu.ruc.news.*;
+import edu.ruc.WebService.*;
 
 public class Behavior implements Comparable{
 	private long uid;
@@ -42,16 +43,16 @@ public class Behavior implements Comparable{
 	/**
      * Analyse user's behavior.
      */
-	public void BehaveAnalyse(OnlineUsers Ousers,NewsList newslist) {
+	public void BehaveAnalyse(OnlineUsers Ousers,News news) {
 		User u = Ousers.findUser(uid);
-		NewsAnalysis na = new NewsAnalysis(newslist.getNews(nid),nid);
-		if(behave==1) // Click 
+		NewsAnalysis na = new NewsAnalysis(news,nid);
+		if(behave==BehaveType.Click.ordinal()) // Click 
 			analysis = new ClickAnalysis(u,na,startTime);
-		else if(behave==2) // Collect
+		else if(behave==BehaveType.Collect.ordinal()) // Collect
 			analysis = new CollectAnalysis(u,na,startTime);
-		else if(behave==3) // Browse 
+		else if(behave==BehaveType.Browse.ordinal()) // Browse 
 			analysis = new BrowseAnalysis(u,na,startTime,time);
-		else if(behave==4) //Comment 
+		else if(behave==BehaveType.Comment.ordinal()) //Comment 
 			analysis = new CommentAnalysis(u,na,startTime,comment);
 	}
 	

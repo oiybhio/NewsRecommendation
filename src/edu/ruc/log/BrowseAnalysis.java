@@ -18,5 +18,6 @@ public class BrowseAnalysis extends LogAnalysis {
      * @return updated user's feature
      */
 	public void UpdateUser(User user) {
+		user.Update(newsA.getAttributes(),newsA.getNid(),1);
 	}
 }
