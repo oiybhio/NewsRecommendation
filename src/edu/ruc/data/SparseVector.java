@@ -116,7 +116,7 @@ public class SparseVector {
 	public void sortValue() {
         Collections.sort(arrayList,new Comparator<Pair>(){  
             public int compare(Pair pair0, Pair pair1) {  
-                return pair0.getValue().compareTo(pair1.getValue());  
+                return pair1.getValue().compareTo(pair0.getValue());  
             }
         });		
 	}
