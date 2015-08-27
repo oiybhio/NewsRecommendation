@@ -104,8 +104,10 @@ public class SparseVector {
      */
 	public void sortKey() {
         Collections.sort(arrayList,new Comparator<Pair>(){  
-            public int compare(Pair pair0, Pair pair1) {  
-                return pair0.getKey().compareTo(pair1.getKey());  
+            public int compare(Pair pair0, Pair pair1) {
+            	Integer key0 = new Integer(pair0.getKey());
+            	Integer key1 = new Integer(pair1.getKey());
+                return key0.compareTo(key1);  
             }  
         });
     }
@@ -115,10 +117,12 @@ public class SparseVector {
 	 */
 	public void sortValue() {
         Collections.sort(arrayList,new Comparator<Pair>(){  
-            public int compare(Pair pair0, Pair pair1) {  
-                return pair1.getValue().compareTo(pair0.getValue());  
+            public int compare(Pair pair0, Pair pair1) {
+            	Double value0 = new Double(pair0.getValue());
+            	Double value1 = new Double(pair1.getValue());
+                return value0.compareTo(value1);
             }
-        });		
+        });
 	}
 	
 	/**

@@ -207,9 +207,9 @@ public class Attribute {
 	 */
 	public void display() {
 		System.out.println("Attribute Name: " + attributeName);
-		System.out.println("Dictionary Id: " + dictId);
 		switch(vectorType) {
 		case SPARSE:
+			System.out.println("Dictionary Id: " + dictId);
 			sparseVector.display();
 			break;
 		case DENSE:

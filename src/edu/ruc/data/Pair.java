@@ -3,8 +3,8 @@ package edu.ruc.data;
 import java.util.Objects;
 
 public class Pair {
-    private Integer first;
-    private Double second;
+    private int first;
+    private double second;
 
     /**
      * Constructor for a Pair.
@@ -13,8 +13,8 @@ public class Pair {
      * @param second the second object in the pair
      */
     public Pair(int first, double second) {
-        this.first = new Integer(first);
-        this.second = new Double(second);
+        this.first = first;
+        this.second = second;
     }
 
     /**
@@ -22,7 +22,7 @@ public class Pair {
      *
      * @return the key for this pair
      */
-    public Integer getKey() {
+    public int getKey() {
         return first;
     }
     
@@ -31,7 +31,7 @@ public class Pair {
      *
      * @return the value for this pair
      */
-    public Double getValue() {
+    public double getValue() {
         return second;
     }
 
@@ -41,7 +41,7 @@ public class Pair {
      * @param first the key
      */
     public void setKey(int first) {
-        this.first = new Integer(first);
+        this.first = first;
     }
     
     /**
@@ -50,7 +50,7 @@ public class Pair {
      * @param second the value
      */
     public void setValue(double second) {
-        this.second = new Double(second);
+        this.second = second;
     }
     
     /**

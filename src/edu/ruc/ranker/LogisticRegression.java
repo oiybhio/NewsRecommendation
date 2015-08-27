@@ -46,8 +46,11 @@ public class LogisticRegression {
 	public void classify(List<Sample> samples) throws Exception {
 		Instances testData = loadInstances(samples);
 		int n = testData.numInstances();
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++) {
+			//System.out.print(samples.get(i).classNum + " ");
 			samples.get(i).classNum = new Integer((int)logic.classifyInstance(testData.instance(i)));
+			//System.out.println(samples.get(i).classNum);
+		}
 	}
 	
 	public Instances loadInstances(List<Sample> samples) {
@@ -55,8 +58,8 @@ public class LogisticRegression {
 	    for (int i = 0; i < attributeSum; i++)
 	    	atts.addElement(new weka.core.Attribute("att" + i));
 	    FastVector attClass = new FastVector();
-	    attClass.addElement(new Integer(0));
-	    attClass.addElement(new Integer(1));
+	    attClass.addElement("0");
+	    attClass.addElement("1");
 	    atts.addElement(new weka.core.Attribute("class", attClass));
 	    
 	    Instances data = new Instances("UserNewsRelation", atts, 0);
@@ -65,13 +68,14 @@ public class LogisticRegression {
 	    	double[] vals = new double[data.numAttributes()];
 	    	calculateFeature(sample,vals);
 	    	if (sample.classNum != null)
-	    		vals[attributeSum] = attClass.indexOf(sample.classNum);
+	    		//vals[attributeSum] = attClass.indexOf(sample.classNum);
+	    		vals[attributeSum] = sample.classNum;
 	    	data.add(new Instance(1.0, vals));
 	    }
 	    
 	    data.setClassIndex(data.numAttributes() - 1);
 	    
-	    System.out.println(data);
+	    //System.out.println(data);
 	    
 	    return data;
 	}
@@ -82,6 +86,7 @@ public class LogisticRegression {
 			String attributeName = attributeNames.get(i);
 			edu.ruc.data.Attribute attribute1 = sample.user.findAttribute(attributeName);
 			edu.ruc.data.Attribute attribute2 = sample.news.getAttribute(attributeName);
+			if (attribute1 == null || attribute2 == null) continue;
 			int startLabel;
 			if (i == 0)
 				startLabel = 0;
@@ -107,6 +112,7 @@ public class LogisticRegression {
 			Pair pair1 = v1.getPairAt(i);
 			Pair pair2 = v2.getPairAt(j);
 			if (pair1.getKey() == pair2.getKey()) {
+				//System.out.println(pair2.getKey());
 				vals[pair1.getKey() + startLabel] = pair1.getValue() * pair2.getValue();
 				i++; j++;
 			}
@@ -116,6 +122,9 @@ public class LogisticRegression {
 				j++;
 			}
 		}
+    	//for(i=0;i<vals.length;i++)
+    	//	System.out.print(vals[i] + " ");
+    	//System.out.println();
 	}
 
 	public void calculate(DenseVector v1, DenseVector v2, double[] vals, int startLabel) {
