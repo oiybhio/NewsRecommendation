@@ -8,8 +8,8 @@ public class CosineSimilarity implements Similarity {
 	private double sum1, sum2, sum3;
 	
 	public void calculate(SparseVector v1, SparseVector v2, double w) {
-		v1.sort();
-		v2.sort();
+		v1.sortKey();
+		v2.sortKey();
 		int len1 = v1.size();
 		int len2 = v2.size();
 		int i = 0, j = 0;
@@ -46,17 +46,16 @@ public class CosineSimilarity implements Similarity {
 		int len1 = v1.size();
 		int len2 = v2.size();
 		int len = Math.min(len1, len2);
-		for (int i = 0; i < len; i += 1) {
+		for (int i = 0; i < len; i++) {
 			sum1 += w * v1.getValue(i) * v2.getValue(i);
 			sum2 += w * v1.getValue(i) * v1.getValue(i);
 			sum3 += w * v2.getValue(i) * v2.getValue(i);
 		}
-		
 	}
 	
 	public double getSimilarity(User user, News news, Weight weight) {
 		sum1 = sum2 = sum3 = 0;
-		for (int i=0; i<weight.length; i+=1) {
+		for (int i = 0; i < weight.length; i++) {
 			String attributeName = weight.attributeNameList.get(i);
 			double w = weight.weightList.get(i);
 			Attribute attribute1 = user.findAttribute(attributeName);
