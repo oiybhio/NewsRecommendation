@@ -60,6 +60,7 @@ public class CosineSimilarity implements Similarity {
 			double w = weight.weightList.get(i);
 			Attribute attribute1 = user.findAttribute(attributeName);
 			Attribute attribute2 = news.getAttribute(attributeName);
+			if (attribute1 == null || attribute2 == null) continue;
 			switch(attribute1.getVectorType()) {
 			case SPARSE:
 				calculate(attribute1.getSparseVector(), attribute2.getSparseVector(), w);

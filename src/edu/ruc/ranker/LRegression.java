@@ -8,19 +8,19 @@ import edu.ruc.data.DenseVector;
 import edu.ruc.data.Dictionary;
 import edu.ruc.data.Pair;
 import edu.ruc.data.SparseVector;
-import weka.classifiers.functions.Logistic;
+import weka.classifiers.functions.LinearRegression;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class LogisticRegression {
-	private Logistic logic;
+public class LRegression {
+	private LinearRegression lr;
 	private List<String> attributeNames;
 	private List<Integer> alphabetSizeSum;
 	private int attributeSum;
 	
-	public LogisticRegression(Dictionary dict, Alphabet attributeSet) {
-		logic = null;
+	public LRegression(Dictionary dict, Alphabet attributeSet) {
+		lr = null;
 		attributeNames = attributeSet.getSymbols();
 		alphabetSizeSum = new ArrayList<Integer>();
 		int len = attributeNames.size();
@@ -33,14 +33,14 @@ public class LogisticRegression {
 	
 	public void training(List<Sample> samples) throws Exception {
 		Instances trainingData = loadInstances(samples);
-		logic = new Logistic();
+		lr = new LinearRegression();
         /*String options[]=new String[4];
         options[0]="-R";
         options[1]="1E-5";
         options[2]="-M";
         options[3]="10";
         logic.setOptions(options);*/
-		logic.buildClassifier(trainingData);
+		lr.buildClassifier(trainingData);
 	}
 	
 	public void classify(List<Sample> samples) throws Exception {
@@ -48,8 +48,8 @@ public class LogisticRegression {
 		int n = testData.numInstances();
 		for (int i = 0; i < n; i++) {
 			System.out.print(samples.get(i).classNum + " ");
-			System.out.println(logic.classifyInstance(testData.instance(i)));
-			//samples.get(i).classNum = new Integer((int)logic.classifyInstance(testData.instance(i)));
+			System.out.println(lr.classifyInstance(testData.instance(i)));
+			//samples.get(i).classNum = new Integer((int)lr.classifyInstance(testData.instance(i)));
 			//System.out.println(samples.get(i).classNum);
 		}
 	}
@@ -58,10 +58,7 @@ public class LogisticRegression {
 	    FastVector atts = new FastVector();
 	    for (int i = 0; i < attributeSum; i++)
 	    	atts.addElement(new weka.core.Attribute("att" + i));
-	    FastVector attClass = new FastVector();
-	    attClass.addElement("0");
-	    attClass.addElement("1");
-	    atts.addElement(new weka.core.Attribute("class", attClass));
+	    atts.addElement(new weka.core.Attribute("class"));
 	    
 	    Instances data = new Instances("UserNewsRelation", atts, 0);
 	    
@@ -69,7 +66,6 @@ public class LogisticRegression {
 	    	double[] vals = new double[data.numAttributes()];
 	    	calculateFeature(sample,vals);
 	    	if (sample.classNum != null)
-	    		//vals[attributeSum] = attClass.indexOf(sample.classNum);
 	    		vals[attributeSum] = sample.classNum;
 	    	data.add(new Instance(1.0, vals));
 	    }
