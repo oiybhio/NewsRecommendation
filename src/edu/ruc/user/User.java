@@ -131,8 +131,32 @@ public class User {
     public void merge(Attribute a) {
     	for(Attribute attribute:arrayList) {
     		if (attribute.getAttributeName() == a.getAttributeName()) {
-    			for(int i=0;i<a.getSparseVector().size();i++)
-    				attribute.addFeature(a.getSparseVector().getPairAt(i).getKey(), a.getSparseVector().getPairAt(i).getValue());
+    		//	System.out.println("^^^^^^^^^^^^^^^^^^^^^^^");
+    		//	attribute.display();
+    		//	System.out.println("***********************");
+    		//	a.display();
+    		//	System.out.println("^^^^^^^^^^^^^^^^^^^^^^^");
+    			attribute.getSparseVector().sort();
+    			int i=0,j=0;
+    			while(i<attribute.getSparseVector().size()&&j<a.getSparseVector().size()) {
+    				System.out.println(attribute.getSparseVector().getPairAt(i).getKey()+"  "+a.getSparseVector().getPairAt(j).getKey());
+    				if(attribute.getSparseVector().getPairAt(i).getKey()==a.getSparseVector().getPairAt(j).getKey()) {
+    					double t = attribute.getSparseVector().getPairAt(i).getValue()+a.getSparseVector().getPairAt(j).getValue();
+    					attribute.getSparseVector().getPairAt(i).setValue(t);
+    					i++; j++;
+    				}
+    				if(attribute.getSparseVector().getPairAt(i).getKey()<a.getSparseVector().getPairAt(j).getKey())
+    					i++;
+    				if(attribute.getSparseVector().getPairAt(i).getKey()>a.getSparseVector().getPairAt(j).getKey()) {
+    					attribute.addFeature(a.getSparseVector().getPairAt(j).getKey(), a.getSparseVector().getPairAt(j).getValue());
+    					j++;
+    				}
+    			}
+    			if(j<a.getSparseVector().size()) {
+    				for(int k=j;k<a.getSparseVector().size();k++) {
+    					attribute.addFeature(a.getSparseVector().getPairAt(j).getKey(), a.getSparseVector().getPairAt(j).getValue());
+    				}
+    			}
     			return;
     		}
     	}
