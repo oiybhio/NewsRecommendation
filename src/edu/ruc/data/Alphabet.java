@@ -58,19 +58,18 @@ public class Alphabet {
 	 * 
 	 * @param symbol String
 	 */
-	public Alphabet(String symbol) {
+	/*public Alphabet(String symbol) {
 		indices = new HashMap<String, Integer>();
 		this.symbols = new ArrayList<String>();
 		addSymbol(symbol);
-	}
+	}*/
 	
 	/**
 	 * Constructs a new Alphabet object that has been constructed before.
 	 * 
-	 * @param str
-	 * @param flag true or false is okay
+	 * @param str String from database
 	 */
-	public Alphabet(String str, boolean flag) {
+	public Alphabet(String str) {
 		indices = new HashMap<String, Integer>();
 		symbols = new ArrayList<String>();
 		StringTokenizer st = new StringTokenizer(str," ");
@@ -164,16 +163,17 @@ public class Alphabet {
 	/**
 	 * Output the elements into screen.
 	 */	
-	public void display(){
+	public void display() {
 		Iterator<String> ite = indices.keySet().iterator();
 		while( ite.hasNext() ){
 			String key = ite.next();
-			System.out.print(indices.get(key) + " ");
+			System.out.print(key + ":" + indices.get(key) + " ");
 		}
 		System.out.println("\n" + "[" + symbols.size()+ "]");
 		for(int i = 0; i < symbols.size(); i++){
-			System.out.print( symbols.get(i) + " ");
+			System.out.print(symbols.get(i) + " ");
 		}
+		System.out.println();
 	}
 	
 	/**
@@ -198,11 +198,10 @@ public class Alphabet {
 	 */
 	public String hashMapToString() {
 		String ret = new String();
-		Iterator<String> ite = indices.keySet().iterator();
-		while(ite.hasNext()){
-			String wrd = ite.next(); 
-			int id = indices.get(wrd);
-			ret += wrd + ":" + id + " "; 
+		for(int i = 0; i < symbols.size(); i++) {
+			String word = symbols.get(i);
+			assert(getIndex(word) == i);
+			ret += word + ":" + i + " ";
 		}
 		return ret;
 	}
@@ -216,14 +215,46 @@ public class Alphabet {
 	 */
 	public void saveIntoDatabase(Connection con, int dictId) throws SQLException {
 		Statement stmt = con.createStatement();
-		Iterator<String> ite = indices.keySet().iterator();
-		while(ite.hasNext()){
-			String wrd = ite.next(); 
-			int id = indices.get(wrd);
-			String sql = "insert into dictionarys values(\"" + dictId + "\",\"" + wrd + "\",\"" + id + "\")";
+		for(int i = 0; i < symbols.size(); i++) {
+			String word = symbols.get(i);
+			assert(getIndex(word) == i);
+			String sql = "insert into dictionarys values(\"" + dictId + "\",\"" + word + "\",\"" + i + "\")";
 			stmt.executeUpdate(sql);
 		}
 	}
+	
+	/**
+	 * Save attribute set into database
+	 * 
+	 * @param con Connection
+	 * @throws SQLException
+	 */
+	public void saveIntoDatabase(Connection con) throws SQLException {
+		Statement stmt = con.createStatement();
+		for(int i = 0; i < symbols.size(); i++) {
+			String word = symbols.get(i);
+			assert(getIndex(word) == i);
+			String sql = "insert into attribute_set values(\"" + word + "\",\"" + i + "\")";
+			stmt.executeUpdate(sql);
+		}
+	}
+	
+	/**
+	 * Load attribute set from database
+	 * 
+	 * @param con Connection
+	 * @throws SQLException
+	 */
+    public void loadFromDatabase(Connection con) throws SQLException {
+    	Statement stmt = con.createStatement();
+    	ResultSet result = stmt.executeQuery("select attribute_name, dict_id from attribute_set");
+        while (result.next()){
+            String attribute_name = result.getString("attribute_name");
+            int dict_id = result.getInt("dict_id");
+            addSymbol(attribute_name, dict_id);
+        }
+        result.close();
+    }
 	
 	/**
 	 * Get all symbols from alphabet

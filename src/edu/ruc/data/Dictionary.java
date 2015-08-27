@@ -40,10 +40,10 @@ public class Dictionary {
     	arrayList.add(new Alphabet(symbols));
     	length++;
     }
-    public void pushBack(String symbol) {
+    /*public void pushBack(String symbol) {
     	arrayList.add(new Alphabet(symbol));
     	length++;
-    }
+    }*/
     
     /**
      * Get Alphabet from Dictionary.
@@ -85,7 +85,9 @@ public class Dictionary {
             int dictId = result.getInt("dict_id");
             String symbol = result.getString("symbol");
             int symbol_id = result.getInt("symbol_id");
-            arrayList.get(dictId).addSymbol(symbol,symbol_id);
+            while (dictId >= length)
+            	pushBack();
+            arrayList.get(dictId).addSymbol(symbol, symbol_id);
         }
         result.close();
     }
