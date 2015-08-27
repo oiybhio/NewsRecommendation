@@ -59,7 +59,16 @@ public class Attribute {
 			this.vectorType = VectorType.DENSE;
 			break;
 		}
-	}	
+	}
+	
+	/**
+	 * Get Dictionary
+	 * 
+	 * @return dict
+	 */
+	public Dictionary getDict() {
+		return dict;
+	}
 	
 	/**
 	 * Get VectorType
