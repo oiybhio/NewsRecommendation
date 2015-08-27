@@ -60,16 +60,7 @@ public class Attribute {
 			break;
 		}
 	}
-	
-	/**
-	 * Get Dictionary
-	 * 
-	 * @return dict
-	 */
-	public Dictionary getDict() {
-		return dict;
-	}
-	
+
 	/**
 	 * Get VectorType
 	 * 
