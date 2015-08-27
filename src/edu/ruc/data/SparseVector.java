@@ -47,6 +47,22 @@ public class SparseVector {
     }
     
     /**
+     * getTopK   
+     */
+    public void getTopK(int K){
+    	ArrayList<Pair> b = arrayList;
+    	removeAll();
+    	int count=0;
+    	for(Pair pair:b) {
+			arrayList.add(pair);
+			if(++count>K)
+				break;    		
+    	}
+    }
+    private void removeAll(){
+    	arrayList = new ArrayList<Pair>();
+    }
+    /**
      * Get a pair from SparseVector.
      *
      * @param i the index of the pair wanted to get
