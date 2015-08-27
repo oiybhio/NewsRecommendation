@@ -59,8 +59,8 @@ public class Attribute {
 			this.vectorType = VectorType.DENSE;
 			break;
 		}
-	}
-
+	}	
+	
 	/**
 	 * Get VectorType
 	 * 
@@ -178,6 +178,16 @@ public class Attribute {
 	}
 	
 	/**
+	 * Get top k
+	 * 
+	 * @param k
+	 */
+	public void getTopK(int k) {
+		if (vectorType == VectorType.SPARSE)
+			sparseVector.getTopK(k);
+	}
+	
+	/**
 	 * Vector to String
 	 * 
 	 * @return String
@@ -191,7 +201,6 @@ public class Attribute {
 		}
 		return null;
 	}
-	
 	
 	/**
 	 * Output the elements into screen.

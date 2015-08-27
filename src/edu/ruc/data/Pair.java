@@ -2,9 +2,9 @@ package edu.ruc.data;
 
 import java.util.Objects;
 
-public class Pair implements Comparable<Object> {
-    private int first;
-    private double second;
+public class Pair {
+    private Integer first;
+    private Double second;
 
     /**
      * Constructor for a Pair.
@@ -13,8 +13,8 @@ public class Pair implements Comparable<Object> {
      * @param second the second object in the pair
      */
     public Pair(int first, double second) {
-        this.first = first;
-        this.second = second;
+        this.first = new Integer(first);
+        this.second = new Double(second);
     }
 
     /**
@@ -22,7 +22,7 @@ public class Pair implements Comparable<Object> {
      *
      * @return the key for this pair
      */
-    public int getKey() {
+    public Integer getKey() {
         return first;
     }
     
@@ -31,7 +31,7 @@ public class Pair implements Comparable<Object> {
      *
      * @return the value for this pair
      */
-    public double getValue() {
+    public Double getValue() {
         return second;
     }
 
@@ -41,7 +41,7 @@ public class Pair implements Comparable<Object> {
      * @param first the key
      */
     public void setKey(int first) {
-        this.first = first;
+        this.first = new Integer(first);
     }
     
     /**
@@ -50,7 +50,7 @@ public class Pair implements Comparable<Object> {
      * @param second the value
      */
     public void setValue(double second) {
-        this.second = second;
+        this.second = new Double(second);
     }
     
     /**
@@ -93,27 +93,7 @@ public class Pair implements Comparable<Object> {
      * Output the elements of pair into screen.
      */    
     public void display() {
-    	System.out.print( new Integer(first) + ":" + new Double(second) );
+    	System.out.print(first + ":" + second );
     }
     
-    /**
-     * Comparator.
-     */
-    @Override
-    public int compareTo(Object o) {
-        if(this == o) {
-            return 0;            
-        }
-        else if (o != null && o instanceof Pair) {   
-            Pair p = (Pair) o; 
-            if(first <= p.first){
-                return -1;
-            }
-            else {
-            	return 1;
-            }
-        }else{
-        	return -1;
-        }
-    }
 }

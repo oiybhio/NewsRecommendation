@@ -224,5 +224,14 @@ public class Alphabet {
 			stmt.executeUpdate(sql);
 		}
 	}
-
+	
+	/**
+	 * Get all symbols from alphabet
+	 * 
+	 * @return ArrayList<String> symbols
+	 */
+	public List<String> getSymbols() {
+		return symbols;
+	}
+	
 }

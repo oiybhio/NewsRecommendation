@@ -2,6 +2,7 @@ package edu.ruc.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class SparseVector {
@@ -47,22 +48,6 @@ public class SparseVector {
     }
     
     /**
-     * getTopK   
-     */
-    public void getTopK(int K){
-    	ArrayList<Pair> b = arrayList;
-    	removeAll();
-    	int count=0;
-    	for(Pair pair:b) {
-			arrayList.add(pair);
-			if(++count>K)
-				break;    		
-    	}
-    }
-    private void removeAll(){
-    	arrayList = new ArrayList<Pair>();
-    }
-    /**
      * Get a pair from SparseVector.
      *
      * @param i the index of the pair wanted to get
@@ -86,7 +71,7 @@ public class SparseVector {
     }
     
     /**
-     * modify a pair in SparseVector.
+     * Modify a pair in SparseVector.
      *
      * @param pair the pair wanted to modify
      */    
@@ -115,11 +100,49 @@ public class SparseVector {
     }
     
     /**
-     * sort all the pairs of SparseVector.
+     * Sort all the pairs of SparseVector by key.
      */
-	public void sort() {
-    	Collections.sort(arrayList);
+	public void sortKey() {
+        Collections.sort(arrayList,new Comparator<Pair>(){  
+            public int compare(Pair pair0, Pair pair1) {  
+                return pair0.getKey().compareTo(pair1.getKey());  
+            }  
+        });
     }
+	
+	/**
+	 * Sort all the pairs of SparseVector by value.
+	 */
+	public void sortValue() {
+        Collections.sort(arrayList,new Comparator<Pair>(){  
+            public int compare(Pair pair0, Pair pair1) {  
+                return pair0.getValue().compareTo(pair1.getValue());  
+            }
+        });		
+	}
+	
+	/**
+	 * Get top k
+	 * 
+	 * @param k
+	 */
+	public void getTopK(int k) {
+		sortValue();
+	   	ArrayList<Pair> temp = arrayList;
+	   	clear();
+	   	int count = 0;
+	   	for (Pair pair:temp) {
+	   		if(++count > k) break;
+	   		arrayList.add(pair);
+	   	}
+	}
+	
+	/**
+	 * Clear
+	 */
+	public void clear() {
+		arrayList = new ArrayList<Pair>();
+	}
 	
 	/**
 	 * Vector to String.
@@ -134,7 +157,6 @@ public class SparseVector {
 		return ret;
 	}
 	
-	
 	/**
 	 * Output the elements into screen.
 	 */
@@ -146,4 +168,5 @@ public class SparseVector {
         }
 		System.out.println("}");
 	}
+	
 }
