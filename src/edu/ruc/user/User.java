@@ -41,6 +41,13 @@ public class User {
     }
     
     /**
+     * Get Readed.
+     */
+     
+    public List getReaded() {
+    	return Readed;
+    }
+    /**
      * Add a attribute to User.
      *
      * @param attribute the object wanted to push back
