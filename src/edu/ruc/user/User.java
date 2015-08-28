@@ -24,6 +24,7 @@ public class User {
     	this.uid = uid;
     	this.length = length;
     	this.arrayList = arrayList;
+    	Readed = new ArrayList();
     }
     
     /**
