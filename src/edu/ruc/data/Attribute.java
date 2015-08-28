@@ -103,9 +103,10 @@ public class Attribute {
 	 * @param symbol The symbol of key
 	 * @param value The value
 	 */
-	public void addFeature(String symbol, double value) {
+	public int addFeature(String symbol, double value) {
 		int key = dict.getAlphabetAt(dictId).getIndex(symbol);
 		sparseVector.pushBack(Pair.create(key, value));
+		return key;
 	}
 	
 	/**
