@@ -10,7 +10,21 @@ import edu.ruc.database.*;
 import edu.ruc.log.*;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
+
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 
 public class Main {
 	 private static NewsDatabase newsData;//the database of news
@@ -19,23 +33,51 @@ public class Main {
 	 private static ResultStore resultStore;
 	 private static Dictionary dict;// the dictionary of features
 	 private static Alphabet attributeSet;// the alphabet of attribute name
-	 private static final String news_filename="src/news_data/news_data_nlp.txt";//the location of news_file 
+	 private static final String news_filename="E://eclipse/workspace/XinHua/dat0.txt";//the location of news_file 
 	 private static final String user_filename="";//the location of user_file
 	 private static final String hotness_url="";//the url of solr
 	 private static final String print_filename="";
 	 private static String default_code="utf-8";
 	 private static long num_news;
+	 private static String urlString = "http://183.174.228.20:8983/solr/Xinhua";
+ 	 private static SolrClient SORL ;
+ 	
+ 	 private static Connection CON;
 	 
 	 private static void Initialize(){//Initialize
 		 //initialize variables
-		 num_news=0;
+		 SORL = new HttpSolrClient(urlString);
+		 InitializeDatabase();
+		 num_news=1;
 		 newsData=new NewsDatabase();
+		 newsData.setSolr(SORL);
+		 newsData.setConnection(CON);
 		 userData=new UserDatabase();
 		 resultStore=new ResultStore();
 		 dict=new Dictionary();
 		 attributeSet=new Alphabet();
 	 }
-	 private static void Ranker() throws IOException{//for every user, rank the newslist
+	 public static void InitializeDatabase(){
+		     try{   
+	    		//加载MySql的驱动类   
+	    		    Class.forName("com.mysql.jdbc.Driver") ;   
+	    	 }catch(ClassNotFoundException e){   
+	    	   System.out.println("找不到驱动程序类 ，加载驱动失败！");   
+	    	   e.printStackTrace() ;   
+	         } 
+	    	 String url = "jdbc:mysql://localhost:3306/xinhua?"
+	    	 		+ "useUnicode=true&characterEncoding=UTF-8" ;    
+	         String username = "root" ;   
+	         String password = "zwh920617" ;   
+	         try{   
+	               CON=    
+	               DriverManager.getConnection(url , username , password ) ;   
+	         }catch(SQLException se){   
+	            System.out.println("数据库连接失败！");   
+	            se.printStackTrace() ;   
+	         }  
+	 }
+	 private static void Ranker() throws IOException, SolrServerException, SQLException{//for every user, rank the newslist
 		 //System.out.println(users.size());
 		 /*List<News> array = newsData.getNewsList("all").getNewsList();
 		 for(News news:array) {
@@ -50,7 +92,8 @@ public class Main {
 			 //ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
 			 //ranker.query(resultStore, user, "social", newsData.getNewsList("social").getNewsList());
 			 //ranker.query(resultStore, user, "economy", newsData.getNewsList("economy").getNewsList());
-			 ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(MakeRandomHashmap.getRandomHashmap()).getNewsList());
+			 ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(MakeRandomHashmap.getRandomHashmap()
+					 ,dict,attributeSet,SORL).getNewsList());
 		 }
 	 }
 	 private static News CreateNews(){
@@ -104,33 +147,62 @@ public class Main {
 		 behavior.UpdateUserProfile();
 		 // users.getUserAt(2).display();
 	 }
+	 private static void SaveDic() throws SQLException{
+		 dict.saveIntoDatabase(CON);
+	 }
 	 
-	 private static void Preprocess() throws IOException{//the preprocess 
-		 InputNewsFile(news_filename,default_code);
+	 private static void LoadDic() throws SQLException{
+		 dict.loadFromDatabase(CON);
+	 }
+	private static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
+  //       LoadDic();
+//		 InputNewsFile(news_filename,default_code);
     	 // InputUserFile(user_filename, default_code);
+//		 SaveDic();
 		 CreateUsers();
 		 
     	 
 	 }
-	 private static Double getHotnessScore(String text,int order) throws IOException{//return score of hotness
-		 BufferedReader br=new BufferedReader(new 
-				 InputStreamReader(new FileInputStream(
-						 "src/hotness/hotness.txt"),"utf-8"));
-		 String str;
-		 int sum=1;
-		 while((str=br.readLine())!=null){
-			 if(sum==order){
-				 return Double.parseDouble(str);
-			 }
-			 sum++;
-		 }
-		 
-		 return 0.0;
+	 private static Double getHotnessScore(String text) throws IOException, SolrServerException{//return score of hotness
+		 StringTokenizer st=new StringTokenizer(text," ");
+			boolean if_first=true;
+			String myquery="";
+			while(st.hasMoreTokens()){
+				if(if_first){
+					String token=st.nextToken();
+					String query=ClientUtils.escapeQueryChars(token);
+					
+					if_first=false;
+					myquery+=("title:"+query);
+					
+					
+				}else{
+					String token=st.nextToken();
+					String query=ClientUtils.escapeQueryChars(token);
+					myquery+=(" OR title:"+query);
+				
+				}
+				
+			}
+			SolrQuery parameters = new SolrQuery();
+	    	parameters.set("q", myquery);
+	    	parameters.set("fl","score,title");
+	    	Double sum=0.0;
+	    	QueryResponse response = SORL.query(parameters);
+	    	SolrDocumentList list = response.getResults();
+	    	for(int i=0;i<list.size();i++){
+	    	   SolrDocument sd=list.get(i);
+	    	   //System.out.println(sd);
+	    	   sum+=Double.parseDouble(sd.get("score").toString());
+	    	}
+	    	//System.out.println(sum);
+	    	//System.out.println(sum/list.size());
+	    	return sum/list.size();
 	 }
 	 
 	 
 	 
-	 private static void InputNewsFile(String filename,String code) throws IOException{
+	 private static void InputNewsFile(String filename,String code) throws IOException, SolrServerException, SQLException{
 		 //read newsdata that has been tokenized
 		 //add the dictionary
 		 BufferedReader br=new BufferedReader(new 
@@ -138,21 +210,27 @@ public class Main {
 		 String str;
 		 int order=1;
 		 while((str=br.readLine())!=null){
+//			 if(order>=2){
+//				 break;
+//			 }
 			 //System.out.println(order);
-			 String date=br.readLine();//read time
-			 br.readLine();//read url
+			 if(order>=10){
+				 break;
+			 }
+//			 System.out.println(order);
+			 String date=str;//read date
 			 String title=br.readLine();
 			 String title_nlp=br.readLine();
 			 String body=br.readLine();
 			 String body_nlp=br.readLine();
 			 
-			 String news_class=br.readLine();
+//			 String news_class=br.readLine();
 			 
 			 //construct news
 			 News news=CreateNews();
 			 news.setTitle(title);
 			 news.setBody(body);
-			 news.setCategory(news_class);
+//			 news.setCategory(news_class);
 			 news.setDate(date);
 			 //title attribute
 			 Attribute title_attribute=new Attribute(VectorType.SPARSE, 
@@ -184,13 +262,14 @@ public class Main {
 			 }
 			 news.setAttribute(body_attribute);
 			 // add attributes,add title,body,news_class
-			 Double hotness_score=getHotnessScore(title_nlp, order);
+			 Double hotness_score=getHotnessScore(title_nlp);
 			 Attribute hotness_attribute=new Attribute(
 					 VectorType.DENSE, dict, attributeSet, "hotness");
 			 hotness_attribute.addFeature(hotness_score);
 			 news.setAttribute(hotness_attribute);
 			 // add the newsdatabase
-			 newsData.setNews(news);
+			 newsData.saveVector(news
+					 );
 			 order++;
 		 }
 	 }
@@ -198,7 +277,7 @@ public class Main {
      private static void Load_feature(){// load the feature of news and user
     	 
      }
-     public static void main(String[] args) throws IOException{
+     public static void main(String[] args) throws IOException, SolrServerException, SQLException{
     	 Initialize();
     	 //preprocess do above actions
     	 
@@ -209,11 +288,11 @@ public class Main {
     	 Preprocess();
     	 
     	 //
-    	// Ranker();
-    	// System.out.println("****************************");
-    	 createLog();
-    	// System.out.println("****************************");
     	 Ranker();
+    	// System.out.println("****************************");
+    	// createLog();
+    	// System.out.println("****************************");
+    	// Ranker();
     	 //print results
     	 //Print();
     	 
