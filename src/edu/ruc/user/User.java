@@ -139,7 +139,7 @@ public class User {
     		//	System.out.println("***********************");
     		//	a.display();
     		//	System.out.println("^^^^^^^^^^^^^^^^^^^^^^^");
-    			attribute.getSparseVector().sort();
+    			attribute.getSparseVector().sortKey();
     			int i=0,j=0;
     			while(i<attribute.getSparseVector().size()&&j<a.getSparseVector().size()) {
     				System.out.println(attribute.getSparseVector().getPairAt(i).getKey()+"  "+a.getSparseVector().getPairAt(j).getKey());
