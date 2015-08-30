@@ -117,7 +117,7 @@ public class User {
     /**
      * Update User
      */    
-    public void Update(List<Attribute> newsattributes, long uid,int weight) {
+    public void Update(List<Attribute> newsattributes, long uid,double weight) {
     	Readed.add(uid);
 		for(int i=0;i<newsattributes.size();i++) {
 			if(isExistAttributeByName(newsattributes.get(i).getAttributeName())) {
