@@ -1,6 +1,8 @@
 package edu.ruc.log;
 
+import edu.ruc.WebService.BehaveType;
 import edu.ruc.user.User;
+import edu.ruc.weight.TimeWeight;
 
 public class BrowseAnalysis extends LogAnalysis {
 	private long time;
@@ -11,6 +13,7 @@ public class BrowseAnalysis extends LogAnalysis {
 		super(u, newsA, startTime);
 		this.time = time;
 		// TODO Auto-generated constructor stub
+		tw = new TimeWeight(BehaveType.Browse.ordinal(), startTime);
 	}
 	
 	/**
@@ -18,6 +21,6 @@ public class BrowseAnalysis extends LogAnalysis {
      * @return updated user's feature
      */
 	public void UpdateUser(User user) {
-		user.Update(newsA.getAttributes(),newsA.getNid(),1);
+		user.Update(newsA.getAttributes(),newsA.getNid(),tw.getWeight());
 	}
 }
