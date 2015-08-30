@@ -1,6 +1,8 @@
 package edu.ruc.log;
 
+import edu.ruc.WebService.BehaveType;
 import edu.ruc.user.User;
+import edu.ruc.weight.TimeWeight;
 
 public class CollectAnalysis extends LogAnalysis {
 	/**
@@ -8,6 +10,7 @@ public class CollectAnalysis extends LogAnalysis {
      */
 	public CollectAnalysis(User u, NewsAnalysis newsA, long StartTime) {
 		super(u, newsA, StartTime);
+		tw = new TimeWeight(BehaveType.Collect.ordinal(), StartTime);
 	} 
 	
 	/**
@@ -15,6 +18,7 @@ public class CollectAnalysis extends LogAnalysis {
      * @return updated user's feature
      */
 	public void UpdateUser(User user) {
-		user.Update(newsA.getAttributes(),newsA.getNid(),1);	
+		user.Update(newsA.getAttributes(),newsA.getNid(),tw.getWeight());	
+		
 	}
 }
