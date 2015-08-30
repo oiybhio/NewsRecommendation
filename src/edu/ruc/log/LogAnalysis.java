@@ -1,5 +1,5 @@
 package edu.ruc.log;
-
+import edu.ruc.weight.*;
 import edu.ruc.user.User;
 
 public class LogAnalysis {
@@ -7,6 +7,7 @@ public class LogAnalysis {
 	public NewsAnalysis newsA;
 	public long startTime;
 	public long time;
+	public TimeWeight tw;
 	/**
      * Constructor for a LogAnalysis.
      */
