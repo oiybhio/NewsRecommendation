@@ -44,10 +44,8 @@ public class Ranker {
 		NewsList ret = new NewsList();
 		if (newsListMerged.size() < topK)
 			topK = newsListMerged.size();
-		for(int i = 0; i < topK; i++) {
+		for(int i = 0; i < topK; i++)
 			ret.addNews(newsListMerged.get(i));
-			//System.out.println(newsListMerged.get(i).title);
-		}
 		
 		return ret;
 	}
