@@ -139,7 +139,7 @@ public class News {
 		for(Attribute a:array){
 			if(a.getAttributeName()=="title"||a.getAttributeName()=="body"){
 			//	a.display();
-				a.getSparseVector().sortKey();
+			//	a.getSparseVector().sortKey();
 			//	a.display();
 				a.getSparseVector().getTopK(K);
 			//	a.display();
