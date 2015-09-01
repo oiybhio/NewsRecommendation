@@ -47,7 +47,7 @@ public class MakeRandomUser {
 				pos = getRandomNumber(pos, length - 1 - (j - 1), rand);
 				List<String> words = arrayList.get(pos).getRandomWords(WordNum, rand);
 				for (String word:words) {
-					attribute.addFeature(word, 1);
+					attribute.addFeature(word, rand.nextDouble());
 					System.out.print(word + " ");
 				}
 				pos++;
