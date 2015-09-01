@@ -89,11 +89,12 @@ public class Main {
 		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
 			 Ranker ranker = new Ranker();
-			 //ranker.query(resultStore, user, "sports", newsData.getNewsList("sports").getNewsList());
-			 //ranker.query(resultStore, user, "social", newsData.getNewsList("social").getNewsList());
-			 //ranker.query(resultStore, user, "economy", newsData.getNewsList("economy").getNewsList());
-			 ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(MakeRandomHashmap.getRandomHashmap()
-					 ,dict,attributeSet,SORL).getNewsList());
+			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
+					 MakeRandomHashmap.getRandomHashmap(),dict,attributeSet,SORL).getNewsList(), 10);
+			 List<News> ans = temp.getNewsList();
+			 System.out.println("User ID: " + user.getUid());
+			 for(int j=0;j<ans.size();j++)
+				 System.out.println(ans.get(j).getTitle());
 		 }
 	 }
 	 private static News CreateNews(){
