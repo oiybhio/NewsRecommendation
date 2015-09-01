@@ -263,6 +263,7 @@ public class Main {
 				 }
 			 }
 			 body_attribute.getTopK(TOPK);
+			 body_attribute.getSparseVector().sortKey();
 			 news.setAttribute(body_attribute);
 			 // add attributes,add title,body,news_class
 			 Double hotness_score=getHotnessScore(title_nlp);
