@@ -1,5 +1,6 @@
 package edu.ruc.data;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class Attribute {
@@ -201,6 +202,25 @@ public class Attribute {
 			return denseVector.vectorToString();
 		}
 		return null;
+	}
+	
+	/**
+	 * Get symbol list
+	 * 
+	 * @return String list of symbols
+	 */
+	public List<String> getSymbolList() {
+		if (vectorType == VectorType.DENSE)
+			 return null;
+		List<String> symbols = new ArrayList<String>();
+		int len = sparseVector.size();
+		for(int i = 0; i < len; i++) {
+			Pair pair = sparseVector.getPairAt(i);
+			int key = pair.getKey();
+			String symbol = dict.getAlphabetAt(dictId).getSymbol(key);
+			symbols.add(symbol);
+		}
+		return symbols;
 	}
 	
 	/**
