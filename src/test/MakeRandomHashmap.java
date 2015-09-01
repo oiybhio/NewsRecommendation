@@ -40,8 +40,8 @@ public class MakeRandomHashmap {
 	public HashMap<String, Double> getRandomHashmap() {
 		HashMap<String, Double> indices = new HashMap<String, Double>();
 		Random rand = new Random();
-		int TopicNum = 2;
-		int WordNum = 3;
+		int TopicNum = 1;
+		int WordNum = 5;
 		int pos = 0;
 		int length = arrayList.size();
 		for(int i = TopicNum; i > 0; i--) {

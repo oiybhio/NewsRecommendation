@@ -33,7 +33,7 @@ public class Main {
 	 private static ResultStore resultStore;
 	 private static Dictionary dict;// the dictionary of features
 	 private static Alphabet attributeSet;// the alphabet of attribute name
-	 private static final String news_filename="E://eclipse/workspace/XinHua/dat0.txt";//the location of news_file 
+	 private static final String news_filename="src/news_data/dat0_example.txt";//the location of news_file 
 	 private static final String user_filename="";//the location of user_file
 	 private static final String hotness_url="";//the url of solr
 	 private static final String print_filename="";
@@ -41,7 +41,7 @@ public class Main {
 	 private static long num_news;
 	 private static String urlString = "http://183.174.228.20:8983/solr/Xinhua";
  	 private static SolrClient SORL ;
- 	
+ 	 private static final int TOPK=5;
  	 private static Connection CON;
 	 
 	 private static void Initialize(){//Initialize
@@ -156,7 +156,8 @@ public class Main {
 	 }
 	private static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
   //       LoadDic();
-//		 InputNewsFile(news_filename,default_code);
+		 InputNewsFile(news_filename,default_code);
+		 newsData.getNews(1).display();
     	 // InputUserFile(user_filename, default_code);
 //		 SaveDic();
 		 CreateUsers();
@@ -245,6 +246,7 @@ public class Main {
 					 title_attribute.modifyFeature(token, d+1);
 				 }
 			 }
+			 title_attribute.getTopK(TOPK);
 			 news.setAttribute(title_attribute);
 			 //
 			//title attribute
@@ -260,6 +262,7 @@ public class Main {
 					 body_attribute.modifyFeature(token, d+1);
 				 }
 			 }
+			 body_attribute.getTopK(TOPK);
 			 news.setAttribute(body_attribute);
 			 // add attributes,add title,body,news_class
 			 Double hotness_score=getHotnessScore(title_nlp);
@@ -268,8 +271,9 @@ public class Main {
 			 hotness_attribute.addFeature(hotness_score);
 			 news.setAttribute(hotness_attribute);
 			 // add the newsdatabase
-			 newsData.saveVector(news
-					 );
+			 newsData.setNews(news);
+//			 newsData.saveVector(news
+//					 );
 			 order++;
 		 }
 	 }

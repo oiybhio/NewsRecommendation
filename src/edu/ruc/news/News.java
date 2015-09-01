@@ -135,6 +135,19 @@ public class News {
 		}
 	}
 	
+	public void getTopK(int K){
+		for(Attribute a:array){
+			if(a.getAttributeName()=="title"||a.getAttributeName()=="body"){
+			//	a.display();
+				a.getSparseVector().sortKey();
+			//	a.display();
+				a.getSparseVector().getTopK(K);
+			//	a.display();
+			//	System.out.println("**************************");
+			}
+		}
+	}
+	
 	
 
 	

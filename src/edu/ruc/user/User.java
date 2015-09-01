@@ -8,7 +8,7 @@ public class User {
 	private long uid;
 	private int length;
 	private List<Attribute> arrayList;
-	private List<Long> Read;
+	private List Readed;
 	
 	/**
      * Constructor for a User.
@@ -17,14 +17,14 @@ public class User {
     	this.uid = uid;
     	length = 0;
     	arrayList = new ArrayList<Attribute>();
-    	Read = new ArrayList<Long>();
+    	Readed = new ArrayList();
     }
     
     public User(long uid, int length, List<Attribute> arrayList) {
     	this.uid = uid;
     	this.length = length;
     	this.arrayList = arrayList;
-    	Read = new ArrayList<Long>();
+    	Readed = new ArrayList();
     }
     
     /**
@@ -42,11 +42,11 @@ public class User {
     }
     
     /**
-     * Get Read.
+     * Get Readed.
      */
      
-    public List<Long> getReaded() {
-    	return Read;
+    public List getReaded() {
+    	return Readed;
     }
     /**
      * Add a attribute to User.
@@ -117,8 +117,8 @@ public class User {
     /**
      * Update User
      */    
-    public void Update(List<Attribute> newsattributes, long uid, double weight) {
-    	Read.add(new Long(uid));
+    public void Update(List<Attribute> newsattributes, long uid,double weight) {
+    	Readed.add(uid);
 		for(int i=0;i<newsattributes.size();i++) {
 			if(isExistAttributeByName(newsattributes.get(i).getAttributeName())) {
 				merge(newsattributes.get(i));
