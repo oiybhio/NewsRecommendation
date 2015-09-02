@@ -14,7 +14,8 @@ public class TimeWeight {
 	public double getWeight() {
 		double t = 0.0;
 		double gap = (System.currentTimeMillis() - date)/1000/60/60/24;
-		t = BehaveWeight.weight[Behave] * Math.exp(-gap) ;
+		t = 1+BehaveWeight.weight[Behave] * Math.exp(-gap) ;
+	//	System.out.println("pppppp "+t);
 		return t;
 	}
 }
