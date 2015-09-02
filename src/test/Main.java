@@ -74,7 +74,7 @@ public class Main {
 	    	 String url = "jdbc:mysql://localhost:3306/xinhua?"
 	    	 		+ "useUnicode=true&characterEncoding=UTF-8" ;    
 	         String username = "root" ;   
-	         String password = "zwh920617" ;   
+	         String password = "123456" ;   
 	         try{   
 	               CON=    
 	               DriverManager.getConnection(url , username , password ) ;   
@@ -92,8 +92,11 @@ public class Main {
 		 
 		 MakeRandomHashmap MakeRandomHashmap = new MakeRandomHashmap();
 		 
-		 for(int i=0;i<users.size();i++) {
+		 for(int i=2;i<3;i++) {
 			 User user = users.getUserAt(i);
+		//	 System.out.println("---------pp-------");
+		//	 user.display();
+		//	 user.getHashmap(dict);
 			 Ranker ranker = new Ranker();
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
 					 user.getHashmap(dict),dict,attributeSet,SORL).getNewsList(), 10);
@@ -155,7 +158,6 @@ public class Main {
 			 if(u1!=null)
 				 users.pushBack(u1);
 		 }
-		 users.display();
      }
 	 
 	 public static void createLog(){
@@ -190,7 +192,7 @@ public class Main {
 	private static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
   //       LoadDic();
 		 InputNewsFile(news_filename,default_code);
-		 newsData.getNews(1).display();
+	//	 newsData.getNews(1).display();
     	 // InputUserFile(user_filename, default_code);
 //		 SaveDic();
 		 CreateUsers();
@@ -325,8 +327,11 @@ public class Main {
     	 
     	 //doHotness();
     	 Preprocess();
-    	 
-    	 testUpdate();
+    	 System.out.println("**************");
+	//	 users.findUser(3).display();
+		 testUpdate();
+	//	 users.findUser(3).display();
+		 
     	 Ranker();
     	// System.out.println("****************************");
     	// createLog();
