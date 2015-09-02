@@ -180,7 +180,7 @@ public class User {
     			}
     			if(j<a.getSparseVector().size()) {
     				for(int k=j;k<a.getSparseVector().size();k++) {
-    					attribute.addFeature(a.getSparseVector().getPairAt(j).getKey(), a.getSparseVector().getPairAt(j).getValue());
+    					attribute.addFeature(a.getSparseVector().getPairAt(k).getKey(), a.getSparseVector().getPairAt(k).getValue());
     				}
     			}
     			return;
@@ -204,10 +204,35 @@ public class User {
     * Output the elements into screen.
     */
     public void display() {
-	System.out.println("userID : "+uid);
-	System.out.println("read news : "+ReadToString());
-	for(int i=0;i<length;i++) {
-		getAttributeAt(i).display();
-	}
+		System.out.println("userID : "+uid);
+		System.out.println("read news : "+ReadToString());
+		for(int i=0;i<length;i++) {
+			getAttributeAt(i).display();
+		}
     }
+	public HashMap<String, Double> getHashmap(Alphabet alphabet) {
+		HashMap<String, Double> indices = new HashMap<String, Double>();
+		Attribute a = findAttribute("title");
+	//	System.out.println("---------------pp-");
+	//  display();
+		if(a!=null) {
+			for(int i=0;i<a.getSparseVector().size();i++){
+				SparseVector s = a.getSparseVector();
+				System.out.println("ppp"+i+alphabet.getSymbol(s.getPairAt(i).getKey()));
+				indices.put(alphabet.getSymbol(s.getPairAt(i).getKey()), s.getPairAt(i).getValue());
+			}
+		}
+		
+		a = findAttribute("body");
+	//	System.out.println("----------------");
+	//	a.display();
+		if(a!=null) {
+			for(int i=0;i<a.getSparseVector().size();i++){
+				SparseVector s = a.getSparseVector();
+				indices.put(alphabet.getSymbol(s.getPairAt(i).getKey()), s.getPairAt(i).getValue());
+			}
+		}
+		indices.toString();
+		return indices;
+	}
 }
