@@ -57,6 +57,7 @@ public class Main {
 		 newsData.setSolr(SORL);
 		 newsData.setConnection(CON);
 		 userData=new UserDatabase();
+		 userData.setConnection(CON);
 		 resultStore=new ResultStore();
 		 dict=new Dictionary();
 		 attributeSet=new Alphabet();
