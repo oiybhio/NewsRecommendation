@@ -1,5 +1,5 @@
 package Server;
-import edu.ruc.BehaveDeal.*;
+import edu.ruc.WebService.DealMsg;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
