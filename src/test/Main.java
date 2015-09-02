@@ -1,6 +1,7 @@
 package test;
 
 import edu.ruc.WebService.BehaveType;
+import edu.ruc.WebService.DealMsg;
 import edu.ruc.data.*;
 import edu.ruc.data.Dictionary;
 import edu.ruc.news.*;
@@ -16,6 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+
+import net.sf.json.JSONObject;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -34,13 +37,14 @@ public class Main {
 	 private static Dictionary dict;// the dictionary of features
 	 private static Alphabet attributeSet;// the alphabet of attribute name
 	 private static final String news_filename="src/news_data/dat0_example.txt";//the location of news_file 
-	 private static final String user_filename="";//the location of user_file
+	 private static final String user_filename="src/user_data/json.txt"";//the location of user_file
 	 private static final String hotness_url="";//the url of solr
 	 private static final String print_filename="";
 	 private static String default_code="utf-8";
 	 private static long num_news;
 	 private static String urlString = "http://183.174.228.20:8983/solr/Xinhua";
  	 private static SolrClient SORL ;
+ 	 
  	 private static final int TOPK=5;
  	 private static Connection CON;
 	 
@@ -56,6 +60,7 @@ public class Main {
 		 resultStore=new ResultStore();
 		 dict=new Dictionary();
 		 attributeSet=new Alphabet();
+		 users = new OnlineUsers();
 	 }
 	 public static void InitializeDatabase(){
 		     try{   
@@ -102,7 +107,7 @@ public class Main {
 	 }
 	 
 	 private static void CreateUsers() throws IOException{
-		 MakeRandomUser makeRandomUser = new MakeRandomUser();
+		 /* MakeRandomUser makeRandomUser = new MakeRandomUser();
 		 int userNum = 2;
 		 int TopicNum = 5;
 		 int WordNum = 3;
@@ -136,8 +141,20 @@ public class Main {
 		 System.out.println();
 		 users.display();
 		 System.out.println();
+		 
 	//	 users.getUserAt(0).display();
 	//	 createLog();
+		 userData.saveVectorALL(users, "userProfile_temp");
+		 User u1 = userData.getVector(3, dict, attributeSet,"userProfile_temp");
+		 System.out.println("**************");
+		 u1.display();*/
+		for(int i=1;i<7;i++) {
+			 User u1 = userData.getVector(i, dict, attributeSet,"userProfile_temp");
+			 u1.display();
+			 if(u1!=null)
+				 users.pushBack(u1);
+		 }
+		 users.display();
      }
 	 
 	 public static void createLog(){
@@ -147,6 +164,20 @@ public class Main {
 		 // newsData.getNews(nid).display();
 		 behavior.UpdateUserProfile();
 		 // users.getUserAt(2).display();
+	 }
+	  public static void testUpdate() throws IOException, SQLException {
+		// JSONObject json = new JSONObject();
+		BufferedReader br = new BufferedReader(new FileReader(user_filename));
+		String jsonString;
+		while((jsonString=br.readLine())!=null){
+			DealMsg dm = new DealMsg(jsonString);
+			dm.start();
+			dm.getDataAnalysis().BehaveAnalyse(users.findUser(dm.getDataAnalysis().getUid()), newsData.getNews(dm.getDataAnalysis().getNid()));
+			dm.getDataAnalysis().UpdateUserProfile();
+			users.findUser(dm.getDataAnalysis().getUid()).display();
+			userData.saveVector(users.findUser(dm.getDataAnalysis().getUid()), "userProfile_temp");
+		}
+		resultStore.clear();
 	 }
 	 private static void SaveDic() throws SQLException{
 		 dict.saveIntoDatabase(CON);
@@ -248,6 +279,7 @@ public class Main {
 				 }
 			 }
 			 title_attribute.getTopK(TOPK);
+			 title_attribute.getSparseVector().sortKey();
 			 news.setAttribute(title_attribute);
 			 //
 			//title attribute
@@ -293,7 +325,7 @@ public class Main {
     	 //doHotness();
     	 Preprocess();
     	 
-    	 //
+    	 testUpdate();
     	 Ranker();
     	// System.out.println("****************************");
     	// createLog();
