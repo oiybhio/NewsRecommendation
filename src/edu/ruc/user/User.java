@@ -42,11 +42,26 @@ public class User {
     }
     
     /**
-     * Get Read.
+     * Get Readed.
      */
      
     public List<Long> getReaded() {
     	return Read;
+    }
+    public String ReadToString() {
+    	String s = "";
+    	for(int i=0;i<Read.size();i++) {
+    		s = s + Long.toString(Read.get(i))+ " ";
+    	}
+    	return s;
+    }
+    public void StringToRead(String s) {
+    	if (s==null||s.equals(""))
+    		return;
+    	String[] str = s.split(" ");
+    	for(int i=0;i<str.length;i++) {
+    		Read.add(Long.parseLong(str[i]));
+    	};
     }
     /**
      * Add a attribute to User.
@@ -117,8 +132,8 @@ public class User {
     /**
      * Update User
      */    
-    public void Update(List<Attribute> newsattributes, long uid, double weight) {
-    	Read.add(new Long(uid));
+    public void Update(List<Attribute> newsattributes, long nid,double weight ) {
+    	Read.add(nid);
 		for(int i=0;i<newsattributes.size();i++) {
 			if(isExistAttributeByName(newsattributes.get(i).getAttributeName())) {
 				merge(newsattributes.get(i));
@@ -150,15 +165,15 @@ public class User {
     			attribute.getSparseVector().sortKey();
     			int i=0,j=0;
     			while(i<attribute.getSparseVector().size()&&j<a.getSparseVector().size()) {
-    				System.out.println(attribute.getSparseVector().getPairAt(i).getKey()+"  "+a.getSparseVector().getPairAt(j).getKey());
+    			//	System.out.println(attribute.getSparseVector().getPairAt(i).getKey()+"  "+a.getSparseVector().getPairAt(j).getKey());
     				if(attribute.getSparseVector().getPairAt(i).getKey()==a.getSparseVector().getPairAt(j).getKey()) {
     					double t = attribute.getSparseVector().getPairAt(i).getValue()+a.getSparseVector().getPairAt(j).getValue();
     					attribute.getSparseVector().getPairAt(i).setValue(t);
     					i++; j++;
     				}
-    				if(attribute.getSparseVector().getPairAt(i).getKey()<a.getSparseVector().getPairAt(j).getKey())
+    				else if(attribute.getSparseVector().getPairAt(i).getKey()<a.getSparseVector().getPairAt(j).getKey())
     					i++;
-    				if(attribute.getSparseVector().getPairAt(i).getKey()>a.getSparseVector().getPairAt(j).getKey()) {
+    				else if(attribute.getSparseVector().getPairAt(i).getKey()>a.getSparseVector().getPairAt(j).getKey()) {
     					attribute.addFeature(a.getSparseVector().getPairAt(j).getKey(), a.getSparseVector().getPairAt(j).getValue());
     					j++;
     				}
@@ -190,6 +205,7 @@ public class User {
     */
     public void display() {
 	System.out.println("userID : "+uid);
+	System.out.println("read news : "+ReadToString());
 	for(int i=0;i<length;i++) {
 		getAttributeAt(i).display();
 	}
