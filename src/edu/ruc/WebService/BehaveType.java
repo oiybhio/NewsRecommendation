@@ -1,5 +1,5 @@
 package edu.ruc.WebService;
 
 public enum BehaveType {
-	Register,Login,Modify,Recommend,Click,Refresh,Query,Comment,Log,Collect,Browse;
+	Click,Comment,Log,Collect,Browse,Register,Login,Modify,Recommend,Refresh,Query;
 }
