@@ -37,7 +37,7 @@ public class Main {
 	 private static Dictionary dict;// the dictionary of features
 	 private static Alphabet attributeSet;// the alphabet of attribute name
 	 private static final String news_filename="src/news_data/dat0_example.txt";//the location of news_file 
-	 private static final String user_filename="src/user_data/json.txt"";//the location of user_file
+	 private static final String user_filename="src/user_data/json.txt";//the location of user_file
 	 private static final String hotness_url="";//the url of solr
 	 private static final String print_filename="";
 	 private static String default_code="utf-8";
@@ -106,7 +106,7 @@ public class Main {
 		 return new News(num_news++);
 	 }
 	 
-	 private static void CreateUsers() throws IOException{
+	 private static void CreateUsers() throws IOException, SQLException{
 		 /* MakeRandomUser makeRandomUser = new MakeRandomUser();
 		 int userNum = 2;
 		 int TopicNum = 5;
@@ -315,7 +315,7 @@ public class Main {
      private static void Load_feature(){// load the feature of news and user
     	 
      }
-     public static void main(String[] args) throws IOException, SolrServerException, SQLException{
+     public static void main(String[] args) throws Exception {
     	 Initialize();
     	 //preprocess do above actions
     	 
