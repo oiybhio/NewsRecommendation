@@ -1,6 +1,7 @@
 package edu.ruc.user;
 
 import edu.ruc.data.*;
+import edu.ruc.data.Dictionary;
 
 import java.util.*;
 
@@ -210,28 +211,20 @@ public class User {
 			getAttributeAt(i).display();
 		}
     }
-	public HashMap<String, Double> getHashmap(Alphabet alphabet) {
+	public HashMap<String, Double> getHashmap(Dictionary dict) {
 		HashMap<String, Double> indices = new HashMap<String, Double>();
-		Attribute a = findAttribute("title");
-	//	System.out.println("---------------pp-");
-	//  display();
-		if(a!=null) {
+		
+		for(Attribute a:arrayList) {
+			SparseVector s = a.getSparseVector();
+			Alphabet alphabet = dict.getAlphabetAt(0);
 			for(int i=0;i<a.getSparseVector().size();i++){
-				SparseVector s = a.getSparseVector();
-				System.out.println("ppp"+i+alphabet.getSymbol(s.getPairAt(i).getKey()));
-				indices.put(alphabet.getSymbol(s.getPairAt(i).getKey()), s.getPairAt(i).getValue());
+			//	System.out.println("ppp"+i+" "+s.getPairAt(i).getKey()+alphabet.getSymbol(s.getPairAt(i).getKey()));
+				if(alphabet.getSymbol(s.getPairAt(i).getKey())!=null)
+					indices.put(alphabet.getSymbol(s.getPairAt(i).getKey()), s.getPairAt(i).getValue());
 			}
 		}
 		
-		a = findAttribute("body");
-	//	System.out.println("----------------");
-	//	a.display();
-		if(a!=null) {
-			for(int i=0;i<a.getSparseVector().size();i++){
-				SparseVector s = a.getSparseVector();
-				indices.put(alphabet.getSymbol(s.getPairAt(i).getKey()), s.getPairAt(i).getValue());
-			}
-		}
+		
 		indices.toString();
 		return indices;
 	}
