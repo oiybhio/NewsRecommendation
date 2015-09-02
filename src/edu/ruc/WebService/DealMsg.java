@@ -32,4 +32,7 @@ public class DealMsg {
 		if(behave == BehaveType.Register.ordinal())
 			da = new Register(json);
 	}
+	public DataAnalysis getDataAnalysis() {
+		return da;
+	}
 }
