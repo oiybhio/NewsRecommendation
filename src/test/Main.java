@@ -96,7 +96,7 @@ public class Main {
 			 User user = users.getUserAt(i);
 			 Ranker ranker = new Ranker();
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-					 MakeRandomHashmap.getRandomHashmap(),dict,attributeSet,SORL).getNewsList(), 10);
+					 user.getHashmap(dict),dict,attributeSet,SORL).getNewsList(), 10);
 			 List<News> ans = temp.getNewsList();
 			 System.out.println("User ID: " + user.getUid());
 			 for(int j=0;j<ans.size();j++)
