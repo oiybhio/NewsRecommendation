@@ -1,5 +1,6 @@
 package edu.ruc.database;
 
+import java.awt.List;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,8 +33,11 @@ public class NewsDatabase {
       private ArrayList<News> array;
       private HashSet<Integer> set;
       private HashSet<String> queryset;
-	  private SolrClient solr;
+	  private SolrClient solr_xinwen;
+	  private SolrClient solr_weibo;
+	  private SolrClient solr_news;
 	  private Connection con;
+	  private int TopK;
 	  public NewsDatabase(){
     	  array=new ArrayList<>();
     	  set=new HashSet<>();
@@ -44,11 +48,20 @@ public class NewsDatabase {
     	  queryset.add("||");
     	  queryset.add("&&");
     	  queryset.add("!");
+    	  this.TopK=5;
       }
       //
-	  	 
-	  public void setSolr(SolrClient s){
-		  this.solr=s;
+	  public void setTOPK(int k){
+		  this.TopK=k;
+	  }
+	  public void setSolr_news(SolrClient s){
+		  this.solr_news=s;
+	  }
+	  public void setSolr_xinwen(SolrClient s){
+		  this.solr_xinwen=s;
+	  }
+	  public void setSolr_weibo(SolrClient s){
+		  this.solr_weibo=s;
 	  }
 	  public void setConnection(Connection con){
 		  this.con=con;
@@ -129,7 +142,7 @@ public class NewsDatabase {
 		    rs = pstmt.execute();
       }
       public NewsList getNewsListbyTopic(HashMap<String,Double> map,Dictionary dict,Alphabet attributeSet
-    		  ,SolrClient SORL) {
+    		  ) {
     	  NewsList newsList=new NewsList();
     	  Iterator iter=map.entrySet().iterator();
     	  String myquery="";
@@ -164,9 +177,9 @@ public class NewsDatabase {
     	    SolrQuery parameters = new SolrQuery();
 	    	parameters.set("q", myquery);
 	    	parameters.set("fl","id,title,body,date");
-	    	parameters.set("row","1000");
+	    	parameters.set("row","20");
 	    	try{
-	    	QueryResponse response = solr.query(parameters);
+	    	QueryResponse response = solr_news.query(parameters);
 	    	SolrDocumentList list = response.getResults();
 	    	Statement stmt = con.createStatement();
 	    	
@@ -194,6 +207,22 @@ public class NewsDatabase {
 	   					 title_attribute.modifyFeature(token, d+1);
 	   				 }
 	   			 }
+	   			ArrayList<String> symbol_title=new ArrayList<>();
+	   			 symbol_title=(ArrayList<String>) title_attribute.getSymbolList();
+	   			 for(String s:symbol_title){
+	   				 Double tf=title_attribute.getFeature(s);
+	   				 SolrQuery para = new SolrQuery();
+	   				 String myq="*:*";
+	   		    	 para.set("q", myq);
+	   		    	 para.set("fl","id,idf(\"title\",\""+s+"\")");
+	   		    	 QueryResponse res = solr_xinwen.query(para);
+	   		    	 SolrDocumentList list2 = res.getResults();
+	   		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"title\",\""+s+"\")").toString());
+	   		    	title_attribute.modifyFeature(s, tf*idf);
+	   			 }
+	   			 
+	   			title_attribute.getSparseVector().getTopK(this.TopK);
+	   			title_attribute.getSparseVector().sortKey();
 	   			 news.setAttribute(title_attribute);
 	   			 //
 	   			//title attribute
@@ -209,9 +238,29 @@ public class NewsDatabase {
 	   					 body_attribute.modifyFeature(token, d+1);
 	   				 }
 	   			 }
+	   			 //body attribute
+	   			 ArrayList<String> symbol_body=new ArrayList<>();
+	   			 symbol_body=(ArrayList<String>) body_attribute.getSymbolList();
+	   			 for(String s:symbol_body){
+	   				 Double tf=body_attribute.getFeature(s);
+	   				 SolrQuery para = new SolrQuery();
+	   				 String myq="*:*";
+	   		    	 para.set("q", myq);
+	   		    	 para.set("fl","id,idf(\"body\",\""+s+"\")");
+	   		    	 QueryResponse res = solr_xinwen.query(para);
+	   		    	 SolrDocumentList list2 = res.getResults();
+	   		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"body\",\""+s+"\")").toString());
+	   		    	 body_attribute.modifyFeature(s, tf*idf);
+	   		    	 //System.out.println(tf*idf);
+	   			 }
+	   			 
+	   			 body_attribute.getSparseVector().getTopK(this.TopK);
+	   			 body_attribute.getSparseVector().sortKey();
 	   			 news.setAttribute(body_attribute);
+	   			 
+	   			 
 	   			 // add attributes,add title,body,news_class
-	   			 Double hotness_score=getHotnessScore(title_nlp,SORL);
+	   			 Double hotness_score=getHotnessScore(title_nlp);
 	   			 Attribute hotness_attribute=new Attribute(
 	   					 VectorType.DENSE, dict, attributeSet, "hotness");
 	   			 hotness_attribute.addFeature(hotness_score);
@@ -245,7 +294,7 @@ public class NewsDatabase {
 //	    	}
     	    return newsList;
       }
-      public Double getHotnessScore(String text,SolrClient SORL) throws IOException, SolrServerException{//return score of hotness
+      public Double getHotnessScore(String text) throws IOException, SolrServerException{//return score of hotness
 			 StringTokenizer st=new StringTokenizer(text," ");
 				boolean if_first=true;
 				String myquery="";
@@ -270,7 +319,7 @@ public class NewsDatabase {
 		    	parameters.set("q", myquery);
 		    	parameters.set("fl","score,title");
 		    	Double sum=0.0;
-		    	QueryResponse response = SORL.query(parameters);
+		    	QueryResponse response = this.solr_xinwen.query(parameters);
 		    	SolrDocumentList list = response.getResults();
 		    	for(int i=0;i<list.size();i++){
 		    	   SolrDocument sd=list.get(i);
