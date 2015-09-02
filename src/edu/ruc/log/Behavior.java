@@ -1,5 +1,6 @@
 package edu.ruc.log;
 
+import net.sf.json.JSONObject;
 import edu.ruc.data.Pair;
 import edu.ruc.user.*;
 import edu.ruc.news.*;
@@ -19,7 +20,15 @@ public class Behavior implements Comparable{
      * @param time  some behaviors have time record, such as browse <br>
      *              and some don't, such as click
      */
-	
+	public Behavior(String s){
+		JSONObject json = JSONObject.fromObject(s);
+		uid = json.getLong("uid");
+		nid = json.getLong("nid");
+		behave = json.getInt("behave");
+		startTime = json.getLong("startTime");
+		comment = json.getString("comment");
+		time = json.getLong("time");
+	}
 	public Behavior(long uid, long nid, int behave, long startTime, long time) {
 		this.uid = uid;
 		this.nid = nid;
