@@ -175,9 +175,12 @@ public class NewsDatabase {
     	  }
     	    System.out.println(myquery);
     	    SolrQuery parameters = new SolrQuery();
+    	    if(myquery.equals("")){
+    	    	myquery="*:*";
+    	    }
 	    	parameters.set("q", myquery);
 	    	parameters.set("fl","id,title,body,date");
-	    	parameters.set("row","20");
+	    	parameters.set("row","1000");
 	    	try{
 	    	QueryResponse response = solr_news.query(parameters);
 	    	SolrDocumentList list = response.getResults();
@@ -225,7 +228,7 @@ public class NewsDatabase {
 	   			title_attribute.getSparseVector().sortKey();
 	   			 news.setAttribute(title_attribute);
 	   			 //
-	   			//title attribute
+	   			//body attribute
 	   			 Attribute body_attribute=new Attribute(VectorType.SPARSE, 
 	   					 dict, attributeSet, "body");
 	   			 st=new StringTokenizer(body_nlp," ");
@@ -239,20 +242,20 @@ public class NewsDatabase {
 	   				 }
 	   			 }
 	   			 //body attribute
-	   			 ArrayList<String> symbol_body=new ArrayList<>();
-	   			 symbol_body=(ArrayList<String>) body_attribute.getSymbolList();
-	   			 for(String s:symbol_body){
-	   				 Double tf=body_attribute.getFeature(s);
-	   				 SolrQuery para = new SolrQuery();
-	   				 String myq="*:*";
-	   		    	 para.set("q", myq);
-	   		    	 para.set("fl","id,idf(\"body\",\""+s+"\")");
-	   		    	 QueryResponse res = solr_xinwen.query(para);
-	   		    	 SolrDocumentList list2 = res.getResults();
-	   		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"body\",\""+s+"\")").toString());
-	   		    	 body_attribute.modifyFeature(s, tf*idf);
-	   		    	 //System.out.println(tf*idf);
-	   			 }
+//	   			 ArrayList<String> symbol_body=new ArrayList<>();
+//	   			 symbol_body=(ArrayList<String>) body_attribute.getSymbolList();
+//	   			 for(String s:symbol_body){
+//	   				 Double tf=body_attribute.getFeature(s);
+//	   				 SolrQuery para = new SolrQuery();
+//	   				 String myq="*:*";
+//	   		    	 para.set("q", myq);
+//	   		    	 para.set("fl","id,idf(\"body\",\""+s+"\")");
+//	   		    	 QueryResponse res = solr_xinwen.query(para);
+//	   		    	 SolrDocumentList list2 = res.getResults();
+//	   		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"body\",\""+s+"\")").toString());
+//	   		    	 body_attribute.modifyFeature(s, tf*idf);
+//	   		    	 //System.out.println(tf*idf);
+//	   			 }
 	   			 
 	   			 body_attribute.getSparseVector().getTopK(this.TopK);
 	   			 body_attribute.getSparseVector().sortKey();

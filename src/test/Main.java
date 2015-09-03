@@ -42,19 +42,25 @@ public class Main {
 	 private static final String print_filename="";
 	 private static String default_code="utf-8";
 	 private static long num_news;
-	 private static String urlString = "http://183.174.228.20:8983/solr/Xinhua";
- 	 private static SolrClient SORL ;
- 	 
+	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/Xinhua";
+	 private static String SOLR_xinwenSurlString = "http://183.174.228.20:8983/solr/Xinhua";
+	 private static String SOLR_weiboSurlString = "http://183.174.228.20:8983/solr/Xinhua";
+	 private static SolrClient SOLR_NEWS ;
+ 	 private static SolrClient SOLR_XINWEN ;
+ 	 private static SolrClient SOLR_WEIBO ;
+ 	
  	 private static final int TOPK=5;
  	 private static Connection CON;
 	 
 	 private static void Initialize(){//Initialize
 		 //initialize variables
-		 SORL = new HttpSolrClient(urlString);
+		 SOLR_NEWS = new HttpSolrClient(SOLR_NEWSurlString);
+		 SOLR_XINWEN=new HttpSolrClient(SOLR_xinwenSurlString);
 		 InitializeDatabase();
 		 num_news=1;
 		 newsData=new NewsDatabase();
-		 newsData.setSolr(SORL);
+		 newsData.setSolr_news(SOLR_NEWS);
+		 newsData.setSolr_xinwen(SOLR_XINWEN);
 		 newsData.setConnection(CON);
 		 userData=new UserDatabase();
 		 userData.setConnection(CON);
@@ -92,14 +98,14 @@ public class Main {
 		 
 		 MakeRandomHashmap MakeRandomHashmap = new MakeRandomHashmap();
 		 
-		 for(int i=2;i<3;i++) {
+		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
-		//	 System.out.println("---------pp-------");
-		//	 user.display();
+			 System.out.println("---------pp-------");
+			 user.display();
 		//	 user.getHashmap(dict);
 			 Ranker ranker = new Ranker();
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-					 user.getHashmap(dict),dict,attributeSet,SORL).getNewsList(), 10);
+					 user.getHashmap(dict),dict,attributeSet).getNewsList(), 10);
 			 List<News> ans = temp.getNewsList();
 			 System.out.println("User ID: " + user.getUid());
 			 for(int j=0;j<ans.size();j++)
@@ -224,7 +230,7 @@ public class Main {
 	    	parameters.set("q", myquery);
 	    	parameters.set("fl","score,title");
 	    	Double sum=0.0;
-	    	QueryResponse response = SORL.query(parameters);
+	    	QueryResponse response = SOLR_XINWEN.query(parameters);
 	    	SolrDocumentList list = response.getResults();
 	    	for(int i=0;i<list.size();i++){
 	    	   SolrDocument sd=list.get(i);
