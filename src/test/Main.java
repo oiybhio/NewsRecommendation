@@ -55,7 +55,7 @@ public class Main {
  	 private static final int TOPK=5;
  	 private static Connection CON;
 	 
-	 private static void Initialize(){//Initialize
+	 private static void Initialize() throws IOException{//Initialize
 		 //initialize variables
 		 SOLR_NEWS = new HttpSolrClient(SOLR_NEWSurlString);
 		 SOLR_XINWEN=new HttpSolrClient(SOLR_xinwenSurlString);
@@ -174,14 +174,14 @@ public class Main {
 		 }
      }
 	 
-	 public static void createLog(){
+	 /*public static void createLog(){
 		 long nid = 33;
 		 Behavior behavior = new Behavior(3, nid, BehaveType.Click.ordinal(), 10);
 		 behavior.BehaveAnalyse(users,newsData.getNews(nid));
 		 // newsData.getNews(nid).display();
 		 behavior.UpdateUserProfile();
 		 // users.getUserAt(2).display();
-	 }
+	 }*/
 	  public static void testUpdate() throws IOException, SQLException {
 		// JSONObject json = new JSONObject();
 		BufferedReader br = new BufferedReader(new FileReader(user_filename));
