@@ -37,13 +37,20 @@ public class UserDatabase {
 			    pstmt.execute();
 		    }
     	} else{
-    		for(Attribute attribute:u.getAttributeList()) {
-       		 	String strsql="Update "+table+" set vector='"+attribute.vectorToString()+"', readed='"+u.ReadToString()+"' where uid="+u.getUid()+";";
-       		 //	System.out.println(strsql);
-       		 	PreparedStatement ps = con.prepareStatement(strsql);  
-	         	ps.executeUpdate();
+    		sql = "delete from "+table+" where uid="+u.getUid()+";";
+    		PreparedStatement p = con.prepareStatement(sql);
+    		p.executeUpdate();
+    		String strsql = "insert into "+ table +" (uid,attribute_name,vector,type,readed)" + " values(?,?,?,?,?)";
+		    for(Attribute attribute:u.getAttributeList()) {
+		    	PreparedStatement pstmt = con.prepareStatement(strsql);
+			    pstmt.setLong(1, u.getUid());
+			    pstmt.setString(2, attribute.getAttributeName());
+			    pstmt.setString(3, attribute.vectorToString());
+			    pstmt.setInt(4, 0);
+			    pstmt.setString(5,u.ReadToString());
+			    pstmt.execute();
 		    }
-    	}
+	    }
     }
     public void saveVectorALL(OnlineUsers users, String table) throws SQLException{
     	for(int i=0;i< users.size();i++) {
