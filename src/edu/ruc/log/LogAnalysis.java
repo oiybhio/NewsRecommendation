@@ -1,5 +1,8 @@
 package edu.ruc.log;
+import java.io.PrintWriter;
+
 import edu.ruc.weight.*;
+import edu.ruc.WebService.BehaveType;
 import edu.ruc.user.User;
 
 public class LogAnalysis {
@@ -15,13 +18,17 @@ public class LogAnalysis {
 		user = u;
 		this.newsA = newsA;
 		this.startTime = startTime;
+		tw = new TimeWeight(BehaveType.Click.ordinal(), startTime);
 	}
 	
 	/**
      * Update user.
      * @return updated user's features.
      */
-	public void UpdateUser() {
-	//	user.Update();
+	public void UpdateUser(PrintWriter pw_log) {
+	//	System.out.println(newsA.getAttributes());
+	//	System.out.println(newsA.getNid());
+	//	System.out.println(tw.getWeight());
+		user.Update(newsA.getAttributes(),newsA.getNid(),tw.getWeight());
 	}
 }
