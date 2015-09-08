@@ -26,6 +26,8 @@ public class Behavior implements Comparable{
 	public Behavior(String s){
 		JSONObject json = JSONObject.fromObject(s);
 		uid = json.getLong("UserID");
+		String js = json.getString("json");
+		json = JSONObject.fromObject(js);
 		nid = json.getLong("NewsID");
 		behave = json.getInt("behave");
 		startTime = new Date(json.getString("Date")).getTime();
@@ -64,8 +66,6 @@ public class Behavior implements Comparable{
 			analysis = new BrowseAnalysis(u,na,startTime,time);
 		else if(behave==BehaveType.Comment.ordinal()) //Comment 
 			analysis = new CommentAnalysis(u,na,startTime,comment);
-		else if(behave==BehaveType.Log.ordinal())
-			analysis = new LogAnalysis(u,na,startTime);
 	}
 	
 	/**
