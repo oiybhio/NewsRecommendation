@@ -1,5 +1,8 @@
 package edu.ruc.log;
 
+import java.io.PrintWriter;
+import java.util.Date;
+
 import net.sf.json.JSONObject;
 import edu.ruc.data.Pair;
 import edu.ruc.user.*;
@@ -22,12 +25,10 @@ public class Behavior implements Comparable{
      */
 	public Behavior(String s){
 		JSONObject json = JSONObject.fromObject(s);
-		uid = json.getLong("uid");
-		nid = json.getLong("nid");
+		uid = json.getLong("UserID");
+		nid = json.getLong("NewsID");
 		behave = json.getInt("behave");
-		startTime = json.getLong("startTime");
-		comment = json.getString("comment");
-		time = json.getLong("time");
+		startTime = new Date(json.getString("Date")).getTime();
 	}
 	public Behavior(long uid, long nid, int behave, long startTime, long time) {
 		this.uid = uid;
@@ -63,13 +64,15 @@ public class Behavior implements Comparable{
 			analysis = new BrowseAnalysis(u,na,startTime,time);
 		else if(behave==BehaveType.Comment.ordinal()) //Comment 
 			analysis = new CommentAnalysis(u,na,startTime,comment);
+		else if(behave==BehaveType.Log.ordinal())
+			analysis = new LogAnalysis(u,na,startTime);
 	}
 	
 	/**
      * Update user's profile.
      */
-	public void UpdateUserProfile() {
-		analysis.UpdateUser();
+	public void UpdateUserProfile(PrintWriter pw_log) {
+		analysis.UpdateUser(pw_log);
 	}
 	
 	/**
