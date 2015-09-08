@@ -2,7 +2,14 @@ package edu.ruc.user;
 
 import edu.ruc.data.*;
 import edu.ruc.data.Dictionary;
+import edu.ruc.database.LogDatabase;
+import edu.ruc.database.NewsDatabase;
+import edu.ruc.database.UserDatabase;
+import edu.ruc.log.Behavior;
 
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 public class User {
@@ -137,12 +144,35 @@ public class User {
     	Read.add(nid);
 		for(int i=0;i<newsattributes.size();i++) {
 			if(isExistAttributeByName(newsattributes.get(i).getAttributeName())) {
-				merge(newsattributes.get(i));
+				merge(newsattributes.get(i),weight);
 			}else{
 				length++;
-				arrayList.add(newsattributes.get(i));
+				Attribute a = newsattributes.get(i);
+				SparseVector s = a.getSparseVector();
+				for(int k=0;k<s.size();k++) {
+					Pair p = s.getPairAt(k);
+					p.setValue(p.getValue()*weight);
+					s.modifyPair(p);
+				}
+				arrayList.add(a);
 			}
 		}
+    }
+    public void UpdateAll(Connection con,OnlineUsers users, NewsDatabase newsData, PrintWriter pw_log ) throws SQLException{
+    	LogDatabase ld = new LogDatabase();
+    	ld.setConnection(con);
+    	ArrayList<Behavior> behaviors = ld.getBehaviors(uid);
+    	pw_log.println(""+uid+"start");
+    	for(Behavior behavior:behaviors){
+	    	behavior.BehaveAnalyse(users,newsData.getNews(behavior.getNid()));
+			behavior.UpdateUserProfile(pw_log);
+    	}
+    	ld.setflag(uid);
+    	pw_log.println(uid+" update : flag");
+    	UserDatabase ud = new UserDatabase();
+    	ud.setConnection(con);
+    	ud.saveVector(this, "userprofile_temp");
+    	pw_log.println(uid+" update in database");
     }
     /**
      * Get News weight to User
@@ -155,7 +185,7 @@ public class User {
      *
      * @param attributeName the name of the attribute wanted to remove
      */    
-    public void merge(Attribute a) {
+    public void merge(Attribute a, double weight) {
     	for(Attribute attribute:arrayList) {
     		if (attribute.getAttributeName() == a.getAttributeName()) {
     		//	System.out.println("^^^^^^^^^^^^^^^^^^^^^^^");
@@ -223,7 +253,6 @@ public class User {
 					indices.put(alphabet.getSymbol(s.getPairAt(i).getKey()), s.getPairAt(i).getValue());
 			}
 		}
-		
 		
 		indices.toString();
 		return indices;
