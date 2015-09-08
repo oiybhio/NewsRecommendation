@@ -1,5 +1,9 @@
 package edu.ruc.WebService;
 
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import edu.ruc.log.ClickAnalysis;
 import edu.ruc.log.NewsAnalysis;
 import edu.ruc.news.News;
@@ -13,7 +17,7 @@ public class DataAnalysis {
 	/**
      * Update user's profile.
      */
-	public void UpdateUserProfile() {
+	public void UpdateUserProfile(PrintWriter pw_log) {
 	}
 	/**
      * Get uid.
@@ -27,5 +31,13 @@ public class DataAnalysis {
      */
 	public long getNid() {
 		return NewsID;
+	}
+	/**
+	 * store Log into database
+	 * @param CON
+	 * @throws SQLException 
+	 */
+	public void Store(Connection CON) throws SQLException {
+		
 	}
 }
