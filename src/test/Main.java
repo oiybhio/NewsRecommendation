@@ -40,6 +40,9 @@ public class Main {
 	 private static final String user_filename="src/user_data/json.txt";//the location of user_file
 	 private static final String hotness_url="";//the url of solr
 	 private static final String print_filename="";
+	 private static final String log_filename="src/log/log"+System.currentTimeMillis()+".txt";
+	 private static PrintWriter pw_log;
+	 
 	 private static String default_code="utf-8";
 	 private static long num_news;
 	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/Xinhua";
@@ -68,6 +71,11 @@ public class Main {
 		 dict=new Dictionary();
 		 attributeSet=new Alphabet();
 		 users = new OnlineUsers();
+		 InitLogfile();
+	 }
+	 
+	 public static void InitLogfile() throws IOException{
+		 pw_log = new PrintWriter(new FileWriter(log_filename));
 	 }
 	 public static void InitializeDatabase(){
 		     try{   
@@ -178,15 +186,19 @@ public class Main {
 		// JSONObject json = new JSONObject();
 		BufferedReader br = new BufferedReader(new FileReader(user_filename));
 		String jsonString;
+	//	br.readLine();
 		while((jsonString=br.readLine())!=null){
+		//	System.out.println("ehfiehfi");
 			DealMsg dm = new DealMsg(jsonString);
 			dm.start();
 			dm.getDataAnalysis().BehaveAnalyse(users.findUser(dm.getDataAnalysis().getUid()), newsData.getNews(dm.getDataAnalysis().getNid()));
-			dm.getDataAnalysis().UpdateUserProfile();
+			dm.getDataAnalysis().UpdateUserProfile(pw_log);
+			dm.getDataAnalysis().Store(CON);
 			users.findUser(dm.getDataAnalysis().getUid()).display();
 			userData.saveVector(users.findUser(dm.getDataAnalysis().getUid()), "userProfile_temp");
 		}
 		resultStore.clear();
+		users.findUser(3).UpdateAll(CON, users, newsData, pw_log);
 	 }
 	 private static void SaveDic() throws SQLException{
 		 dict.saveIntoDatabase(CON);
@@ -324,6 +336,10 @@ public class Main {
      private static void Load_feature(){// load the feature of news and user
     	 
      }
+     
+     public static void close(){
+    	 pw_log.close();
+     }
      public static void main(String[] args) throws Exception {
     	 Initialize();
     	 //preprocess do above actions
@@ -333,10 +349,9 @@ public class Main {
     	 
     	 //doHotness();
     	 Preprocess();
-    	 System.out.println("**************");
-	//	 users.findUser(3).display();
-		 testUpdate();
-	//	 users.findUser(3).display();
+    	users.findUser(3).display();
+	testUpdate();
+	users.findUser(3).display();
 		 
     	 Ranker();
     	// System.out.println("****************************");
@@ -345,6 +360,6 @@ public class Main {
     	// Ranker();
     	 //print results
     	 //Print();
-    	 
+    	 close();
      }
 }
