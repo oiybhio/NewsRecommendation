@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.crypto.Data;
 
@@ -26,25 +27,32 @@ public class LogDatabase {
 		  this.con=con;
 	}
     public void saveLog(String s) throws SQLException {
-    	String strsql = "insert into log (uid, nid, behave, startTime, comment, time)" + " values(?,?,?,?,?,?)";
     	JSONObject json = JSONObject.fromObject(s);
-		long uid = json.getLong("uid");
-		long nid = json.getLong("nid");
-		int behave = json.getInt("behave");
-		long startTime = json.getLong("startTime");
-		String comment = json.getString("comment");
-		long time = json.getLong("time");
+    	String strsql = "insert into log(logID, uid, json, flag)" + " values(?,?,?,?)";
+		long uid = json.getLong("UserID");
+		String logID = ""+System.currentTimeMillis()+""+uid;
 
 		PreparedStatement pstmt = con.prepareStatement(strsql);
-	    pstmt.setLong(1, uid);
-	    pstmt.setLong(2, nid);
-	    pstmt.setInt(3, behave);
-	    pstmt.setLong(4, startTime);
-	    pstmt.setString(5, comment);
-	    pstmt.setLong(6, time);
+	    pstmt.setString(1, logID);
+	    pstmt.setLong(2, uid);
+	    pstmt.setString(3, s);
+	    pstmt.setInt(4, 0);
 	    pstmt.execute();
     }
-    public Behavior getBehavior(long uid, long nid, Data time) {
-    	return null;
+    public ArrayList<Behavior> getBehaviors(long uid) throws SQLException {
+    	String sql = "select * from log where uid="+uid+";";
+    	ArrayList<Behavior> behaviors = new ArrayList<Behavior>();
+        //	System.out.println(sql);
+    	Statement stmt = con.createStatement();      
+    	ResultSet rs = stmt.executeQuery(sql);
+        while(rs.next()){
+        	behaviors.add(new Behavior(rs.getString("json")));
+        }
+    	return behaviors;
+    }
+    public void setflag(long uid) throws SQLException {
+    	String sql = "update log set flag=1 where uid="+uid+";";
+    	Statement stmt = con.createStatement();   
+    	stmt.executeUpdate(sql);
     }
 }
