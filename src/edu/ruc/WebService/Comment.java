@@ -1,4 +1,5 @@
 package edu.ruc.WebService;
+import java.io.PrintWriter;
 import java.util.Date;
 
 import edu.ruc.log.ClickAnalysis;
@@ -32,8 +33,8 @@ public class Comment extends DataAnalysis{
 	/**
      * Update user's profile.
      */
-	public void UpdateUserProfile() {
-		analysis.UpdateUser();
+	public void UpdateUserProfile(PrintWriter pw_log) {
+		analysis.UpdateUser(pw_log);
 	}
 	/**
      * Get uid.
