@@ -14,7 +14,6 @@ public class Log extends DataAnalysis{
 		json = J;
 		js = J.toString();
 		UserID = J.getLong("UserID");
-		NewsID = J.getLong("NewsID");
 	}
 	public void Store(Connection con) throws SQLException {
 		String strsql = "insert into log(logID, uid, json, flag)" + " values(?,?,?,?)";
