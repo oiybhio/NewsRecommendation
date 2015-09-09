@@ -6,14 +6,24 @@ import java.util.*;
 public class Dictionary {
 	private int length;
 	private ArrayList<Alphabet> arrayList;
-	
+	private HashMap<String,Double> word_idf;
+	private Double Common_value=10.0;
     /**
      * Constructor for a Dictionary.
      */
     public Dictionary() {
     	length = 0;
     	arrayList = new ArrayList<Alphabet>();
+    	word_idf=new HashMap<String, Double>();
     }
+    
+    public Dictionary(HashMap<String,Double> map) {
+    	length = 0;
+    	arrayList = new ArrayList<Alphabet>();
+    	word_idf=new HashMap<String, Double>();
+    	this.word_idf=map;
+    }
+    
     
     /**
      * Get size.
@@ -91,5 +101,22 @@ public class Dictionary {
         }
         result.close();
     }
+    
+    public void loadIDF(HashMap<String,Double> map){
+    	this.word_idf=map;
+    }
+    
+    public void loadIDF(String key,Double val){
+    	word_idf.put(key, val);
+    }
+    public Double getIDF(String key){
+    	if(!word_idf.containsKey(key)){
+    		return Common_value;
+    	}else{
+    		return word_idf.get(key);
+    	}
+    }
+    
+    
     
 }

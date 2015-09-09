@@ -8,8 +8,12 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.apache.solr.client.solrj.SolrClient;
@@ -29,6 +33,7 @@ import edu.ruc.data.Dictionary;
 import edu.ruc.data.VectorType;
 import edu.ruc.database.NewsDatabase;
 import edu.ruc.news.News;
+import edu.ruc.news.NewsList;
 
 public class Main {
 	 private static NewsDatabase newsData;
@@ -36,18 +41,22 @@ public class Main {
 	 private static Dictionary dict;// the dictionary of features
 	 private static Alphabet attributeSet;// the alphabet of attribute name
 	 private static final String news_filename=
-			 "src/news_data/dat0_example.txt";//the location of news_file 
+			 "src/news_data/dat1000_example.txt";//the location of news_file 
+	 
+	 private static final String idf_filename="D://users/wenhui_zhang/xinwen_data/idf/1.txt";
+	 
 	 private static String SOLR_NEWS_urlString = "http://localhost:8983/solr/test2";
-	 private static String SOLR_Xinwen_urlString = "http://183.174.228.20:8983/solr/Xinhua";
+	 private static String SOLR_Xinwen_urlString = "http://localhost:8983/solr/Xinhua";
  	 private static int TopK;
 	 private static SolrClient SOLR_NEWS ;
  	 private static SolrClient SOLR_XINWEN ;
  	 private static Connection CON;
-	 public static void Initialize() throws SQLException{
+	 public static void Initialize() throws SQLException, IOException{
 		 TopK=5;
 		 SOLR_NEWS = new HttpSolrClient(SOLR_NEWS_urlString);
 		 SOLR_XINWEN=new HttpSolrClient(SOLR_Xinwen_urlString);
 		 dict=new Dictionary();
+		 dict.loadIDF(LoadIDFfile(idf_filename));
 		 attributeSet=new Alphabet();
 		 InitializeDatabase();
 		 newsData=new NewsDatabase();
@@ -57,6 +66,31 @@ public class Main {
 //		 attributeSet.loadFromDatabase(CON);
 //		 dict.loadFromDatabase(CON);
 	 }
+	 public static HashMap<String,Double> LoadIDFfile(String filename) throws IOException{
+		 BufferedReader br=new BufferedReader(new 
+				 InputStreamReader(new FileInputStream(filename),default_code));
+		 HashMap<String,Double> map=new HashMap<String, Double>();
+		 String str;
+		 int order=0;
+	   	 while((str=br.readLine())!=null){
+//	   		 if(order%1000==0){
+//	   			 System.out.println(order);
+//	   		 }
+	   		StringTokenizer st=new StringTokenizer(str,"\t");
+	   		while(st.hasMoreTokens()){
+	   			StringTokenizer sst=new StringTokenizer(st.nextToken()," ");
+	   			String key=sst.nextToken();
+	   			Double val=Double.parseDouble(sst.nextToken());
+	   			map.put(key, val);
+	   		}
+	   		order++;
+	   	 }
+	   	 
+	   	 br.close();
+		 return map;
+		 
+	 }
+	 
 	 public static void InitializeDatabase(){
 	     try{   
     		//加载MySql的驱动类   
@@ -65,10 +99,10 @@ public class Main {
     	   System.out.println("找不到驱动程序类 ，加载驱动失败！");   
     	   e.printStackTrace() ;   
          } 
-    	 String url = "jdbc:mysql://localhost:3306/test?"
+    	 String url = "jdbc:mysql://localhost:3306/xinhua?"
     	 		+ "useUnicode=true&characterEncoding=UTF-8" ;    
          String username = "root" ;   
-         String password = "zwh920617" ;   
+         String password = "123456" ;   
          try{   
                CON=    
                DriverManager.getConnection(url , username , password ) ;   
@@ -84,7 +118,7 @@ public class Main {
 		 String str;
 		 int order=1;
 		 while((str=br.readLine())!=null){
-//			 if(order>1){
+//			 if(order>10){
 //				 break;
 //			 }
 			 //load the news from file
@@ -105,12 +139,13 @@ public class Main {
 			 UpdateResponse response = SOLR_NEWS.add(document);
 			 // Remember to commit your changes!
 			 SOLR_NEWS.commit();
-			 // input database
+			 // save database
 			 News news=new News(order);
-			 news.setTitle(title_nlp);
-			 news.setBody(body_nlp);
+			 news.setTitle(title);
+			 news.setBody(body);
 			 news.setDate(date);
-			    
+			 newsData.SaveNews(news);
+			   //save vector 
  			Attribute title_attribute=new Attribute(VectorType.SPARSE, 
 					 dict, attributeSet, "title");
 			 StringTokenizer st=new StringTokenizer(title_nlp," ");
@@ -127,14 +162,15 @@ public class Main {
 			 symbol_title=(ArrayList<String>) title_attribute.getSymbolList();
 			 for(String s:symbol_title){
 				 Double tf=title_attribute.getFeature(s);
-				 SolrQuery para = new SolrQuery();
-				 String myq="*:*";
-		    	 para.set("q", myq);
-		    	 para.set("fl","id,idf(\"title\",\""+s+"\")");
-		    	 QueryResponse res = SOLR_XINWEN.query(para);
-		    	 SolrDocumentList list2 = res.getResults();
-		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"title\",\""+s+"\")").toString());
-		    	title_attribute.modifyFeature(s, tf*idf);
+//				 SolrQuery para = new SolrQuery();
+//				 String myq="*:*";
+//		    	 para.set("q", myq);
+//		    	 para.set("fl","id,idf(\"title\",\""+s+"\")");
+//		    	 QueryResponse res = SOLR_XINWEN.query(para);
+//		    	 SolrDocumentList list2 = res.getResults();
+//		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"title\",\""+s+"\")").toString());
+		    	 Double idf=dict.getIDF(s);
+				 title_attribute.modifyFeature(s, tf*idf);
 			 }
 			 
 			 title_attribute.getSparseVector().getTopK(TopK);
@@ -161,14 +197,17 @@ public class Main {
 			 symbol_body=(ArrayList<String>) body_attribute.getSymbolList();
 			 for(String s:symbol_body){
 				 Double tf=body_attribute.getFeature(s);
-				 SolrQuery para = new SolrQuery();
-				 String myq="*:*";
-		    	 para.set("q", myq);
-		    	 para.set("fl","id,idf(\"body\",\""+s+"\")");
-		    	 QueryResponse res = SOLR_XINWEN.query(para);
-		    	 SolrDocumentList list2 = res.getResults();
-		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"body\",\""+s+"\")").toString());
-		    	 body_attribute.modifyFeature(s, tf*idf);
+//				 SolrQuery para = new SolrQuery();
+//				 String myq="*:*";
+//		    	 para.set("q", myq);
+//		    	 para.set("fl","id,idf(\"body\",\""+s+"\")");
+//		    	 QueryResponse res = SOLR_XINWEN.query(para);
+//		    	 SolrDocumentList list2 = res.getResults();
+//		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"body\",\""+s+"\")").toString());
+//		    	 body_attribute.modifyFeature(s, tf*idf);
+				 Double idf=dict.getIDF(s);
+				 //System.out.println(s+":"+tf*idf);
+				 body_attribute.modifyFeature(s, tf*idf);
 		    	 //System.out.println(tf*idf);
 			 }
 			 
@@ -185,6 +224,10 @@ public class Main {
    			 newsData.saveVector(news);
 			 order++;
 			 System.out.println(order);
+//			 if(order%100==0){
+//				 System.out.println(order);
+//			 }
+			 
 		 }
 	 }
 	 private static Double getHotnessScore(String text) throws IOException, SolrServerException{//return score of hotness
@@ -227,13 +270,72 @@ public class Main {
 		 attributeSet.saveIntoDatabase(CON);
 		 dict.saveIntoDatabase(CON);
 	 }
-	
+	 public static void Preprocess() throws SQLException, IOException, SolrServerException{
+		 Initialize();
+    	 LoadNewsFromFile(news_filename);
+		 //LoadNewsFromDatabase(CON);
+//		 NewsList newsList=newsData.getNewsList("all");
+//		 for(News n: newsList.getNewsList()){
+//		    System.out.println(n.getTitle());
+//		 }
+    	 SaveDic();
+	 }
+	 public static void LoadNewsFromDatabase(Connection con) throws SQLException{
+		    Statement stmt = con.createStatement();
+	    	ResultSet result = stmt.executeQuery("select id,date,title,body from content");
+	    	while (result.next()){
+	            long id = Long.parseLong(result.getString("id"));
+	            
+	            String date = result.getString("date");
+	            String title = result.getString("title");
+	            String body = result.getString("body");
+	            News news=new News(id);
+	            news.setBody(body);
+	            news.setDate(date);
+	            news.setTitle(title);
+	            String query_title="select vector from vector where id="+id+" and attribute_name=\'title\'";
+	            //System.out.println(query_title);
+	           Statement stmt_title = con.createStatement();
+	            ResultSet result_title_vector = stmt_title.executeQuery(query_title);
+	            String vector_title=null;
+	            while(result_title_vector.next()){
+	            	vector_title=result_title_vector.getString("vector");
+	            }
+	          // System.out.println(vector_title);
+	            Attribute title_attribute=new Attribute(VectorType.SPARSE, 
+	            		dict, attributeSet,"title",vector_title);
+	            news.setAttribute(title_attribute);
+	            
+	            String query_body="select vector from vector where id="+id+" and attribute_name=\'body\'";
+	            Statement stmt_body = con.createStatement();
+	            ResultSet result_body_vector = stmt_body.executeQuery(query_body);
+	            String vector_body=null;
+	            while(result_body_vector.next()){
+	            	vector_body=result_body_vector.getString("vector");
+	            }
+	            Attribute body_attribute=new Attribute(VectorType.SPARSE, 
+	            		dict, attributeSet,"body",vector_body);
+	            news.setAttribute(body_attribute);
+	            
+	            String query_hotness="select vector from vector where id="+id+" and attribute_name=\'hotness\'";
+	            Statement stmt_hotness = con.createStatement();
+	            ResultSet result_hotness_vector = stmt_hotness.executeQuery(query_hotness);
+	            String vector_hotness=null;
+	            while(result_hotness_vector.next()){
+	            	vector_hotness=result_hotness_vector.getString("vector");
+	            }
+	            Attribute hotness_attribute=new Attribute(VectorType.DENSE, 
+	            		dict, attributeSet,"body",vector_hotness);
+	            news.setAttribute(hotness_attribute);
+	            newsData.setNews(news);
+	        }
+	 }
+	 
      public static void main(String[] args) throws IOException, SolrServerException, SQLException{
     	 // this project test the news which are from file/port 
     	 // save the solr, save the database, load from database
     	 // test the ranker
-    	 Initialize();
-    	 LoadNewsFromFile(news_filename);
-    	 SaveDic();
-     }
+    	 Preprocess();
+    	 
+     };
 }

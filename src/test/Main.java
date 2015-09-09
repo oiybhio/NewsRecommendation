@@ -38,6 +38,8 @@ public class Main {
 	 private static Alphabet attributeSet;// the alphabet of attribute name
 	 private static final String news_filename="src/news_data/dat0_example.txt";//the location of news_file 
 	 private static final String user_filename="src/user_data/json.txt";//the location of user_file
+	 private static final String idf_filename="D://users/wenhui_zhang/xinwen_data/idf/30all.txt";
+	 
 	 private static final String hotness_url="";//the url of solr
 	 private static final String print_filename="";
 	 private static final String log_filename="src/log/log"+System.currentTimeMillis()+".txt";
@@ -65,10 +67,12 @@ public class Main {
 		 newsData.setSolr_news(SOLR_NEWS);
 		 newsData.setSolr_xinwen(SOLR_XINWEN);
 		 newsData.setConnection(CON);
+		
 		 userData=new UserDatabase();
 		 userData.setConnection(CON);
 		 resultStore=new ResultStore();
 		 dict=new Dictionary();
+		 dict.loadIDF(LoadIDFfile(idf_filename));
 		 attributeSet=new Alphabet();
 		 users = new OnlineUsers();
 		 InitLogfile();
@@ -76,6 +80,24 @@ public class Main {
 	 
 	 public static void InitLogfile() throws IOException{
 		 pw_log = new PrintWriter(new FileWriter(log_filename));
+	 }
+	 public static HashMap<String,Double> LoadIDFfile(String filename) throws IOException{
+		 BufferedReader br=new BufferedReader(new 
+				 InputStreamReader(new FileInputStream(filename),default_code));
+		 HashMap<String,Double> map=new HashMap<String, Double>();
+		 String str;
+		 int order=0;
+	   	 while((str=br.readLine())!=null){
+	   		StringTokenizer st=new StringTokenizer(str,"\t");
+	   		while(st.hasMoreTokens()){
+	   			StringTokenizer sst=new StringTokenizer(st.nextToken()," ");
+	   			String key=sst.nextToken();
+	   			Double val=Double.parseDouble(sst.nextToken());
+	   			map.put(key, val);
+	   		}
+	   	 }
+		 return map;
+		 
 	 }
 	 public static void InitializeDatabase(){
 		     try{   
@@ -209,7 +231,9 @@ public class Main {
 	 }
 	private static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
   //       LoadDic();
-		 InputNewsFile(news_filename,default_code);
+		 LoadDic();
+         newsData.LoadNewsFromDatabase(dict, attributeSet);
+		 //InputNewsFile(news_filename,default_code);
 	//	 newsData.getNews(1).display();
     	 // InputUserFile(user_filename, default_code);
 //		 SaveDic();

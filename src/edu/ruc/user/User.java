@@ -149,6 +149,9 @@ public class User {
 				length++;
 				Attribute a = newsattributes.get(i);
 				SparseVector s = a.getSparseVector();
+				if(s==null)
+					break;
+			//	System.out.println(s);
 				for(int k=0;k<s.size();k++) {
 					Pair p = s.getPairAt(k);
 					p.setValue(p.getValue()*weight);
