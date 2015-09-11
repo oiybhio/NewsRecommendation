@@ -70,7 +70,7 @@ public class UserDatabase {
     		return null;*/
     	
     	User u = new User(uid);    	
-    	sql = "select * from "+ table +"  where uid="+uid+" limit 1;";
+    	sql = "select * from "+ table +"  where uid="+uid+";";
     //	System.out.println(sql);
     	stmt = con.createStatement();      
     	rs = stmt.executeQuery(sql);// executeQuery会返回结果的集合，否则返回空值
@@ -81,6 +81,7 @@ public class UserDatabase {
     		u.StringToRead(rs.getString("readed"));
     		count++;
     	}
+    //	System.out.println("&&&&&&&&&&&&&&&count "+uid+" "+count);
     	if(count==0)
     		return null;
     	return u;
