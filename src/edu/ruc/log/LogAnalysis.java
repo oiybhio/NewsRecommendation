@@ -26,9 +26,6 @@ public class LogAnalysis {
      * @return updated user's features.
      */
 	public void UpdateUser(PrintWriter pw_log) {
-	//	System.out.println(newsA.getAttributes());
-	//	System.out.println(newsA.getNid());
-	//	System.out.println(tw.getWeight());
 		user.Update(newsA.getAttributes(),newsA.getNid(),tw.getWeight());
 	}
 }
