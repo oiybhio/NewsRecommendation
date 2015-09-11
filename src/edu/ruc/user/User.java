@@ -146,36 +146,40 @@ public class User {
 			if(isExistAttributeByName(newsattributes.get(i).getAttributeName())) {
 				merge(newsattributes.get(i),weight);
 			}else{
-				length++;
 				Attribute a = newsattributes.get(i);
 				SparseVector s = a.getSparseVector();
 				if(s==null)
 					break;
-			//	System.out.println(s);
 				for(int k=0;k<s.size();k++) {
 					Pair p = s.getPairAt(k);
 					p.setValue(p.getValue()*weight);
 					s.modifyPair(p);
 				}
 				arrayList.add(a);
+				length++;
 			}
 		}
     }
     public void UpdateAll(Connection con,OnlineUsers users, NewsDatabase newsData, PrintWriter pw_log ) throws SQLException{
+    //	System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     	LogDatabase ld = new LogDatabase();
     	ld.setConnection(con);
     	ArrayList<Behavior> behaviors = ld.getBehaviors(uid);
-    	pw_log.println(""+uid+"start");
+    	pw_log.println(""+uid+" start");
+    	pw_log.flush();
     	for(Behavior behavior:behaviors){
 	    	behavior.BehaveAnalyse(users,newsData.getNews(behavior.getNid()));
 			behavior.UpdateUserProfile(pw_log);
     	}
     	ld.setflag(uid);
     	pw_log.println(uid+" update : flag");
+    	pw_log.flush();
+    //	System.out.println(uid+" update : flag");
     	UserDatabase ud = new UserDatabase();
     	ud.setConnection(con);
     	ud.saveVector(this, "userprofile_temp");
     	pw_log.println(uid+" update in database");
+    	pw_log.flush();
     }
     /**
      * Get News weight to User
