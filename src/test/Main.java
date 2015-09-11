@@ -131,7 +131,7 @@ public class Main {
 		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
 			 System.out.println("---------pp-------");
-			 user.display();
+		//	 user.display();
 		//	 user.getHashmap(dict);
 			 Ranker ranker = new Ranker();
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
@@ -190,7 +190,7 @@ public class Main {
 		 u1.display();*/
 		for(int i=1;i<7;i++) {
 			 User u1 = userData.getVector(i, dict, attributeSet,"userProfile_temp");
-			 u1.display();
+		//	 u1.display();
 			 if(u1!=null)
 				 users.pushBack(u1);
 		 }
@@ -205,20 +205,22 @@ public class Main {
 		 // users.getUserAt(2).display();
 	 }*/
 	  public static void testUpdate() throws IOException, SQLException {
-		// JSONObject json = new JSONObject();
-		BufferedReader br = new BufferedReader(new FileReader(user_filename));
+		/*BufferedReader br = new BufferedReader(new FileReader(user_filename));
 		String jsonString;
-	//	br.readLine();
 		while((jsonString=br.readLine())!=null){
 		//	System.out.println("ehfiehfi");
 			DealMsg dm = new DealMsg(jsonString);
 			dm.start();
+			dm.getDataAnalysis().Store(CON);
 			dm.getDataAnalysis().BehaveAnalyse(users.findUser(dm.getDataAnalysis().getUid()), newsData.getNews(dm.getDataAnalysis().getNid()));
 			dm.getDataAnalysis().UpdateUserProfile(pw_log);
 			dm.getDataAnalysis().Store(CON);
-			users.findUser(dm.getDataAnalysis().getUid()).display();
+			System.out.println("pppppppppppp"+dm.getDataAnalysis().getNid());
+			newsData.getNews(dm.getDataAnalysis().getNid()).display();;
+			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		//	users.findUser(dm.getDataAnalysis().getUid()).display();
 			userData.saveVector(users.findUser(dm.getDataAnalysis().getUid()), "userProfile_temp");
-		}
+		}*/
 		resultStore.clear();
 		users.findUser(3).UpdateAll(CON, users, newsData, pw_log);
 	 }
@@ -374,8 +376,8 @@ public class Main {
     	 //doHotness();
     	 Preprocess();
     	users.findUser(3).display();
-	testUpdate();
-	users.findUser(3).display();
+    	testUpdate();
+    	users.findUser(3).display();
 		 
     	 Ranker();
     	// System.out.println("****************************");
