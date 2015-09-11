@@ -1,2 +1,4 @@
-{"UserID":3, "NewsID":1, "behave":0, "Date":"2015/8/30 22:32:17"}
-{"UserID":3, "NewsID":2, "behave":0, "Date":"2015/8/29 22:34:00"}
+{"UserID":3, "behave":2, "json":"{'UserID':3, 'NewsID':1, 'behave':0, 'Date':'2015/8/29 22:34:00'}"}
+{"UserID":3, "behave":2, "json":"{'UserID':3, 'NewsID':2, 'behave':0, 'Date':'2015/8/30 22:32:17'}"}
+{"UserID":3, "behave":2, "json":"{'UserID':3, 'NewsID':4, 'behave':0, 'Date':'2015/8/29 22:34:00'}"}
+{"UserID":3, "behave":2, "json":"{'UserID':3, 'NewsID':3, 'behave':0, 'Date':'2015/8/29 22:34:00'}"}
