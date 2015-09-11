@@ -1,4 +1,5 @@
 package edu.ruc.log;
+import java.io.PrintWriter;
 import java.util.List;
 
 import edu.ruc.data.Attribute;
@@ -19,7 +20,7 @@ public class ClickAnalysis extends LogAnalysis {
      * Update user.
      * @return updated user's feature
      */
-	public void UpdateUser() {
+	public void UpdateUser(PrintWriter pw_log) {
 		user.Update(newsA.getAttributes(),newsA.getNid(),tw.getWeight());
 	}
 }
