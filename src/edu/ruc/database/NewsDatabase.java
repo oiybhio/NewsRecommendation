@@ -160,7 +160,6 @@ public class NewsDatabase {
 	            Attribute body_attribute=new Attribute(VectorType.SPARSE, 
 	            		dict, attributeSet,"body",vector_body);
 	            news.setAttribute(body_attribute);
-	            
 	            String query_hotness="select vector from vector where id="+id+" and attribute_name=\'hotness\'";
 	            Statement stmt_hotness = con.createStatement();
 	            ResultSet result_hotness_vector = stmt_hotness.executeQuery(query_hotness);
@@ -169,7 +168,7 @@ public class NewsDatabase {
 	            	vector_hotness=result_hotness_vector.getString("vector");
 	            }
 	            Attribute hotness_attribute=new Attribute(VectorType.DENSE, 
-	            		dict, attributeSet,"body",vector_hotness);
+	            		dict, attributeSet,"hotness",vector_hotness);
 	            news.setAttribute(hotness_attribute);
 	            array.add(news);
 	        }

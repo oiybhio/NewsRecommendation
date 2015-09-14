@@ -47,7 +47,7 @@ public class Main {
 	 
 	 private static String default_code="utf-8";
 	 private static long num_news;
-	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/Xinhua";
+	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/test2";
 	 private static String SOLR_xinwenSurlString = "http://183.174.228.20:8983/solr/Xinhua";
 	 private static String SOLR_weiboSurlString = "http://183.174.228.20:8983/solr/Xinhua";
 	 private static SolrClient SOLR_NEWS ;
@@ -134,6 +134,11 @@ public class Main {
 		//	 user.display();
 		//	 user.getHashmap(dict);
 			 Ranker ranker = new Ranker();
+//			 ArrayList<News> array=newsData.getNewsListbyTopic(
+//					 user.getHashmap(dict),dict,attributeSet).getNewsList();
+////			 for(News n:array){
+//				 System.out.println(n.getTitle());
+//			 }
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
 					 user.getHashmap(dict),dict,attributeSet).getNewsList(), 10);
 			 List<News> ans = temp.getNewsList();
@@ -235,6 +240,11 @@ public class Main {
   //       LoadDic();
 		 LoadDic();
          newsData.LoadNewsFromDatabase(dict, attributeSet);
+//         NewsList nl=newsData.getNewsList("all");
+//         for(News n:nl.getNewsList()){
+//        	 System.out.println(n.getAttribute("body").getSparseVector());
+//         }
+         
 		 //InputNewsFile(news_filename,default_code);
 	//	 newsData.getNews(1).display();
     	 // InputUserFile(user_filename, default_code);
