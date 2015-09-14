@@ -249,6 +249,8 @@ public class User {
 		}
     }
 	public HashMap<String, Double> getHashmap(Dictionary dict) {
+		if(length == 0)
+			return null;
 		HashMap<String, Double> indices = new HashMap<String, Double>();
 		
 		for(Attribute a:arrayList) {
