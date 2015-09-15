@@ -75,12 +75,17 @@ public class UserDatabase {
     	stmt = con.createStatement();      
     	rs = stmt.executeQuery(sql);// executeQuery会返回结果的集合，否则返回空值
     	int count=0;
+   // 	System.out.print(uid);
     	while(rs.next()){
-    		Attribute a=new Attribute(VectorType.SPARSE, dict, attributeSet, rs.getString("attribute_name"),rs.getString("vector"));
-    		u.modifyAttribute(a);
-    		u.StringToRead(rs.getString("readed"));
+    	//	System.out.print("    "+rs.getString("attribute_name"));
+    		if(rs.getString("attribute_name")!=null) {
+	    		Attribute a=new Attribute(VectorType.SPARSE, dict, attributeSet, rs.getString("attribute_name"),rs.getString("vector"));
+	    		u.modifyAttribute(a);
+	    		u.StringToRead(rs.getString("readed"));
+    		}
     		count++;
     	}
+    //	System.out.println();
     //	System.out.println("&&&&&&&&&&&&&&&count "+uid+" "+count);
     	if(count==0)
     		return null;
