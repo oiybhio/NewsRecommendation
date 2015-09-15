@@ -7,4 +7,7 @@ public class Login extends DataAnalysis{
 		UserID = json.getLong("UserID");
 		Password = json.getString("Password");
 	}
+	public long getUserID() {
+		return UserID;
+	}
 }
