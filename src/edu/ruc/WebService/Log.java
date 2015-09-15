@@ -4,6 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 
+import edu.ruc.data.Alphabet;
+import edu.ruc.data.Dictionary;
+import edu.ruc.database.NewsDatabase;
+import edu.ruc.ranker.ResultStore;
+import edu.ruc.user.OnlineUsers;
 import net.sf.json.*;
 public class Log extends DataAnalysis{
 	private String js;
@@ -15,7 +20,8 @@ public class Log extends DataAnalysis{
 		js = J.toString();
 		UserID = J.getLong("UserID");
 	}
-	public void Store(Connection con) throws SQLException {
+	public void deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
+			Dictionary dict,Alphabet attributeSet, Connection con)throws Exception {
 		String strsql = "insert into log(logID, uid, json, flag)" + " values(?,?,?,?)";
 		long uid = json.getLong("UserID");
 		String logID = ""+System.currentTimeMillis()+""+uid;
