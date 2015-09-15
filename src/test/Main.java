@@ -226,9 +226,18 @@ public class Main {
 		//	users.findUser(dm.getDataAnalysis().getUid()).display();
 			userData.saveVector(users.findUser(dm.getDataAnalysis().getUid()), "userProfile_temp");
 		}*/
-		resultStore.clear();
-		users.findUser(3).UpdateAll(CON, users, newsData, pw_log);
-	 }
+		  resultStore.clear();
+		  users.findUser(3).UpdateAll(CON, users, newsData, pw_log);
+	  }
+	  public static void testWebservice() throws Exception {	
+		  BufferedReader br = new BufferedReader(new FileReader(user_filename));
+		  String jsonString;
+		  while((jsonString=br.readLine())!=null){
+			  DealMsg dm = new DealMsg(jsonString);
+			  dm.start();
+			  dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
+		  }
+	  }
 	 private static void SaveDic() throws SQLException{
 		 dict.saveIntoDatabase(CON);
 	 }
@@ -378,24 +387,12 @@ public class Main {
      }
      public static void main(String[] args) throws Exception {
     	 Initialize();
-    	 //preprocess do above actions
-    	 
-    	 //InputNewsFile(news_filename,default_code);
-    	 //InputUserFile(user_filename, default_code);
-    	 
-    	 //doHotness();
+
     	 Preprocess();
-    	users.findUser(3).display();
-    	testUpdate();
-    	users.findUser(3).display();
+    //	users.findUser(3).display();
+    	 testWebservice();
+    //	users.findUser(3).display();
 		 
-    	 Ranker();
-    	// System.out.println("****************************");
-    	// createLog();
-    	// System.out.println("****************************");
-    	// Ranker();
-    	 //print results
-    	 //Print();
     	 close();
      }
 }
