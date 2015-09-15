@@ -4,9 +4,14 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import edu.ruc.data.Alphabet;
+import edu.ruc.data.Dictionary;
+import edu.ruc.database.NewsDatabase;
 import edu.ruc.log.ClickAnalysis;
 import edu.ruc.log.NewsAnalysis;
 import edu.ruc.news.News;
+import edu.ruc.ranker.ResultStore;
+import edu.ruc.user.OnlineUsers;
 import edu.ruc.user.User;
 
 public class DataAnalysis {
@@ -37,7 +42,8 @@ public class DataAnalysis {
 	 * @param CON
 	 * @throws SQLException 
 	 */
-	public void Store(Connection CON) throws SQLException {
+	public void deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
+			Dictionary dict,Alphabet attributeSet, Connection con)throws Exception  {
 		
 	}
 }
