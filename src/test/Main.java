@@ -57,7 +57,7 @@ public class Main {
  	 private static final int TOPK=5;
  	 private static Connection CON;
 	 
-	 private static void Initialize() throws IOException{//Initialize
+	 public static void Initialize() throws IOException{//Initialize
 		 //initialize variables
 		 SOLR_NEWS = new HttpSolrClient(SOLR_NEWSurlString);
 		 SOLR_XINWEN=new HttpSolrClient(SOLR_xinwenSurlString);
@@ -245,7 +245,7 @@ public class Main {
 	 private static void LoadDic() throws SQLException{
 		 dict.loadFromDatabase(CON);
 	 }
-	private static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
+	public static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
   //       LoadDic();
 		 LoadDic();
          newsData.LoadNewsFromDatabase(dict, attributeSet);
