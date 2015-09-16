@@ -20,7 +20,7 @@ public class Log extends DataAnalysis{
 		js = J.toString();
 		UserID = J.getLong("UserID");
 	}
-	public void deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
+	public String deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
 			Dictionary dict,Alphabet attributeSet, Connection con)throws Exception {
 		String strsql = "insert into log(logID, uid, json, flag)" + " values(?,?,?,?)";
 		long uid = json.getLong("UserID");
@@ -32,6 +32,7 @@ public class Log extends DataAnalysis{
 	    pstmt.setString(3, js);
 	    pstmt.setInt(4, 0);
 	    pstmt.execute();
+	    return "ok";
 	}
 	/**
      * Get uid.
