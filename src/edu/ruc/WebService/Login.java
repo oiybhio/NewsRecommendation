@@ -30,7 +30,7 @@ public class Login extends DataAnalysis{
 	public long getUid() {
 		return UserID;
 	}
-	public void deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
+	public String deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
 			Dictionary dict,Alphabet attributeSet, Connection con)throws Exception {
 			
 		 MakeRandomHashmap MakeRandomHashmap = new MakeRandomHashmap();
@@ -45,6 +45,6 @@ public class Login extends DataAnalysis{
 		 for(int j=0;j<ans.size();j++)
 			 json.put("News"+j, ans.get(j).getTitle());
 		 System.out.println(json.toString());
-	//	return json.toString();
+		return json.toString();
 	}
 }
