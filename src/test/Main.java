@@ -229,14 +229,18 @@ public class Main {
 		  resultStore.clear();
 		  users.findUser(3).UpdateAll(CON, users, newsData, pw_log);
 	  }
-	  public static void testWebservice() throws Exception {	
-		  BufferedReader br = new BufferedReader(new FileReader(user_filename));
+	  public static String testWebservice(String jsonString) throws Exception {	
+/*		  BufferedReader br = new BufferedReader(new FileReader(user_filename));
 		  String jsonString;
 		  while((jsonString=br.readLine())!=null){
 			  DealMsg dm = new DealMsg(jsonString);
 			  dm.start();
 			  dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
 		  }
+*/	 	DealMsg dm = new DealMsg(jsonString);
+		dm.start();
+		String s = dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
+		  return s;
 	  }
 	 private static void SaveDic() throws SQLException{
 		 dict.saveIntoDatabase(CON);
@@ -390,7 +394,7 @@ public class Main {
 
     	 Preprocess();
     //	users.findUser(3).display();
-    	 testWebservice();
+    //	 testWebservice();
     //	users.findUser(3).display();
 		 
     	 close();
