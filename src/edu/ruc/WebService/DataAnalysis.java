@@ -42,8 +42,8 @@ public class DataAnalysis {
 	 * @param CON
 	 * @throws SQLException 
 	 */
-	public void deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
+	public String deal(OnlineUsers users,NewsDatabase newsData, ResultStore resultStore, 
 			Dictionary dict,Alphabet attributeSet, Connection con)throws Exception  {
-		
+		return null;
 	}
 }
