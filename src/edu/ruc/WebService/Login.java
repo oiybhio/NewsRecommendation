@@ -41,10 +41,15 @@ public class Login extends DataAnalysis{
 				 user.getHashmap(dict),dict,attributeSet).getNewsList(), 10);
 		 List<News> ans = temp.getNewsList();
 		 JSONObject json = new JSONObject();
+		 String s;
 		 System.out.println("User ID: " + user.getUid());
-		 for(int j=0;j<ans.size();j++)
+		 s = "UserID : "+user.getUid()+"<br />";
+		 for(int j=0;j<ans.size();j++){
+			 s = s + ans.get(j).getTitle()+"<br />";
 			 json.put("News"+j, ans.get(j).getTitle());
+		 }
 		 System.out.println(json.toString());
-		return json.toString();
+	//	return json.toString();
+		 return s;
 	}
 }
