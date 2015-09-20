@@ -44,6 +44,8 @@ public class Login extends DataAnalysis{
 		 String s;
 		 System.out.println("User ID: " + user.getUid());
 		 s = "UserID : "+user.getUid()+"<br />";
+		 s = s + user.getHashmap(dict).keySet().toString()+"<br />";
+		 s = s + "     推荐的新闻为：   <br />";
 		 for(int j=0;j<ans.size();j++){
 			 s = s + ans.get(j).getTitle()+"<br />";
 			 json.put("News"+j, ans.get(j).getTitle());
