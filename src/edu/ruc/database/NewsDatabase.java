@@ -127,7 +127,10 @@ public class NewsDatabase {
       public  void LoadNewsFromDatabase(Dictionary dict,Alphabet attributeSet) throws SQLException{
 		    Statement stmt = con.createStatement();
 	    	ResultSet result = stmt.executeQuery("select id,date,title,body from content");
+	    	int order=0;
 	    	while (result.next()){
+	    		order++;
+	    		//System.out.println(order);
 	            long id = Long.parseLong(result.getString("id"));
 	            
 	            String date = result.getString("date");
@@ -139,7 +142,7 @@ public class NewsDatabase {
 	            news.setTitle(title);
 	            String query_title="select vector from vector where id="+id+" and attribute_name=\'title\'";
 	            //System.out.println(query_title);
-	           Statement stmt_title = con.createStatement();
+	            Statement stmt_title = con.createStatement();
 	            ResultSet result_title_vector = stmt_title.executeQuery(query_title);
 	            String vector_title=null;
 	            while(result_title_vector.next()){
@@ -233,7 +236,7 @@ public class NewsDatabase {
     		
     		
     	  }
-    	    System.out.println(myquery);
+    	    //System.out.println(myquery);
     	    if(myquery.equals("")){
     	    	myquery="*:*";
     	    }

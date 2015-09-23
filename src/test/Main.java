@@ -47,7 +47,7 @@ public class Main {
 	 
 	 private static String default_code="utf-8";
 	 private static long num_news;
-	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/test2";
+	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/UCI";
 	 private static String SOLR_xinwenSurlString = "http://183.174.228.20:8983/solr/Xinhua";
 	 private static String SOLR_weiboSurlString = "http://183.174.228.20:8983/solr/Xinhua";
 	 private static SolrClient SOLR_NEWS ;
@@ -72,10 +72,18 @@ public class Main {
 		 userData.setConnection(CON);
 		 resultStore=new ResultStore();
 		 dict=new Dictionary();
+		 System.out.println("start dic");
+		 long t1=System.currentTimeMillis();
 		 dict.loadIDF(LoadIDFfile(idf_filename));
+		 long t2=System.currentTimeMillis();
+		 System.out.println("t2-t1:"+(t2-t1));
 		 attributeSet=new Alphabet();
 		 users = new OnlineUsers();
+		 long t3=System.currentTimeMillis();
+		 System.out.println("t3-t1:"+(t3-t1));
 		 InitLogfile();
+		 long t4=System.currentTimeMillis();
+		 System.out.println("t4-t1:"+(t4-t1));
 	 }
 	 
 	 public static void InitLogfile() throws IOException{
@@ -96,6 +104,7 @@ public class Main {
 	   			map.put(key, val);
 	   		}
 	   	 }
+	   	 
 		 return map;
 		 
 	 }
@@ -130,7 +139,7 @@ public class Main {
 		 
 		 for(int i=0;i<users.size();i++) {
 			 User user = users.getUserAt(i);
-			 System.out.println("---------pp-------");
+			 //System.out.println("---------pp-------");
 		//	 user.display();
 		//	 user.getHashmap(dict);
 			 Ranker ranker = new Ranker();
@@ -142,9 +151,9 @@ public class Main {
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
 					 user.getHashmap(dict),dict,attributeSet).getNewsList(), 10);
 			 List<News> ans = temp.getNewsList();
-			 System.out.println("User ID: " + user.getUid());
-			 for(int j=0;j<ans.size();j++)
-				 System.out.println(ans.get(j).getTitle());
+			 //System.out.println("User ID: " + user.getUid());
+//			 for(int j=0;j<ans.size();j++)
+//				 System.out.println(ans.get(j).getTitle());
 		 }
 	 }
 	 private static News CreateNews(){
@@ -238,6 +247,7 @@ public class Main {
 			  dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
 		  }
 */	 	DealMsg dm = new DealMsg(jsonString);
+        System.out.println(jsonString);
 		dm.start();
 		String s = dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
 		  return s;
@@ -251,8 +261,14 @@ public class Main {
 	 }
 	public static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
   //       LoadDic();
+		long t1=System.currentTimeMillis();
+		
 		 LoadDic();
+		 long t2=System.currentTimeMillis();
+		 System.out.println("t2-t1:"+(t2-t1));
          newsData.LoadNewsFromDatabase(dict, attributeSet);
+         long t3=System.currentTimeMillis();
+         System.out.println("t3-t1:"+(t3-t1));
 //         NewsList nl=newsData.getNewsList("all");
 //         for(News n:nl.getNewsList()){
 //        	 System.out.println(n.getAttribute("body").getSparseVector());
