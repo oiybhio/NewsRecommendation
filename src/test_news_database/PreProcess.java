@@ -143,10 +143,10 @@ public class PreProcess {
 			 String body=br.readLine();
 			 String body_nlp=br.readLine();
 			 String date=br.readLine();//read date
-			 if(order<=20000){
+			 if(order<=100000){
 				 continue;
 			 }
-			 if(order>=100000){
+			 if(order>=300000){
 				 break;
 			 }
 			 //System.out.println(order);

@@ -1,7 +1,10 @@
 package edu.ruc.database;
 
 import java.awt.List;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -129,6 +132,9 @@ public class NewsDatabase {
 	    	ResultSet result = stmt.executeQuery("select id,date,title,body from content");
 	    	int order=0;
 	    	while (result.next()){
+//	    		if(order>=100){
+//	    			break;
+//	    		}
 	    		order++;
 	    		//System.out.println(order);
 	            long id = Long.parseLong(result.getString("id"));
@@ -244,24 +250,42 @@ public class NewsDatabase {
 	    	parameters.set("q", myquery);
 	    	//parameters.set("fl","id,title,body,date");
 	    	parameters.set("fl","id");
-	    	parameters.set("row","500");
+	    	parameters.set("rows","100");
+	    	System.out.println(myquery);
 	    	try{
 	    	QueryResponse response = solr_news.query(parameters);
 	    	SolrDocumentList list = response.getResults();
 	    	Statement stmt = con.createStatement();
 	    	HashSet<Long> setNewsID=new HashSet<Long>();
 	    	//NewsList newsList=new NewsList();
+	    	BufferedWriter bw2=new BufferedWriter(
+					new OutputStreamWriter(new 
+							FileOutputStream("newsid.txt",true),"utf-8"));
+			System.out.println(list.size());
 	    	for(int i=0;i<list.size();i++){
 	    		
 	    			SolrDocument sd=list.get(i);
 	    			long id=Long.parseLong(sd.get("id").toString());
 	    			setNewsID.add(id);
-	    	}		
+	    			bw2.write(id+"\t");
+	    	}	
+	    	bw2.newLine();
+			bw2.close();
+	    	BufferedWriter bw=new BufferedWriter(
+					new OutputStreamWriter(new 
+							FileOutputStream("newslist.txt",true),"utf-8"));
+			 
 	    	for(News n:array){		//News news=new News(id);
 	    		if(setNewsID.contains(n.getID())){
 	    			newsList.addNews(n);
+	    			//write the newslist
+	    			 bw.write(n.getTitle()+"\t");
+	    			
+	    			   
 	    		}
 	    	}
+	    	bw.newLine();
+			bw.close();
 	    	return newsList;
 	    			
 //	    			String title_nlp=sd.get("title").toString();

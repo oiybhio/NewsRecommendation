@@ -71,19 +71,11 @@ public class Main {
 		 userData=new UserDatabase();
 		 userData.setConnection(CON);
 		 resultStore=new ResultStore();
-		 dict=new Dictionary();
-		 System.out.println("start dic");
-		 long t1=System.currentTimeMillis();
+		 dict=new Dictionary();		
 		 dict.loadIDF(LoadIDFfile(idf_filename));
-		 long t2=System.currentTimeMillis();
-		 System.out.println("t2-t1:"+(t2-t1));
 		 attributeSet=new Alphabet();
 		 users = new OnlineUsers();
-		 long t3=System.currentTimeMillis();
-		 System.out.println("t3-t1:"+(t3-t1));
 		 InitLogfile();
-		 long t4=System.currentTimeMillis();
-		 System.out.println("t4-t1:"+(t4-t1));
 	 }
 	 
 	 public static void InitLogfile() throws IOException{
@@ -247,7 +239,7 @@ public class Main {
 			  dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
 		  }
 */	 	DealMsg dm = new DealMsg(jsonString);
-        System.out.println(jsonString);
+  //      System.out.println(jsonString);
 		dm.start();
 		String s = dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
 		  return s;
@@ -260,20 +252,11 @@ public class Main {
 		 dict.loadFromDatabase(CON);
 	 }
 	public static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
-  //       LoadDic();
-		long t1=System.currentTimeMillis();
-		
 		 LoadDic();
-		 long t2=System.currentTimeMillis();
-		 System.out.println("t2-t1:"+(t2-t1));
+		 long t1=System.currentTimeMillis();
          newsData.LoadNewsFromDatabase(dict, attributeSet);
-         long t3=System.currentTimeMillis();
-         System.out.println("t3-t1:"+(t3-t1));
-//         NewsList nl=newsData.getNewsList("all");
-//         for(News n:nl.getNewsList()){
-//        	 System.out.println(n.getAttribute("body").getSparseVector());
-//         }
-         
+         long t2=System.currentTimeMillis();
+         System.out.println("the time of starting database is:"+(t2-t1));
 		 //InputNewsFile(news_filename,default_code);
 	//	 newsData.getNews(1).display();
     	 // InputUserFile(user_filename, default_code);
