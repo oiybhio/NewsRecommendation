@@ -248,7 +248,7 @@ public class User {
 			getAttributeAt(i).display();
 		}
     }
-	public HashMap<String, Double> getHashmap(Dictionary dict) {
+	/*public HashMap<String, Double> getHashmap(Dictionary dict) {
 		if(length == 0)
 			return null;
 		HashMap<String, Double> indices = new HashMap<String, Double>();
@@ -265,5 +265,25 @@ public class User {
 		
 		indices.toString();
 		return indices;
+	}*/
+	public HashMap<String, Double> getHashmap(Dictionary dict, Alphabet attributeSet) {
+		if(length == 0)
+			return null;
+		HashMap<String, Double> indices = new HashMap<String, Double>();
+		
+		for(Attribute a:arrayList) {
+			SparseVector s = a.getSparseVector();
+			int dictId = attributeSet.getIndex(a.getAttributeName());
+			Alphabet alphabet = dict.getAlphabetAt(dictId);
+			for(int i=0;i<s.size();i++){
+			//	System.out.println("ppp"+i+" "+s.getPairAt(i).getKey()+alphabet.getSymbol(s.getPairAt(i).getKey()));
+				if(alphabet.getSymbol(s.getPairAt(i).getKey())!=null)
+					indices.put(alphabet.getSymbol(s.getPairAt(i).getKey()), s.getPairAt(i).getValue());
+			}
+		}
+		
+		indices.toString();
+		return indices;
 	}
+	
 }
