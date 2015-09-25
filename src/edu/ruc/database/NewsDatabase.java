@@ -132,9 +132,9 @@ public class NewsDatabase {
 	    	ResultSet result = stmt.executeQuery("select id,date,title,body from content");
 	    	int order=0;
 	    	while (result.next()){
-	    		if(order>=100){
-	    			break;
-	    		}
+//	    		if(order>=100){
+//	    			break;
+//	    		}
 	    		order++;
 	    		//System.out.println(order);
 	            long id = Long.parseLong(result.getString("id"));

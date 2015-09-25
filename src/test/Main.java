@@ -47,7 +47,7 @@ public class Main {
 	 
 	 private static String default_code="utf-8";
 	 private static long num_news;
-	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/UCI";
+	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/testdic";
 	 private static String SOLR_xinwenSurlString = "http://183.174.228.20:8983/solr/Xinhua";
 	 private static String SOLR_weiboSurlString = "http://183.174.228.20:8983/solr/Xinhua";
 	 private static SolrClient SOLR_NEWS ;
@@ -141,7 +141,7 @@ public class Main {
 //				 System.out.println(n.getTitle());
 //			 }
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-					 user.getHashmap(dict, attributeSet),dict,attributeSet).getNewsList(), 10);
+					 user.getHashmap(dict),dict,attributeSet).getNewsList(), 10);
 			 List<News> ans = temp.getNewsList();
 			 //System.out.println("User ID: " + user.getUid());
 //			 for(int j=0;j<ans.size();j++)
