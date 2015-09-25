@@ -215,10 +215,12 @@ public class Alphabet {
 	 */
 	public void saveIntoDatabase(Connection con, int dictId) throws SQLException {
 		Statement stmt = con.createStatement();
+		String sql = "delete from dictionarys";
+		stmt.executeUpdate(sql);
 		for(int i = 0; i < symbols.size(); i++) {
 			String word = symbols.get(i);
 			assert(getIndex(word) == i);
-			String sql = "replace into dictionarys values(\"" + dictId + "\",\"" + word + "\",\"" + i + "\")";
+			sql = "insert into dictionarys values(\"" + dictId + "\",\"" + word + "\",\"" + i + "\")";
 			stmt.executeUpdate(sql);
 		}
 	}
