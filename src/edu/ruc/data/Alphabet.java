@@ -215,7 +215,7 @@ public class Alphabet {
 	 */
 	public void saveIntoDatabase(Connection con, int dictId) throws SQLException {
 		Statement stmt = con.createStatement();
-		String sql = "delete from dictionarys";
+		String sql = "delete from dictionarys where dict_id="+dictId;
 		stmt.executeUpdate(sql);
 		for(int i = 0; i < symbols.size(); i++) {
 			String word = symbols.get(i);
