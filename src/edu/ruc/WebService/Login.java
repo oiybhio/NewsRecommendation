@@ -38,13 +38,13 @@ public class Login extends DataAnalysis{
 		 System.out.println("---------pp-------");
 		 Ranker ranker = new Ranker();
 		 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-				 user.getHashmap(dict),dict,attributeSet).getNewsList(), 10);
+				 user.getHashmap(dict, attributeSet),dict,attributeSet).getNewsList(), 10);
 		 List<News> ans = temp.getNewsList();
 		 JSONObject json = new JSONObject();
 		 String s;
 		 System.out.println("User ID: " + user.getUid());
 		 s = "UserID : "+user.getUid()+"<br />";
-		 s = s + user.getHashmap(dict).keySet().toString()+"<br />";
+		 s = s + user.getHashmap(dict,attributeSet).keySet().toString()+"<br />";
 		 s = s + "     推荐的新闻为：   <br />";
 		 for(int j=0;j<ans.size();j++){
 			 s = s + ans.get(j).getTitle()+"<br />";
