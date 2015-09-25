@@ -141,7 +141,7 @@ public class Main {
 //				 System.out.println(n.getTitle());
 //			 }
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-					 user.getHashmap(dict),dict,attributeSet).getNewsList(), 10);
+					 user.getHashmap(dict, attributeSet),dict,attributeSet).getNewsList(), 10);
 			 List<News> ans = temp.getNewsList();
 			 //System.out.println("User ID: " + user.getUid());
 //			 for(int j=0;j<ans.size();j++)
