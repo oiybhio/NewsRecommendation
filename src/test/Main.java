@@ -153,7 +153,7 @@ public class Main {
 	 }
 	 
 	 private static void CreateUsers() throws IOException, SQLException{
-		 /* MakeRandomUser makeRandomUser = new MakeRandomUser();
+		 /*MakeRandomUser makeRandomUser = new MakeRandomUser();
 		 int userNum = 2;
 		 int TopicNum = 5;
 		 int WordNum = 3;
@@ -179,6 +179,7 @@ public class Main {
 		 Attribute b = new Attribute(VectorType.SPARSE,dict,attributeSet,"body");
 		 b.addFeature("贝克汉姆",1);
 		 b.addFeature("曼联",1);
+		 b.addFeature("台湾", 1);
 		 u.pushBack(a);
 		 u.pushBack(b);
 		 users.pushBack(u);
@@ -186,20 +187,21 @@ public class Main {
 		 
 		 System.out.println();
 		 users.display();
-		 System.out.println();
+		 System.out.println();*/
 		 
 	//	 users.getUserAt(0).display();
 	//	 createLog();
-		 userData.saveVectorALL(users, "userProfile_temp");
-		 User u1 = userData.getVector(3, dict, attributeSet,"userProfile_temp");
-		 System.out.println("**************");
-		 u1.display();*/
+		 //userData.saveVectorALL(users, "userProfile_temp");
+		 //User u1 = userData.getVector(3, dict, attributeSet,"userProfile_temp");
+//		 System.out.println("**************");
+//		 u1.display();
 		for(int i=1;i<7;i++) {
 			 User u1 = userData.getVector(i, dict, attributeSet,"userProfile_temp");
 		//	 u1.display();
 			 if(u1!=null)
 				 users.pushBack(u1);
 		 }
+		users.display();
      }
 	 
 	 /*public static void createLog(){
@@ -246,10 +248,12 @@ public class Main {
 	  }
 	 private static void SaveDic() throws SQLException{
 		 dict.saveIntoDatabase(CON);
+		 attributeSet.saveIntoDatabase(CON);
 	 }
 	 
 	 private static void LoadDic() throws SQLException{
 		 dict.loadFromDatabase(CON);
+		 attributeSet.loadFromDatabase(CON);
 	 }
 	public static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
 		 LoadDic();
@@ -260,9 +264,10 @@ public class Main {
 		 //InputNewsFile(news_filename,default_code);
 	//	 newsData.getNews(1).display();
     	 // InputUserFile(user_filename, default_code);
-//		 SaveDic();
+		 
 		 CreateUsers();
 		 
+		 SaveDic();
     	 
 	 }
 	 private static Double getHotnessScore(String text) throws IOException, SolrServerException{//return score of hotness

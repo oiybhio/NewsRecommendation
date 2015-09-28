@@ -392,6 +392,112 @@ public class NewsDatabase {
 //	    	}
     	    return newsList;
       }
+      
+      public NewsList getNewsListbyTopic(HashMap<String,Double> map,Dictionary dict,Alphabet attributeSet,int Number
+    		  ) {
+    	  NewsList newsList=new NewsList();
+    	  Iterator iter=map.entrySet().iterator();
+    	  String myquery="";
+    	  boolean if_first=true;
+    	  while (iter.hasNext()) {
+    		  Map.Entry entry = (Map.Entry) iter.next();
+    		  if(if_first){
+    			    String key = (String)entry.getKey();
+    	    	    Double val = (Double)entry.getValue();
+					String query=ClientUtils.escapeQueryChars(key);
+					if(queryset.contains(query)){
+						continue;
+					}
+					if_first=false;
+					myquery+=("title:"+query+"^"+val);
+					
+					
+				}else{
+					    String key = (String)entry.getKey();
+	    	    	    Double val = (Double)entry.getValue();
+						String query=ClientUtils.escapeQueryChars(key);
+						if(queryset.contains(query)){
+							continue;
+						}
+						myquery+=(" OR title:"+query+"^"+val);
+				
+				}
+    		
+    		
+    	  }
+    	    //System.out.println(myquery);
+    	    if(myquery.equals("")){
+    	    	myquery="*:*";
+    	    }
+    	    SolrQuery parameters = new SolrQuery();
+	    	parameters.set("q", myquery);
+	    	//parameters.set("fl","id,title,body,date");
+	    	parameters.set("fl","id");
+	    	parameters.set("rows","100");
+	    	System.out.println(myquery);
+	    	try{
+	    	QueryResponse response = solr_news.query(parameters);
+	    	SolrDocumentList list = response.getResults();
+	    	Statement stmt = con.createStatement();
+	    	HashSet<Long> setNewsID=new HashSet<Long>();
+	    	//NewsList newsList=new NewsList();
+	    	BufferedWriter bw2=new BufferedWriter(
+					new OutputStreamWriter(new 
+							FileOutputStream("newsid.txt",true),"utf-8"));
+			System.out.println(list.size());
+	    	for(int i=0;i<list.size();i++){
+	    		
+	    			SolrDocument sd=list.get(i);
+	    			long id=Long.parseLong(sd.get("id").toString());
+	    			setNewsID.add(id);
+	    			bw2.write(id+"\t");
+	    	}	
+	    	bw2.newLine();
+			bw2.close();
+	    	BufferedWriter bw=new BufferedWriter(
+					new OutputStreamWriter(new 
+							FileOutputStream("newslist.txt",true),"utf-8"));
+			 
+	    	for(News n:array){		//News news=new News(id);
+	    		if(setNewsID.contains(n.getID())){
+	    			newsList.addNews(n);
+	    			//write the newslist
+	    			 bw.write(n.getTitle()+"\t");
+	    			   
+	    		}
+	    	}
+	    	bw.newLine();
+			bw.close();
+	    	return newsList;
+	    			
+//	    			
+	   			
+	    	
+	    	}catch(Exception e){
+	    		e.printStackTrace();
+	    	}finally{
+	    		
+	    	}
+	    	   
+    	      //String id_str=(String)sd.get("id");
+	    	   //System.out.println(id_str);
+//    	  for(int i=1;i<10;i++){
+//    		  
+//	    	   String sql = "select vector from vector where id="+i+" and attribute_name="+"'title'";
+//	    	   //System.out.println(sql);
+//	    	   Statement stmt = con.createStatement();
+//	              
+//	           ResultSet rs = stmt.executeQuery(sql);// executeQuery会返回结果的集合，否则返回空值
+////	           Attribute a=new Attribute(vectorType, dict, attributeSet, attributeName)
+////	          
+//	           String title_vec=rs.getString(1) ;// 入如果返回的是int类型可以用getInt()
+//	            System.out.println();
+//	   	    
+////	    	   System.out.println(id);  
+//	    	}
+    	    return newsList;
+      }
+      
       public Double getHotnessScore(String text) throws IOException, SolrServerException{//return score of hotness
 			 StringTokenizer st=new StringTokenizer(text," ");
 				boolean if_first=true;

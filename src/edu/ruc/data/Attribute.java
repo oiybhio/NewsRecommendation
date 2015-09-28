@@ -232,6 +232,16 @@ public class Attribute {
 		case SPARSE:
 			System.out.println("Dictionary Id: " + dictId);
 			sparseVector.display();
+			System.out.print("{");
+			Alphabet alphabet = dict.getAlphabetAt(dictId);
+			int len = sparseVector.size();
+			for(int i = 0; i < len; i++) {
+				Pair pair = sparseVector.getPairAt(i);
+				int key = pair.getKey();
+				System.out.print( alphabet.getSymbol(key) + ":" + pair.getValue());
+				System.out.print(" ");
+	        }
+			System.out.println("}");
 			break;
 		case DENSE:
 			denseVector.display();

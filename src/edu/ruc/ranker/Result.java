@@ -37,7 +37,7 @@ public class Result {
 	}
 	
 	public boolean validationChecking() {
-		return true; // Didn't finish.
+		return true;
 	}
 	
 }

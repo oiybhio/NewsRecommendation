@@ -250,7 +250,7 @@ public class Alphabet {
 	 */
     public void loadFromDatabase(Connection con) throws SQLException {
     	Statement stmt = con.createStatement();
-    	ResultSet result = stmt.executeQuery("select attribute_name, dict_id from attribute_set");
+    	ResultSet result = stmt.executeQuery("select attribute_name, dict_id from attribute_set order by dict_id");
         while (result.next()){
             String attribute_name = result.getString("attribute_name");
             int dict_id = result.getInt("dict_id");

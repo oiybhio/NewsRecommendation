@@ -38,7 +38,8 @@ public class Login extends DataAnalysis{
 		 System.out.println("---------pp-------");
 		 Ranker ranker = new Ranker();
 		 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-				 user.getHashmap(dict, attributeSet),dict,attributeSet).getNewsList(), 10);
+				 user.getHashmap(dict, attributeSet),dict,attributeSet,100).getNewsList(), 10);
+		 if (temp==null) return "";
 		 List<News> ans = temp.getNewsList();
 		 JSONObject json = new JSONObject();
 		 String s;

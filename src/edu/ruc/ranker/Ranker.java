@@ -9,6 +9,8 @@ public class Ranker {
 
 	public NewsList query(ResultStore resultStore, User user, String category, List<News> candidateList, int topK) {
 		
+		if (candidateList.isEmpty()) return null;
+		
 		List<List<News>> newsList = new ArrayList<List<News>>();
 		
 		Result result = resultStore.find(user, category, RankerType.VSM);
@@ -38,8 +40,15 @@ public class Ranker {
 			newsList.add(result.getNewsList());
 		}
 		
-		RandomMerge randomMerge = new RandomMerge();
-		List<News> newsListMerged = randomMerge.merge(newsList, user.getReaded());
+		List<News> newsListMerged;
+		result = resultStore.find(user, category, RankerType.ALL);
+		if (result == null) {
+			RandomMerge randomMerge = new RandomMerge();
+			newsListMerged = randomMerge.merge(newsList, user.getReaded());
+			resultStore.add(new Result(user, category, RankerType.ALL, newsListMerged));
+		} else {
+			newsListMerged = result.getNewsList();
+		}
 		
 		NewsList ret = new NewsList();
 		if (newsListMerged.size() < topK)

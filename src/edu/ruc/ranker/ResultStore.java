@@ -15,6 +15,17 @@ public class ResultStore {
 		arrayList = new ArrayList<Result>();
 	}
 	
+	public void clear(User user) {
+		for(int i = 0; i < arrayList.size(); i++) {
+			Result result = arrayList.get(i);
+			if (Objects.equals(result.getUser(),user))
+			{
+				arrayList.remove(result);
+				i--;
+			}
+		}
+	}
+	
 	public void add(Result result) {
 		arrayList.add(result);
 	}
@@ -27,7 +38,7 @@ public class ResultStore {
 				if (result.validationChecking())
 					return result;
 				else {
-					arrayList.remove(result);
+					//arrayList.remove(result);
 					return null;
 				}
 			}
