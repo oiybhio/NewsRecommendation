@@ -13,6 +13,7 @@ import edu.ruc.database.NewsDatabase;
 import edu.ruc.news.News;
 import edu.ruc.news.NewsList;
 import edu.ruc.ranker.Ranker;
+import edu.ruc.ranker.RankerType;
 import edu.ruc.ranker.ResultStore;
 import edu.ruc.user.OnlineUsers;
 import edu.ruc.user.User;
@@ -36,12 +37,43 @@ public class Login extends DataAnalysis{
 		 MakeRandomHashmap MakeRandomHashmap = new MakeRandomHashmap();
 	 	 User user = users.findUser(UserID);
 		 System.out.println("---------pp-------");
+		 String s;
+		 s = "UserID : "+user.getUid()+"<br />";
+		 s = s + user.getHashmap(dict,attributeSet).keySet().toString()+"<br /><br />";
+		 
 		 Ranker ranker = new Ranker();
+		 
 		 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-				 user.getHashmap(dict, attributeSet),dict,attributeSet,100).getNewsList(), 10);
-		 if (temp==null) return "";
+				 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), RankerType.VSM, 10);
 		 List<News> ans = temp.getNewsList();
-		 JSONObject json = new JSONObject();
+		 s = s + "     VSM 推荐的新闻为：   <br />";
+		 for(int j=0;j<ans.size();j++){
+			 s = s + ans.get(j).getTitle()+"<br />";
+		 }
+		 s = s+"<br />";
+		 
+		 temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
+				 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), RankerType.POPULARITY, 10);
+		 ans = temp.getNewsList();
+		 s = s + "     POPULARITY 推荐的新闻为：   <br />";
+		 for(int j=0;j<ans.size();j++){
+			 s = s + ans.get(j).getTitle()+"<br />";
+		 }
+		 s = s+"<br />";
+		 
+		 
+		 temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
+				 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), RankerType.TIME, 10);
+		 ans = temp.getNewsList();
+		 s = s + "     TIME 推荐的新闻为：   <br />";
+		 for(int j=0;j<ans.size();j++){
+			 s = s + ans.get(j).getTitle()+"<br />";
+		 }
+		 s = s+"<br />";
+		 
+		 
+		 
+		 /*JSONObject json = new JSONObject();
 		 String s;
 		 System.out.println("User ID: " + user.getUid());
 		 s = "UserID : "+user.getUid()+"<br />";
@@ -53,6 +85,6 @@ public class Login extends DataAnalysis{
 		 }
 		 System.out.println(json.toString());
 	//	return json.toString();
-		 return s;
+*/		 return s;
 	}
 }
