@@ -7,9 +7,13 @@ import java.util.*;
 
 public class Ranker {
 
-	public NewsList query(ResultStore resultStore, User user, String category, List<News> candidateList, int topK) {
+	public NewsList query(ResultStore resultStore, User user, String category, List<News> candidateList, RankerType rankerType, int topK) {
 		
 		if (candidateList.isEmpty()) return null;
+		
+		if (rankerType != RankerType.ALL) {
+			return queryByType(resultStore, user, category, candidateList, rankerType, topK);
+		}
 		
 		List<List<News>> newsList = new ArrayList<List<News>>();
 		
@@ -59,4 +63,74 @@ public class Ranker {
 		return ret;
 	}
 	
+	public NewsList queryByType(ResultStore resultStore, User user, String category, List<News> candidateList, RankerType rankerType, int topK) {
+		List<List<News>> newsList = new ArrayList<List<News>>();
+		
+		if (rankerType == RankerType.VSM)
+		{
+			Result result = resultStore.find(user, category, RankerType.VSM);
+			if (result == null) {
+				VSMRanker vsmRanker = new VSMRanker();
+				List<News> temp = vsmRanker.query(user, candidateList);
+				newsList.add(temp);
+				newsList.add(temp);
+				newsList.add(temp);
+				resultStore.add(new Result(user, category, RankerType.VSM, temp));
+			} else {
+				List<News> temp = result.getNewsList();
+				newsList.add(temp);
+				newsList.add(temp);
+				newsList.add(temp);
+			}
+		}
+
+		if (rankerType == RankerType.POPULARITY)
+		{
+			Result result = resultStore.find(user, category, RankerType.POPULARITY);
+			if (result == null) {
+				PopularityRanker popularityRanker = new PopularityRanker();
+				List<News> temp = popularityRanker.query(user, candidateList);
+				newsList.add(temp);
+				newsList.add(temp);
+				newsList.add(temp);
+				resultStore.add(new Result(user, category, RankerType.POPULARITY, temp));
+			} else {
+				List<News> temp = result.getNewsList();
+				newsList.add(temp);
+				newsList.add(temp);
+				newsList.add(temp);
+			}
+		}
+		
+		if (rankerType == RankerType.TIME)
+		{
+			Result result = resultStore.find(user, category, RankerType.TIME);
+			if (result == null) {
+				TimeRanker timeRanker = new TimeRanker();
+				List<News> temp = timeRanker.query(user, candidateList);
+				newsList.add(temp);
+				newsList.add(temp);
+				newsList.add(temp);
+				resultStore.add(new Result(user, category, RankerType.TIME, temp));
+			} else {
+				List<News> temp = result.getNewsList();
+				newsList.add(temp);
+				newsList.add(temp);
+				newsList.add(temp);
+			}
+		}
+		
+		List<News> newsListMerged;
+		RandomMerge randomMerge = new RandomMerge();
+		newsListMerged = randomMerge.merge(newsList, user.getReaded());
+		
+		NewsList ret = new NewsList();
+		if (newsListMerged.size() < topK)
+			topK = newsListMerged.size();
+		for(int i = 0; i < topK; i++)
+			ret.addNews(newsListMerged.get(i));
+		
+		return ret;
+	}
+
 }
