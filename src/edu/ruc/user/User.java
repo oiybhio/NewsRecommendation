@@ -158,6 +158,7 @@ public class User {
 				arrayList.add(a);
 				length++;
 			}
+			newsattributes.get(i).getSparseVector().sortKey();
 		}
     }
     public void UpdateAll(Connection con,OnlineUsers users, NewsDatabase newsData, PrintWriter pw_log ) throws SQLException{
