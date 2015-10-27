@@ -6,8 +6,8 @@ import edu.ruc.data.*;
 
 public class News {
 
-//	News : 一条新闻的基本组成和操作。
-//  主要的接口就是根据标签名字取attribute
+//	
+//  
 //
 		
     
@@ -17,17 +17,38 @@ public class News {
 	public String category;
 	public String title;
 	public String body;
+	public String oldarticle_id;
+	public String headline;
+	public String headline_nlp;
 
-//  构造函数
- // 唯一一种构造函数，指定一个id作为唯一标识
+//  
+ // 
 	public News(long id){
 		this.id=id;
 		array=new ArrayList<Attribute>();
 	}
 	
-//  方法
+// 
 	
-	//得到ID
+	//
+	public void setHeadline(String headline){
+		this.headline=headline;
+	}
+	public String getHeadline(){
+		return this.headline;
+	}
+	public void setHeadline_nlp(String headline_nlp){
+		this.headline_nlp=headline_nlp;
+	}
+	public String getHeadline_nlp(){
+		return this.headline_nlp;
+	}
+	public void setOldarticle_id(String oldarticle_id){
+		this.oldarticle_id=oldarticle_id;
+	}
+	public String getOldarticle_id(){
+		return this.oldarticle_id;
+	}
 	public void setDate(String date){
 		this.date=date;
 	}
@@ -58,7 +79,7 @@ public class News {
 		return this.id;
 	}
 	
-	//设置属性 如果存在 就覆盖 返回fasle
+	//
 	public boolean setAttribute(Attribute attribute){
 		for(Attribute a:array){
 			if(a. getAttributeName().equals(attribute.getAttributeName())){
@@ -71,7 +92,7 @@ public class News {
 		return true;
 	}
 	
-	//删除属性 不存在返回false
+	//
 	public boolean removeAttribute(String attribute_name){
 		for(Attribute a:array){
 			if(a. getAttributeName().equals(attribute_name)){
@@ -83,12 +104,12 @@ public class News {
 		return false;
 	}
 	
-	//返回属性数量
+	//
 	public int getLengthAttribute(){
 		return array.size();
 	}
 	
-	//根据属性名字返回属性
+	//
 	public Attribute getAttribute(String attribute_name){
 		
 		for(Attribute a:array){
@@ -104,12 +125,12 @@ public class News {
 	
 	
 	
-	//返回属性列表
+	//
 	public List<Attribute> getAttributeList(){
 		return array;
 	}
 	
-	//返回属性名字列表
+	//
 	public List<String> getAttributeListName(){
 		ArrayList<String> arrayName=new ArrayList<String>();
 		for(Attribute a:array){
@@ -118,7 +139,7 @@ public class News {
 		return arrayName;
 	}
 	
-	//判断属性是否存在
+	//
 	public boolean isExistAttributeByName(String attribute_name){
 		for(Attribute a:array){
 			if(a. getAttributeName().equals(attribute_name)){		
@@ -127,7 +148,7 @@ public class News {
 		}
 		return false;
 	}
-	//打印
+	//
 	public void display() {
 		System.out.println(title);
 		for(Attribute attribute:array) {

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class NewsList {
 	 private ArrayList<News> array;
-	 //构造函数
+	 //鏂伴椈
      public NewsList(){
     	 array=new ArrayList<News>();
      }
-     //添加news 如果存在 就覆盖 返回false
+     //
      public boolean addNews(News news){
     	 for(News n:array){
     		 if(n.getID()==news.getID()){
