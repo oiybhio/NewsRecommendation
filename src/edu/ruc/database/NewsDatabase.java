@@ -127,6 +127,19 @@ public class NewsDatabase {
 		    boolean rs = pstmt.execute();
 		    
       }
+      public void SaveNewsLTR(News n) throws SQLException{
+    	  String strsql = "replace into contentLTR (id,oldarticle_id,headline,headline_nlp)"
+					+ " values(?,?,?,?)";
+			
+			PreparedStatement pstmt = con.prepareStatement(strsql);
+		    pstmt.setLong(1, n.getID());
+		    pstmt.setString(2, n.getOldarticle_id());
+		    pstmt.setString(3, n.getHeadline());
+		    pstmt.setString(4, n.getHeadline_nlp());
+		    
+		    boolean rs = pstmt.execute();
+		    
+      }
       public  void LoadNewsFromDatabase(Dictionary dict,Alphabet attributeSet) throws SQLException{
 		    Statement stmt = con.createStatement();
 	    	ResultSet result = stmt.executeQuery("select id,date,title,body from content");
@@ -183,7 +196,61 @@ public class NewsDatabase {
 	        }
 	 }
 	 
-   
+      public  void LoadNewsFromDatabaseLTR(Dictionary dict,Alphabet attributeSet) throws SQLException{
+		    Statement stmt = con.createStatement();
+	    	ResultSet result = stmt.executeQuery("select id,headline from contentltr");
+	    	int order=0;
+	    	while (result.next()){
+//	    		if(order>=100){
+//	    			break;
+//	    		}
+	    		order++;
+	    		//System.out.println(order);
+	            long id = Long.parseLong(result.getString("id"));
+	            
+	            String headline=result.getString("headline");
+	            News news=new News(id);
+	            news.setHeadline(headline);
+	            String query_headline="select vector from vectorltr where id="+id+" and attribute_name=\'headline\'";
+	            //System.out.println(query_title);
+	            Statement stmt_headline = con.createStatement();
+	            ResultSet result_headline_vector = stmt_headline.executeQuery(query_headline);
+	            String vector_headline=null;
+	            while(result_headline_vector.next()){
+	            	vector_headline=result_headline_vector.getString("vector");
+	            }
+	          // System.out.println(vector_title);
+	            Attribute headline_attribute=new Attribute(VectorType.SPARSE, 
+	            		dict, attributeSet,"headline",vector_headline);
+	            news.setAttribute(headline_attribute);
+	            //xiwen_hotness
+	            String query_xinwen_hotness="select vector from vectorltr where id="+id+" and attribute_name=\'xinwen_hotness\'";
+	            Statement stmt_xinwen_hotness = con.createStatement();
+	            ResultSet result_xinwen_hotness_vector = stmt_xinwen_hotness.executeQuery(query_xinwen_hotness);
+	            String vector_xinwen_hotness=null;
+	            while(result_xinwen_hotness_vector.next()){
+	            	vector_xinwen_hotness=result_xinwen_hotness_vector.getString("vector");
+	            }
+	            Attribute xinwen_hotness_attribute=new Attribute(VectorType.DENSE, 
+	            		dict, attributeSet,"xinwen_hotness",vector_xinwen_hotness);
+	            news.setAttribute(xinwen_hotness_attribute);
+	            
+	            //weibo_hotness
+	            String query_weibo_hotness="select vector from vectorltr where id="+id+" and attribute_name=\'weibo_hotness\'";
+	            Statement stmt_weibo_hotness = con.createStatement();
+	            ResultSet result_weibo_hotness_vector = stmt_weibo_hotness.executeQuery(query_weibo_hotness);
+	            String vector_weibo_hotness=null;
+	            while(result_xinwen_hotness_vector.next()){
+	            	vector_weibo_hotness=result_weibo_hotness_vector.getString("vector");
+	            }
+	            Attribute weibo_hotness_attribute=new Attribute(VectorType.DENSE, 
+	            		dict, attributeSet,"weibo_hotness",vector_xinwen_hotness);
+	            news.setAttribute(weibo_hotness_attribute);
+	            array.add(news);
+	        }
+	 }
+	 
+ 
       public void saveVector(News n) throws SQLException{
     	    String strsql = "replace into vector (id,attribute_name,vector,type)"
 					+ " values(?,?,?,?)";
@@ -210,7 +277,35 @@ public class NewsDatabase {
 		    
 		    rs = pstmt.execute();
       }
-      public NewsList getNewsListbyTopic(HashMap<String,Double> map,Dictionary dict,Alphabet attributeSet
+      public void saveVectorLTR(News n) throws SQLException{
+  	    String strsql = "replace into vectorLTR (id,attribute_name,vector,type)"
+					+ " values(?,?,?,?)";
+			
+			PreparedStatement pstmt = con.prepareStatement(strsql);
+		    pstmt.setLong(1, n.getID());
+		    pstmt.setString(2, "headline");
+		    pstmt.setString(3, n.getAttribute("headline").vectorToString());
+		    pstmt.setInt(4, 0);
+		    boolean rs = pstmt.execute();
+		    pstmt = con.prepareStatement(strsql);
+		    pstmt.setLong(1, n.getID());
+		    pstmt.setString(2, "xinwen_hotness");
+		    pstmt.setString(3, n.getAttribute("xinwen_hotness").vectorToString());
+		    pstmt.setInt(4, 1);
+		    rs = pstmt.execute();
+		    
+		    pstmt = con.prepareStatement(strsql);
+		    pstmt.setLong(1, n.getID());
+		    pstmt.setString(2, "weibo_hotness");
+		    pstmt.setString(3, n.getAttribute("weibo_hotness").vectorToString());
+		    pstmt.setInt(4, 1);
+		   
+		    
+		    rs = pstmt.execute();
+    }
+    
+      public NewsList getNewsListbyTopic(HashMap<String,Double> map,
+    		  String field,Dictionary dict,Alphabet attributeSet
     		  ) {
     	  NewsList newsList=new NewsList();
     	  Iterator iter=map.entrySet().iterator();
@@ -226,7 +321,7 @@ public class NewsDatabase {
 						continue;
 					}
 					if_first=false;
-					myquery+=("title:"+query+"^"+val);
+					myquery+=(field+":"+query+"^"+val);
 					
 					
 				}else{
@@ -236,13 +331,13 @@ public class NewsDatabase {
 						if(queryset.contains(query)){
 							continue;
 						}
-						myquery+=(" OR title:"+query+"^"+val);
+						myquery+=(" OR "+field+":"+query+"^"+val);
 				
 				}
     		
     		
     	  }
-    	    //System.out.println(myquery);
+    	    
     	    if(myquery.equals("")){
     	    	myquery="*:*";
     	    }
@@ -287,84 +382,7 @@ public class NewsDatabase {
 			bw.close();
 	    	return newsList;
 	    			
-//	    			String title_nlp=sd.get("title").toString();
-//	    			String body_nlp=sd.get("body").toString();
-//	    			String date=sd.get("date").toString();
-//	    			news.setTitle(title_nlp);
-//	   			    news.setBody(body_nlp);
-//	   			    news.setDate(date);
-//	    			Attribute title_attribute=new Attribute(VectorType.SPARSE, 
-//	   					 dict, attributeSet, "title");
-//	   			 StringTokenizer st=new StringTokenizer(title_nlp," ");
-//	   			 while(st.hasMoreTokens()){
-//	   				 String token=st.nextToken();
-//	   				 if(title_attribute.getFeature(token)==0){
-//	   					 title_attribute.addFeature(token, 1.0);
-//	   				 }else{
-//	   					 Double d=title_attribute.getFeature(token);
-//	   					 title_attribute.modifyFeature(token, d+1);
-//	   				 }
-//	   			 }
-//	   			ArrayList<String> symbol_title=new ArrayList<>();
-//	   			 symbol_title=(ArrayList<String>) title_attribute.getSymbolList();
-//	   			 for(String s:symbol_title){
-//	   				 Double tf=title_attribute.getFeature(s);
-//	   				 SolrQuery para = new SolrQuery();
-//	   				 String myq="*:*";
-//	   		    	 para.set("q", myq);
-//	   		    	 para.set("fl","id,idf(\"title\",\""+s+"\")");
-//	   		    	 QueryResponse res = solr_xinwen.query(para);
-//	   		    	 SolrDocumentList list2 = res.getResults();
-//	   		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"title\",\""+s+"\")").toString());
-//	   		    	title_attribute.modifyFeature(s, tf*idf);
-//	   			 }
-//	   			 
-//	   			title_attribute.getSparseVector().getTopK(this.TopK);
-//	   			title_attribute.getSparseVector().sortKey();
-//	   			 news.setAttribute(title_attribute);
-//	   			 //
-//	   			//body attribute
-//	   			 Attribute body_attribute=new Attribute(VectorType.SPARSE, 
-//	   					 dict, attributeSet, "body");
-//	   			 st=new StringTokenizer(body_nlp," ");
-//	   			 while(st.hasMoreTokens()){
-//	   				 String token=st.nextToken();
-//	   				 if(body_attribute.getFeature(token)==0){
-//	   					 body_attribute.addFeature(token, 1.0);
-//	   				 }else{
-//	   					 Double d=body_attribute.getFeature(token);
-//	   					 body_attribute.modifyFeature(token, d+1);
-//	   				 }
-//	   			 }
-//	   			 //body attribute
-////	   			 ArrayList<String> symbol_body=new ArrayList<>();
-////	   			 symbol_body=(ArrayList<String>) body_attribute.getSymbolList();
-////	   			 for(String s:symbol_body){
-////	   				 Double tf=body_attribute.getFeature(s);
-////	   				 SolrQuery para = new SolrQuery();
-////	   				 String myq="*:*";
-////	   		    	 para.set("q", myq);
-////	   		    	 para.set("fl","id,idf(\"body\",\""+s+"\")");
-////	   		    	 QueryResponse res = solr_xinwen.query(para);
-////	   		    	 SolrDocumentList list2 = res.getResults();
-////	   		    	 Double idf=Double.parseDouble(list2.get(0).get("idf(\"body\",\""+s+"\")").toString());
-////	   		    	 body_attribute.modifyFeature(s, tf*idf);
-////	   		    	 //System.out.println(tf*idf);
-////	   			 }
-//	   			 
-//	   			 body_attribute.getSparseVector().getTopK(this.TopK);
-//	   			 body_attribute.getSparseVector().sortKey();
-//	   			 news.setAttribute(body_attribute);
-//	   			 
-//	   			 
-//	   			 // add attributes,add title,body,news_class
-//	   			 Double hotness_score=getHotnessScore(title_nlp);
-//	   			 Attribute hotness_attribute=new Attribute(
-//	   					 VectorType.DENSE, dict, attributeSet, "hotness");
-//	   			 hotness_attribute.addFeature(hotness_score);
-//	   			 news.setAttribute(hotness_attribute);
-//	   			 // add the newsdatabase
-//	   			 newsList.addNews(news);
+//	    		
 //	    	}
 	   			
 	    	
@@ -374,26 +392,13 @@ public class NewsDatabase {
 	    		
 	    	}
 	    	   
-    	      //String id_str=(String)sd.get("id");
-	    	   //System.out.println(id_str);
-//    	  for(int i=1;i<10;i++){
-//    		  
-//	    	   String sql = "select vector from vector where id="+i+" and attribute_name="+"'title'";
-//	    	   //System.out.println(sql);
-//	    	   Statement stmt = con.createStatement();
-//	              
-//	           ResultSet rs = stmt.executeQuery(sql);// executeQuery会返回结果的集合，否则返回空值
-////	           Attribute a=new Attribute(vectorType, dict, attributeSet, attributeName)
-////	          
-//	           String title_vec=rs.getString(1) ;// 入如果返回的是int类型可以用getInt()
-//	            System.out.println();
-//	   	    
-////	    	   System.out.println(id);  
-//	    	}
+    	        
+
     	    return newsList;
       }
       
-      public NewsList getNewsListbyTopic(HashMap<String,Double> map,Dictionary dict,Alphabet attributeSet,int Number
+      public NewsList getNewsListbyTopic(HashMap<String,Double> map,String field,
+    		  Dictionary dict,Alphabet attributeSet,int Number
     		  ) {
     	  NewsList newsList=new NewsList();
     	  Iterator iter=map.entrySet().iterator();
@@ -409,7 +414,7 @@ public class NewsDatabase {
 						continue;
 					}
 					if_first=false;
-					myquery+=("title:"+query+"^"+val);
+					myquery+=(field+":"+query+"^"+val);
 					
 					
 				}else{
@@ -419,7 +424,7 @@ public class NewsDatabase {
 						if(queryset.contains(query)){
 							continue;
 						}
-						myquery+=(" OR title:"+query+"^"+val);
+						myquery+=(" OR "+field+":"+query+"^"+val);
 				
 				}
     		
@@ -433,7 +438,7 @@ public class NewsDatabase {
 	    	parameters.set("q", myquery);
 	    	//parameters.set("fl","id,title,body,date");
 	    	parameters.set("fl","id");
-	    	parameters.set("rows","100");
+	    	parameters.set("rows",Number+"");
 	    	System.out.println(myquery);
 	    	try{
 	    	QueryResponse response = solr_news.query(parameters);
@@ -444,7 +449,8 @@ public class NewsDatabase {
 	    	BufferedWriter bw2=new BufferedWriter(
 					new OutputStreamWriter(new 
 							FileOutputStream("newsid.txt",true),"utf-8"));
-			System.out.println(list.size());
+			//System.out.println(list.size());
+			
 	    	for(int i=0;i<list.size();i++){
 	    		
 	    			SolrDocument sd=list.get(i);
@@ -452,6 +458,23 @@ public class NewsDatabase {
 	    			setNewsID.add(id);
 	    			bw2.write(id+"\t");
 	    	}	
+	    	if(list.size()<Number){
+	    		SolrQuery parameters2 = new SolrQuery();
+		    	parameters2.set("q", "*:*");
+		    	//parameters.set("fl","id,title,body,date");
+		    	parameters2.set("fl","id");
+		    	parameters2.set("rows",(Number-list.size())+"");
+		    	QueryResponse response2 = solr_news.query(parameters);
+		    	SolrDocumentList list2 = response2.getResults();
+		    	for(int j=0;j<list2.size();j++){
+		    		
+	    			SolrDocument sd2=list.get(j);
+	    			long id=Long.parseLong(sd2.get("id").toString());
+	    			setNewsID.add(id);
+	    			bw2.write(id+"\t");
+		    	}
+		    	
+			}
 	    	bw2.newLine();
 			bw2.close();
 	    	BufferedWriter bw=new BufferedWriter(
@@ -479,22 +502,7 @@ public class NewsDatabase {
 	    		
 	    	}
 	    	   
-    	      //String id_str=(String)sd.get("id");
-	    	   //System.out.println(id_str);
-//    	  for(int i=1;i<10;i++){
-//    		  
-//	    	   String sql = "select vector from vector where id="+i+" and attribute_name="+"'title'";
-//	    	   //System.out.println(sql);
-//	    	   Statement stmt = con.createStatement();
-//	              
-//	           ResultSet rs = stmt.executeQuery(sql);// executeQuery会返回结果的集合，否则返回空值
-////	           Attribute a=new Attribute(vectorType, dict, attributeSet, attributeName)
-////	          
-//	           String title_vec=rs.getString(1) ;// 入如果返回的是int类型可以用getInt()
-//	            System.out.println();
-//	   	    
-////	    	   System.out.println(id);  
-//	    	}
+    	     
     	    return newsList;
       }
       
@@ -530,8 +538,7 @@ public class NewsDatabase {
 		    	   //System.out.println(sd);
 		    	   sum+=Double.parseDouble(sd.get("score").toString());
 		    	}
-		    	//System.out.println(sum);
-		    	//System.out.println(sum/list.size());
+		    	
 		    	return sum/list.size();
 		 }
 		 
