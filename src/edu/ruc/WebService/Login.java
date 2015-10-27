@@ -44,7 +44,7 @@ public class Login extends DataAnalysis{
 		 Ranker ranker = new Ranker();
 		 
 		 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-				 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), RankerType.VSM, 10);
+				 user.getHashmap(dict,attributeSet),"headline",dict,attributeSet).getNewsList(), RankerType.VSM, 10);
 		 List<News> ans = temp.getNewsList();
 		 s = s + "     VSM 推荐的新闻为：   <br />";
 		 for(int j=0;j<ans.size();j++){
@@ -53,7 +53,7 @@ public class Login extends DataAnalysis{
 		 s = s+"<br />";
 		 
 		 temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-				 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), RankerType.POPULARITY, 10);
+				 user.getHashmap(dict,attributeSet),"headline",dict,attributeSet).getNewsList(), RankerType.VSM, 10);
 		 ans = temp.getNewsList();
 		 s = s + "     POPULARITY 推荐的新闻为：   <br />";
 		 for(int j=0;j<ans.size();j++){
@@ -63,7 +63,7 @@ public class Login extends DataAnalysis{
 		 
 		 
 		 temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-				 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), RankerType.TIME, 10);
+				 user.getHashmap(dict,attributeSet),"headline",dict,attributeSet).getNewsList(), RankerType.VSM, 10);
 		 ans = temp.getNewsList();
 		 s = s + "     TIME 推荐的新闻为：   <br />";
 		 for(int j=0;j<ans.size();j++){
