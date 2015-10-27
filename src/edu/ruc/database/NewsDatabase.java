@@ -201,11 +201,13 @@ public class NewsDatabase {
 	    	ResultSet result = stmt.executeQuery("select id,headline from contentltr");
 	    	int order=0;
 	    	while (result.next()){
-//	    		if(order>=100){
+//	    		if(order>=1000){
 //	    			break;
 //	    		}
 	    		order++;
-	    		//System.out.println(order);
+//	    		if(order%100==0){
+//	    			System.out.println(order);
+//	    		}
 	            long id = Long.parseLong(result.getString("id"));
 	            
 	            String headline=result.getString("headline");
@@ -308,36 +310,40 @@ public class NewsDatabase {
     		  String field,Dictionary dict,Alphabet attributeSet
     		  ) {
     	  NewsList newsList=new NewsList();
-    	  Iterator iter=map.entrySet().iterator();
     	  String myquery="";
-    	  boolean if_first=true;
-    	  while (iter.hasNext()) {
-    		  Map.Entry entry = (Map.Entry) iter.next();
-    		  if(if_first){
-    			    String key = (String)entry.getKey();
-    	    	    Double val = (Double)entry.getValue();
-					String query=ClientUtils.escapeQueryChars(key);
-					if(queryset.contains(query)){
-						continue;
-					}
-					if_first=false;
-					myquery+=(field+":"+query+"^"+val);
-					
-					
-				}else{
-					    String key = (String)entry.getKey();
+    	  if(map.size()==0){
+    		  
+    	  }else{
+	    	  Iterator iter=map.entrySet().iterator();
+	    	  
+	    	  boolean if_first=true;
+	    	  while (iter.hasNext()) {
+	    		  Map.Entry entry = (Map.Entry) iter.next();
+	    		  if(if_first){
+	    			    String key = (String)entry.getKey();
 	    	    	    Double val = (Double)entry.getValue();
 						String query=ClientUtils.escapeQueryChars(key);
 						if(queryset.contains(query)){
 							continue;
 						}
-						myquery+=(" OR "+field+":"+query+"^"+val);
-				
-				}
-    		
-    		
-    	  }
-    	    
+						if_first=false;
+						myquery+=(field+":"+query+"^"+val);
+						
+						
+					}else{
+						    String key = (String)entry.getKey();
+		    	    	    Double val = (Double)entry.getValue();
+							String query=ClientUtils.escapeQueryChars(key);
+							if(queryset.contains(query)){
+								continue;
+							}
+							myquery+=(" OR "+field+":"+query+"^"+val);
+					
+					}
+	    		
+	    		
+	    	  }
+    	  	}
     	    if(myquery.equals("")){
     	    	myquery="*:*";
     	    }
@@ -401,34 +407,37 @@ public class NewsDatabase {
     		  Dictionary dict,Alphabet attributeSet,int Number
     		  ) {
     	  NewsList newsList=new NewsList();
-    	  Iterator iter=map.entrySet().iterator();
+    	  
     	  String myquery="";
-    	  boolean if_first=true;
-    	  while (iter.hasNext()) {
-    		  Map.Entry entry = (Map.Entry) iter.next();
-    		  if(if_first){
-    			    String key = (String)entry.getKey();
-    	    	    Double val = (Double)entry.getValue();
-					String query=ClientUtils.escapeQueryChars(key);
-					if(queryset.contains(query)){
-						continue;
-					}
-					if_first=false;
-					myquery+=(field+":"+query+"^"+val);
-					
-					
-				}else{
-					    String key = (String)entry.getKey();
+    	  Iterator iter=map.entrySet().iterator();
+    	  if(map.size()>0){
+	    	  boolean if_first=true;
+	    	  while (iter.hasNext()) {
+	    		  Map.Entry entry = (Map.Entry) iter.next();
+	    		  if(if_first){
+	    			    String key = (String)entry.getKey();
 	    	    	    Double val = (Double)entry.getValue();
 						String query=ClientUtils.escapeQueryChars(key);
 						if(queryset.contains(query)){
 							continue;
 						}
-						myquery+=(" OR "+field+":"+query+"^"+val);
-				
-				}
-    		
-    		
+						if_first=false;
+						myquery+=(field+":"+query+"^"+val);
+						
+						
+					}else{
+						    String key = (String)entry.getKey();
+		    	    	    Double val = (Double)entry.getValue();
+							String query=ClientUtils.escapeQueryChars(key);
+							if(queryset.contains(query)){
+								continue;
+							}
+							myquery+=(" OR "+field+":"+query+"^"+val);
+					
+					}
+	    		
+	    		
+	    	  }
     	  }
     	    //System.out.println(myquery);
     	    if(myquery.equals("")){
