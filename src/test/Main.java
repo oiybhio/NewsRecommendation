@@ -251,6 +251,13 @@ public class Main {
 		String s = dm.getDataAnalysis().deal(users,newsData, resultStore, dict, attributeSet, CON);
 		  return s;
 	  }
+	  public static List<News> testRecommend(int N,User u) {
+		  Ranker ranker = new Ranker();
+		  NewsList temp = ranker.query(resultStore, u, "all", newsData.getNewsListbyTopic(
+					 u.getHashmap(dict,attributeSet),"headline",dict,attributeSet).getNewsList(), RankerType.VSM, N);
+		  List<News> ans = temp.getNewsList();
+		  return ans;
+	  }
 	 private static void SaveDic() throws SQLException{
 		 dict.saveIntoDatabase(CON);
 		 attributeSet.saveIntoDatabase(CON);
