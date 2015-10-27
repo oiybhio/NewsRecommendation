@@ -47,9 +47,9 @@ public class Main {
 	 
 	 private static String default_code="utf-8";
 	 private static long num_news;
-	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/testdic";
-	 private static String SOLR_xinwenSurlString = "http://183.174.228.20:8983/solr/Xinhua";
-	 private static String SOLR_weiboSurlString = "http://183.174.228.20:8983/solr/Xinhua";
+	 private static String SOLR_NEWSurlString = "http://183.174.228.20:8983/solr/LTRNews";
+	 private static String SOLR_xinwenSurlString = "http://183.174.228.20:8983/solr/xinhua_news";
+	 private static String SOLR_weiboSurlString = "http://183.174.228.20:8983/solr/weibo_hotness";
 	 private static SolrClient SOLR_NEWS ;
  	 private static SolrClient SOLR_XINWEN ;
  	 private static SolrClient SOLR_WEIBO ;
@@ -61,11 +61,13 @@ public class Main {
 		 //initialize variables
 		 SOLR_NEWS = new HttpSolrClient(SOLR_NEWSurlString);
 		 SOLR_XINWEN=new HttpSolrClient(SOLR_xinwenSurlString);
+		 SOLR_WEIBO =new HttpSolrClient(SOLR_weiboSurlString);
 		 InitializeDatabase();
 		 num_news=1;
 		 newsData=new NewsDatabase();
 		 newsData.setSolr_news(SOLR_NEWS);
 		 newsData.setSolr_xinwen(SOLR_XINWEN);
+		 newsData.setSolr_weibo(SOLR_WEIBO);
 		 newsData.setConnection(CON);
 		
 		 userData=new UserDatabase();
@@ -140,8 +142,11 @@ public class Main {
 ////			 for(News n:array){
 //				 System.out.println(n.getTitle());
 //			 }
+//			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
+//					 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), 10);
 			 NewsList temp = ranker.query(resultStore, user, "all", newsData.getNewsListbyTopic(
-					 user.getHashmap(dict,attributeSet),dict,attributeSet).getNewsList(), 10);
+					 user.getHashmap(dict,attributeSet),"headline",dict,attributeSet).getNewsList(), RankerType.VSM, 10);
+			 
 			 List<News> ans = temp.getNewsList();
 			 //System.out.println("User ID: " + user.getUid());
 //			 for(int j=0;j<ans.size();j++)
@@ -258,7 +263,7 @@ public class Main {
 	public static void Preprocess() throws IOException, SolrServerException, SQLException{//the preprocess 
 		 LoadDic();
 		 long t1=System.currentTimeMillis();
-         newsData.LoadNewsFromDatabase(dict, attributeSet);
+         newsData.LoadNewsFromDatabaseLTR(dict, attributeSet);
          long t2=System.currentTimeMillis();
          System.out.println("the time of starting database is:"+(t2-t1));
 		 //InputNewsFile(news_filename,default_code);
